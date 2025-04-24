@@ -39,4 +39,4 @@ build/
 .DS_Store
 
 ### Arquivo de Configuração do Banco ###
-/src/main/resources/dbconfig.properties
+src/main/resources/dbconfig.properties
