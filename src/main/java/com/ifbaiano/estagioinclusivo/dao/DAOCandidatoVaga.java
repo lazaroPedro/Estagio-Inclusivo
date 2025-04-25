@@ -23,7 +23,7 @@ public class DAOCandidatoVaga implements DAORepository <CandidatoVaga, Long> {
     }
 
     @Override
-    public void delete(CandidatoVaga entity) {
+    public void delete(Long id) {
 
     }
 

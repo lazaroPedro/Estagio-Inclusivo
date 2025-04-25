@@ -4,16 +4,27 @@ public class Usuario {
     private int id;
     private String nome;
     private String email;
-    private String senha;
+    private String hashSenha;
+    private String salt;
+
 
     public Usuario() {
     }
 
-    public Usuario(int id, String nome, String email, String senha) {
+    public Usuario(int id, String nome, String email, String hashSenha, String salt) {
         this.id = id;
         this.nome = nome;
         this.email = email;
-        this.senha = senha;
+        this.hashSenha = hashSenha;
+        this.salt = salt;
+    }
+
+    public String getSalt() {
+        return salt;
+    }
+
+    public void setSalt(String salt) {
+        this.salt = salt;
     }
 
     public int getId() {
@@ -40,11 +51,12 @@ public class Usuario {
         this.email = email;
     }
 
-    public String getSenha() {
-        return senha;
+    public String getHashSenha() {
+        return hashSenha;
     }
 
-    public void setSenha(String senha) {
-        this.senha = senha;
+    public void setHashSenha(String hashSenha) {
+        this.hashSenha = hashSenha;
     }
+
 }

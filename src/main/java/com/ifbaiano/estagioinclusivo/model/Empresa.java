@@ -7,8 +7,8 @@ public class Empresa extends Usuario {
     public Empresa() {
     }
 
-    public Empresa(int id, String nome, String email, String senha, String cnpj, String razaoSocial) {
-        super(id, nome, email, senha);
+    public Empresa(int id, String nome, String email, String hashSenha, String salt, String cnpj, String razaoSocial) {
+        super(id, nome, email, hashSenha, salt);
         this.cnpj = cnpj;
         this.razaoSocial = razaoSocial;
     }
