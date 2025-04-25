@@ -1,5 +1,11 @@
 package com.ifbaiano.estagioinclusivo.model;
+import com.ifbaiano.estagioinclusivo.utils.validation.ErroCampo;
+import com.ifbaiano.estagioinclusivo.utils.validation.ValidationException;
+import com.ifbaiano.estagioinclusivo.utils.validation.Validator;
+
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Curso {
     private Long id;
@@ -9,6 +15,7 @@ public class Curso {
     private LocalDate dataInicio;
     private LocalDate dataFim;
 
+    public Curso() {}
     public Curso(Long id, String instituicao, String nomeCurso, String descricao, LocalDate dataInicio, LocalDate dataFim) {
         this.id = id;
         this.instituicao = instituicao;
@@ -17,8 +24,23 @@ public class Curso {
         this.dataInicio = dataInicio;
         this.dataFim = dataFim;
     }
-    public void validar() {
+    public Curso(long id) {
+        this.id = id;
+    }
 
+    public void validar() {
+        List<ErroCampo> erros = new ArrayList<>();
+
+        Validator.notBlank(instituicao, "instituicao", erros);
+        Validator.notBlank(nomeCurso, "nomeCurso", erros);
+        Validator.notBlank(descricao, "descricao", erros);
+        Validator.notNull(dataInicio, "dataInicio", erros);
+        Validator.notNull(dataFim, "dataFim", erros);
+        Validator.periodoValido(dataInicio, dataFim, "dataInicio", "dataFim", erros);
+
+        if (!erros.isEmpty()) {
+            throw new ValidationException(erros);
+        }
 
     }
     public Long getId() {
@@ -69,11 +91,5 @@ public class Curso {
         this.dataFim = dataFim;
     }
 
-    public Curso(String instituicao, String nomeCurso, String descricao, LocalDate dataInicio, LocalDate dataFim) {
-        this.instituicao = instituicao;
-        this.nomeCurso = nomeCurso;
-        this.descricao = descricao;
-        this.dataInicio = dataInicio;
-        this.dataFim = dataFim;
-    }
+
 }

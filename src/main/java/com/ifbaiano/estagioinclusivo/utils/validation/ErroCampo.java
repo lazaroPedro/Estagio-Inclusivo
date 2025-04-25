@@ -1,9 +1,9 @@
 package com.ifbaiano.estagioinclusivo.utils.validation;
 
 public class ErroCampo {
-    private String nomeCampo;
-    private Object valorInserido;
-    private String mensagemErro;
+    private final String nomeCampo;
+    private final Object valorInserido;
+    private final String mensagemErro;
 
 
 
@@ -17,25 +17,15 @@ public class ErroCampo {
         return valorInserido;
     }
 
-    public void setValorInserido(Object valorInserido) {
-        this.valorInserido = valorInserido;
-    }
-
     public String getMensagemErro() {
         return mensagemErro;
     }
 
-    public void setMensagemErro(String mensagemErro) {
-        this.mensagemErro = mensagemErro;
-    }
 
     public String getNomeCampo() {
         return nomeCampo;
     }
 
-    public void setNomeCampo(String nomeCampo) {
-        this.nomeCampo = nomeCampo;
-    }
 
 
 }
