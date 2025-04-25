@@ -22,7 +22,7 @@ public class DAOUsuario implements DAORepository<Usuario, Integer> {
             stmt.setString(4, entity.getSalt());
             stmt.executeUpdate();
         } catch (SQLException e) {
-            throw new RuntimeException("Erro ao inserir usuário", e);
+            throw new RuntimeException("Erro ao inserir usuário ", e);
         }
     }
 
