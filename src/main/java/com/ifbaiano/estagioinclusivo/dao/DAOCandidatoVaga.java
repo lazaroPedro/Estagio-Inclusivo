@@ -5,7 +5,7 @@ import com.ifbaiano.estagioinclusivo.model.CandidatoVaga;
 import java.sql.Connection;
 import java.util.List;
 
-public class DAOCandidatoVaga implements DAORepository <CandidatoVaga, Long> {
+public class DAOCandidatoVaga implements DAORepository<CandidatoVaga, Long> {
     private Connection conexao;
 
     public DAOCandidatoVaga(Connection conexao) {

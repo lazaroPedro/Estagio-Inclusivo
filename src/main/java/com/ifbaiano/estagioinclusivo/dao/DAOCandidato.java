@@ -1,4 +1,4 @@
 package com.ifbaiano.estagioinclusivo.dao;
 
-public class DAOCandidato {
+public class DAOCandidato  {
 }

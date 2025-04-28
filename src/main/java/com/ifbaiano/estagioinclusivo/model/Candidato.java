@@ -50,4 +50,8 @@ public class Candidato extends Usuario{
     public void setCpf(String cpf) {
         this.cpf = cpf;
     }
+
+    public void validar() {
+
+    }
 }
