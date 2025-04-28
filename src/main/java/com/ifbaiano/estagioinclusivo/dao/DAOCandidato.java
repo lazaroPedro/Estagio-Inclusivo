@@ -31,8 +31,6 @@ public class DAOCandidato implements DAORepository<Candidato, Integer> {
 			stmt.setString(7, entity.getTelefone());
 			stmt.executeUpdate();
 
-			inserirDeficiencias(entity.getId(), entity.getDeficiencias());
-
 		} catch (Exception e) {
 			throw new RuntimeException("Erro ao inserir candidato", e);
 		}
@@ -53,9 +51,6 @@ public class DAOCandidato implements DAORepository<Candidato, Integer> {
 			stmt.setInt(8, entity.getId());
 			stmt.executeUpdate();
 
-			deletarDeficiencias(entity.getId());
-			inserirDeficiencias(entity.getId(), entity.getDeficiencias());
-
 		} catch (Exception e) {
 			throw new RuntimeException("Erro ao atualizar candidato", e);
 
@@ -67,7 +62,6 @@ public class DAOCandidato implements DAORepository<Candidato, Integer> {
 	public void delete(Integer id) {
 
 		try {
-			deletarDeficiencias(id);
 
 			String sql = "DELETE FROM candidsto WHERE id = ?";
 			try (PreparedStatement stmt = connection.prepareStatement(sql)) {
@@ -88,7 +82,7 @@ public class DAOCandidato implements DAORepository<Candidato, Integer> {
 			while (rs.next()) {
 				Candidato candidato = new Candidato(rs.getInt("id"), rs.getString("nome"), rs.getString("email"),
 						rs.getString("hashSenha"), rs.getString("salt"), rs.getString("cpf"), rs.getString("curso"),
-						rs.getString("telefone"), buscarDeficiencias(rs.getInt("id")));
+						rs.getString("telefone"));
 				candidatos.add(candidato);
 			}
 		} catch (SQLException e) {
@@ -106,7 +100,7 @@ public class DAOCandidato implements DAORepository<Candidato, Integer> {
 				if (rs.next()) {
 					return new Candidato(rs.getInt("id"), rs.getString("nome"), rs.getString("email"),
 							rs.getString("hashSenha"), rs.getString("salt"), rs.getString("cpf"), rs.getString("curso"),
-							rs.getString("telefone"), buscarDeficiencias(id));
+							rs.getString("telefone"));
 				}
 			}
 		} catch (SQLException e) {
@@ -115,54 +109,13 @@ public class DAOCandidato implements DAORepository<Candidato, Integer> {
 		return null;
 	}
 
-	private void inserirDeficiencias(int candidatoId, List<TipoDeficiencia> deficiencias) throws SQLException {
-		String sql = "INSERT INTO candidatoDeficiencia (candidatoId, deficienciaId) VALUES (?, ?)";
-
-		try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-			for (TipoDeficiencia def : deficiencias) {
-				stmt.setInt(1, candidatoId);
-				stmt.setLong(2, def.getId());
-				stmt.addBatch();
-			}
-
-			stmt.executeBatch();
-		}
-	}
-
-	private List<TipoDeficiencia> buscarDeficiencias(int candidatoId) throws SQLException {
-		String sql = "SELECT d.id, d.nome FROM tipoDeficiencia d"
-				+ "JOIN cadidatoDeficiencia cd ON d.id = cd.deficienciaId " + "WHERE cd.candidatoId = ?";
-		List<TipoDeficiencia> deficiencias = new ArrayList<>();
-
-		try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-			stmt.setInt(1, candidatoId);
-			try (ResultSet rs = stmt.executeQuery()) {
-				while (rs.next()) {
-					TipoDeficiencia def = new TipoDeficiencia();
-					def.setId(rs.getLong("id"));
-					def.setNome(rs.getString("nome"));
-					deficiencias.add(def);
-				}
-			}
-
-		}
-		return deficiencias;
-	}
-
-	private void deletarDeficiencias(int candidatoId) throws SQLException {
-		String sql = "DELETE FROM candidatoDeficiencia WHERE candidatoId = ?";
-		try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-			stmt.setInt(1, candidatoId);
-			stmt.executeUpdate();
-		}
-
-	}
-
+	
+	
 	public void fecharConexao() {
-        try {
-            connection.close();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
+		try {
+			connection.close();
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		}
+	}
 }
