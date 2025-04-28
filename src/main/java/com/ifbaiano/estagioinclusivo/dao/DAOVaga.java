@@ -20,7 +20,6 @@ public class DAOVaga implements DAORepository<Vaga, Integer> {
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setInt(1, vaga.getEmpresa().getId());
             stmt.setInt(2, vaga.getRegiao().getId());
-            stmt.setLong(3, vaga.getCurso().getId()); // Long
             stmt.setString(4, vaga.getDescricao());
             stmt.setString(5, vaga.getRequisitos());
             stmt.setString(6, vaga.getBeneficios());
@@ -36,7 +35,6 @@ public class DAOVaga implements DAORepository<Vaga, Integer> {
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setInt(1, vaga.getEmpresa().getId());
             stmt.setInt(2, vaga.getRegiao().getId());
-            stmt.setLong(3, vaga.getCurso().getId()); // Long
             stmt.setString(4, vaga.getDescricao());
             stmt.setString(5, vaga.getRequisitos());
             stmt.setString(6, vaga.getBeneficios());
