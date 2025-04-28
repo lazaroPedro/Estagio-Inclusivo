@@ -16,21 +16,6 @@ public class Curso {
     private LocalDate dataFim;
     private Candidato candidato;
 
-    public Curso() {}
-
-    public Curso(Long id, String instituicao, String nomeCurso, String descricao, LocalDate dataInicio, LocalDate dataFim, Candidato candidato) {
-        this.id = id;
-        this.instituicao = instituicao;
-        this.nomeCurso = nomeCurso;
-        this.descricao = descricao;
-        this.dataInicio = dataInicio;
-        this.dataFim = dataFim;
-        this.candidato = candidato;
-    }
-
-    public Curso(long idCurso) {
-    }
-
 
     public void validar() {
         List<ErroCampo> erros = new ArrayList<>();
@@ -47,6 +32,18 @@ public class Curso {
             throw new ValidationException(erros);
         }
 
+    }
+
+    public Curso() {}
+
+    public Curso(Long id, String instituicao, String nomeCurso, String descricao, LocalDate dataInicio, LocalDate dataFim, Candidato candidato) {
+        this.id = id;
+        this.instituicao = instituicao;
+        this.nomeCurso = nomeCurso;
+        this.descricao = descricao;
+        this.dataInicio = dataInicio;
+        this.dataFim = dataFim;
+        this.candidato = candidato;
     }
     public Long getId() {
         return id;

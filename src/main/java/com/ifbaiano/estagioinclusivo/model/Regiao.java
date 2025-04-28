@@ -5,8 +5,10 @@ public class Regiao {
 	private String Estado;
 	private String cidade;
 	
+	public void validar() {}
+
+	public Regiao() {}
 	public Regiao(int id, String estado, String cidade) {
-		super();
 		this.id = id;
 		Estado = estado;
 		this.cidade = cidade;

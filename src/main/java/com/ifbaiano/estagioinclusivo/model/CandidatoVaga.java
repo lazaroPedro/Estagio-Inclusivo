@@ -7,6 +7,11 @@ public class CandidatoVaga {
     private Vaga vaga;
     private LocalDateTime data;
 
+
+    public void validar(){
+
+    }
+
     public CandidatoVaga() {
     }
 

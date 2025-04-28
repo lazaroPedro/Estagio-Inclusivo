@@ -13,9 +13,9 @@ public class TipoDeficiencia {
     private String nome;
     private String descricao;
     private TipoDeficienciaEnum tipo;
-    private String cid;
     private String tipoApoio;
     private Candidato candidato;
+
 
     public void validar() {
         List<ErroCampo> erros = new ArrayList<>();
@@ -23,13 +23,23 @@ public class TipoDeficiencia {
         Validator.notBlank(nome, "nome", erros);
         Validator.notBlank(descricao, "descricao", erros);
         Validator.notNull(tipo, "tipo", erros);
-        Validator.notBlank(cid, "cid", erros);
         // Validator.notNull(tipoApoio, "tipoApoio", erros); aceita null
         Validator.notNull(candidato, "candidato", erros);
 
         if (!erros.isEmpty()) {
             throw new ValidationException(erros);
         }
+    }
+
+    public TipoDeficiencia() {}
+
+    public TipoDeficiencia(Long id, String nome, String descricao, TipoDeficienciaEnum tipo, String tipoApoio, Candidato candidato) {
+        this.id = id;
+        this.nome = nome;
+        this.descricao = descricao;
+        this.tipo = tipo;
+        this.tipoApoio = tipoApoio;
+        this.candidato = candidato;
     }
 
     public Long getId() {
@@ -64,13 +74,6 @@ public class TipoDeficiencia {
         this.tipo = tipo;
     }
 
-    public String getCid() {
-        return cid;
-    }
-
-    public void setCid(String cid) {
-        this.cid = cid;
-    }
 
     public String getTipoApoio() {
         return tipoApoio;
@@ -87,15 +90,5 @@ public class TipoDeficiencia {
     public void setCandidato(Candidato candidato) {
         this.candidato = candidato;
     }
-    public TipoDeficiencia() {}
 
-    public TipoDeficiencia(Long id, String nome, String descricao, TipoDeficienciaEnum tipo, String cid, String tipoApoio, Candidato candidato) {
-        this.id = id;
-        this.nome = nome;
-        this.descricao = descricao;
-        this.tipo = tipo;
-        this.cid = cid;
-        this.tipoApoio = tipoApoio;
-        this.candidato = candidato;
-    }
 }

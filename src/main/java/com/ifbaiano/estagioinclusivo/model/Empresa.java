@@ -4,6 +4,8 @@ public class Empresa extends Usuario {
     private String cnpj;
     private String razaoSocial;
 
+    public void validar(){}
+
     public Empresa() {
     }
 

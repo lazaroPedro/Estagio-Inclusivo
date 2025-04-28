@@ -6,18 +6,16 @@ public class Candidato extends Usuario{
     private String cpf;
     private String curso;
     private String telefone;
-    private List<Curso> cursos;
-    private List<TipoDeficiencia> deficiencias;
 
+    public void validar(){}
     public Candidato () {
     }
 
-    public Candidato(int id, String nome, String email, String hashSenha, String salt, String cpf, String curso, String telefone, List<TipoDeficiencia> deficiencias) {
+    public Candidato(int id, String nome, String email, String hashSenha, String salt, String cpf, String curso, String telefone) {
         super(id, nome, email, hashSenha, salt);
         this.cpf = cpf;
         this.curso = curso;
         this.telefone = telefone;
-        this.deficiencias = deficiencias;
     }
 
     public String getCurso() {
@@ -36,13 +34,6 @@ public class Candidato extends Usuario{
         this.telefone = telefone;
     }
 
-    public List<TipoDeficiencia> getDeficiencias() {
-        return deficiencias;
-    }
-
-    public void setDeficiencias(List<TipoDeficiencia> deficiencias) {
-        this.deficiencias = deficiencias;
-    }
 
     public String getCpf() {
         return cpf;
@@ -52,7 +43,4 @@ public class Candidato extends Usuario{
         this.cpf = cpf;
     }
 
-    public void validar() {
-
-    }
 }

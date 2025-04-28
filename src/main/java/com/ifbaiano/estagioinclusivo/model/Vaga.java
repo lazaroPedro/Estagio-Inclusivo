@@ -4,21 +4,22 @@ public class Vaga {
 	private int id;
 	private Empresa empresa;
 	private Regiao regiao;
-	private Curso curso;
 	private String descricao;
 	private String requisitos;
 	private String beneficios;
 
+
+	public void validar() {}
+
 	public Vaga() {
 	}
 
-	public Vaga(int id, Empresa empresa, Regiao regiao, Curso curso, String descricao, String requisitos,
+	public Vaga(int id, Empresa empresa, Regiao regiao,  String descricao, String requisitos,
 				String beneficios) {
 		super();
 		this.id = id;
 		this.empresa = empresa;
 		this.regiao = regiao;
-		this.curso = curso;
 		this.descricao = descricao;
 		this.requisitos = requisitos;
 		this.beneficios = beneficios;
@@ -40,12 +41,6 @@ public class Vaga {
 	}
 	public void setRegiao(Regiao regiao) {
 		this.regiao = regiao;
-	}
-	public Curso getCurso() {
-		return curso;
-	}
-	public void setCurso(Curso curso) {
-		this.curso = curso;
 	}
 	public String getDescricao() {
 		return descricao;
