@@ -2,7 +2,7 @@ create database estagioinclusivo;
 use estagioinclusivo;
 
 CREATE TABLE usuario (
-    id INT AUTO_INCREMENT PRIMARY KEY,
+    id_usuario INT AUTO_INCREMENT PRIMARY KEY,
     nome VARCHAR(100) NOT NULL,
     email VARCHAR(100) NOT NULL UNIQUE,
     hashSenha TEXT NOT NULL,
