@@ -8,8 +8,12 @@ public class Vaga {
 	private String descricao;
 	private String requisitos;
 	private String beneficios;
+
+	public Vaga() {
+	}
+
 	public Vaga(int id, Empresa empresa, Regiao regiao, Curso curso, String descricao, String requisitos,
-			String beneficios) {
+				String beneficios) {
 		super();
 		this.id = id;
 		this.empresa = empresa;

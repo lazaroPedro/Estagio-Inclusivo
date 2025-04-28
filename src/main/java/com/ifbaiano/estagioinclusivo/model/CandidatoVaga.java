@@ -7,10 +7,7 @@ public class CandidatoVaga {
     private Vaga vaga;
     private LocalDateTime data;
 
-    public CandidatoVaga(Candidato candidato, Vaga vaga) {
-        this.candidato = candidato;
-        this.vaga = vaga;
-        this.data = LocalDateTime.now();
+    public CandidatoVaga() {
     }
 
     public CandidatoVaga(Candidato candidato, Vaga vaga, LocalDateTime data) {

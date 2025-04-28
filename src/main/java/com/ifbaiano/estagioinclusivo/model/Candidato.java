@@ -6,6 +6,7 @@ public class Candidato extends Usuario{
     private String cpf;
     private String curso;
     private String telefone;
+    private List<Curso> cursos;
     private List<TipoDeficiencia> deficiencias;
 
     public Candidato () {
