@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.ifbaiano</groupId>
-    <artifactId>estagio-inclusivo</artifactId>
+    <artifactId>estagioinclusivo</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>war</packaging>
     <properties>
@@ -32,8 +32,19 @@
             <version>6.1.0</version>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>org.webjars</groupId>
+            <artifactId>bootstrap</artifactId>
+            <version>5.3.5</version>
+        </dependency>
+<dependency>
+    <groupId>org.apache.tomcat</groupId>
+    <artifactId>tomcat-jasper</artifactId>
+    <version>11.0.6</version>
+</dependency>
+
     </dependencies>
       <build>
-    <finalName>estagio-inclusivo</finalName>
+    <finalName>estagioinclusivo</finalName>
   </build>
 </project>

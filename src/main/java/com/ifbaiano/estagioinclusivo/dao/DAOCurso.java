@@ -32,6 +32,7 @@ public class DAOCurso implements DAORepository<Curso, Long> {
 
     }
 
+
     @Override
     public void update(Curso entity) {
         String sql = "UPDATE cursos SET instituicao = ?, nome = ?, descricao = ?, data_inicio = ?, data_fim = ?, fk_candidato = ? WHERE id = ?)";

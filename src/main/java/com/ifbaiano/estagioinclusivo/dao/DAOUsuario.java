@@ -14,7 +14,7 @@ public class DAOUsuario implements DAORepository<Usuario, Integer> {
 
     @Override
     public void insert(Usuario entity) {
-        String sql = "INSERT INTO usuario (nome, email, hashSenha, salt) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO usuarios (nome, email, hashSenha, salt) VALUES (?, ?, ?, ?)";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, entity.getNome());
             stmt.setString(2, entity.getEmail());
@@ -26,9 +26,29 @@ public class DAOUsuario implements DAORepository<Usuario, Integer> {
         }
     }
 
+    public int insertAndReturnid(Usuario entity) {
+        String sql = "INSERT INTO usuarios (nome, email, hashSenha, salt) VALUES (?, ?, ?, ?)";
+        try (PreparedStatement stmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            stmt.setString(1, entity.getNome());
+            stmt.setString(2, entity.getEmail());
+            stmt.setString(3, entity.getHashSenha());
+            stmt.setString(4, entity.getSalt());
+            stmt.executeUpdate();
+
+            ResultSet rs = stmt.getGeneratedKeys();
+            if (rs.next()) {
+                return rs.getInt(1);
+            } else {
+                throw new SQLException("Erro ao obter o ID do usuário.");
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao inserir usuário ", e);
+        }
+    }
+
     @Override
     public void update(Usuario entity) {
-        String sql = "UPDATE usuario SET nome = ?, email = ?, hashSenha = ?, salt = ? WHERE id = ?";
+        String sql = "UPDATE usuarios SET nome = ?, email = ?, hashSenha = ?, salt = ? WHERE id_usuario = ?";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, entity.getNome());
             stmt.setString(2, entity.getEmail());
@@ -43,7 +63,7 @@ public class DAOUsuario implements DAORepository<Usuario, Integer> {
 
     @Override
     public void delete(Integer id) {
-        String sql = "DELETE FROM usuario WHERE id = ?";
+        String sql = "DELETE FROM usuarios WHERE id = ?";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setInt(1, id);
             stmt.executeUpdate();
@@ -55,12 +75,12 @@ public class DAOUsuario implements DAORepository<Usuario, Integer> {
     @Override
     public List<Usuario> findAll() {
         List<Usuario> usuarios = new ArrayList<>();
-        String sql = "SELECT * FROM usuario";
+        String sql = "SELECT * FROM usuarios";
         try (PreparedStatement stmt = connection.prepareStatement(sql);
             ResultSet rs = stmt.executeQuery()) {
         while (rs.next()) {
             Usuario usuario = new Usuario();
-            usuario.setId(rs.getInt("id"));
+            usuario.setId(rs.getInt("id_usuario"));
             usuario.setNome(rs.getString("nome"));
             usuario.setEmail(rs.getString("email"));
             usuario.setHashSenha(rs.getString("hashSenha"));
@@ -75,13 +95,13 @@ public class DAOUsuario implements DAORepository<Usuario, Integer> {
 
     @Override
     public Usuario findById(Integer id) {
-        String sql = "SELECT * FROM usuario WHERE id = ?";
+        String sql = "SELECT * FROM usuarios WHERE id = ?";
        try(PreparedStatement stmt = connection.prepareStatement(sql);) {
            stmt.setInt(1, id);
            ResultSet rs = stmt.executeQuery();
            if (rs.next()) {
                return new Usuario(
-                       rs.getInt("id"),
+                       rs.getInt("id_usuario"),
                        rs.getString("nome"),
                        rs.getString("email"),
                        rs.getString("hashSenha"),
@@ -96,13 +116,13 @@ public class DAOUsuario implements DAORepository<Usuario, Integer> {
     }
 
     public Usuario findByEmail(String email) throws SQLException {
-        String sql = "SELECT * FROM usuario WHERE email = ?";
+        String sql = "SELECT * FROM usuarios WHERE email = ?";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, email);
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
                     return new Usuario(
-                            rs.getInt("id"),
+                            rs.getInt("id_usuario"),
                             rs.getString("nome"),
                             rs.getString("email"),
                             rs.getString("hashSenha"),

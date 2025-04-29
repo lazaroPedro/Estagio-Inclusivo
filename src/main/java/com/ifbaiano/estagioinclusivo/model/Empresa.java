@@ -15,6 +15,12 @@ public class Empresa extends Usuario {
         this.razaoSocial = razaoSocial;
     }
 
+    public Empresa(String nome, String email, String hashSenha, String salt, String cnpj, String razaoSocial) {
+        super(nome, email, hashSenha, salt);
+        this.cnpj = cnpj;
+        this.razaoSocial = razaoSocial;
+    }
+
     public String getCnpj() {
         return cnpj;
     }

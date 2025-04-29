@@ -1,16 +1,16 @@
 create database estagioinclusivo;
 use estagioinclusivo;
 CREATE TABLE enderecos(
-                        id_endereco INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-                        rua VARCHAR(255) NOT NULL,
-                        bairro VARCHAR(255) NOT NULL,
-                        municipio VARCHAR(255) NOT NULL,
-                        estado VARCHAR(255) NOT NULL,
-                        cep CHAR(8) NOT NULL
+    id_endereco INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    rua VARCHAR(255) NOT NULL,
+    bairro VARCHAR(255) NOT NULL,
+    municipio VARCHAR(255) NOT NULL,
+    estado VARCHAR(255) NOT NULL,
+    cep CHAR(8) NOT NULL
 );
 
 CREATE TABLE usuarios (
-    id_usuario INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    id_usuario INT AUTO_INCREMENT PRIMARY KEY,
     nome VARCHAR(255) NOT NULL,
     email VARCHAR(255) NOT NULL UNIQUE,
     hashSenha TEXT NOT NULL,
@@ -18,7 +18,7 @@ CREATE TABLE usuarios (
     data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     fk_endereco INT UNSIGNED NOT NULL,
     FOREIGN KEY (fk_endereco) REFERENCES enderecos(id_endereco)
-    );
+);
 
 
 
@@ -77,9 +77,9 @@ CREATE TABLE vagas(
     FOREIGN KEY (fk_endereco) REFERENCES enderecos(id_endereco)
 );
 CREATE TABLE candidato_vaga (
-    fk_candidato INT UNSIGNED,
-    fk_vaga INT UNSIGNED,
-    data_cadastro TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    fk_candidato INT UNSIGNED NOT NULL,
+    fk_vaga INT UNSIGNED NOT NULL,
+    data_cadastro TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL ,
     FOREIGN KEY (fk_candidato) REFERENCES candidatos(id_candidato),
     FOREIGN KEY (fk_vaga) REFERENCES vagas(id_vaga),
     PRIMARY KEY(fk_candidato,fk_vaga)

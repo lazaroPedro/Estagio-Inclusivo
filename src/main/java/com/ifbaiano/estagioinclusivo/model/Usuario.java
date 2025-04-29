@@ -1,22 +1,37 @@
 package com.ifbaiano.estagioinclusivo.model;
+import com.ifbaiano.estagioinclusivo.utils.SenhaUtils;
 
 public class Usuario {
-    private int id;
+    private int id_usuario;
     private String nome;
     private String email;
-    private String hashSenha;
     private String salt;
+    private String hashSenha;
 
 
     public Usuario() {
     }
 
-    public Usuario(int id, String nome, String email, String hashSenha, String salt) {
-        this.id = id;
+    public Usuario(String nome, String email, String salt, String hashSenha) {
         this.nome = nome;
         this.email = email;
-        this.hashSenha = hashSenha;
         this.salt = salt;
+        this.hashSenha = hashSenha;
+    }
+
+    public Usuario(String nome, String email, String senha) {
+        this.nome = nome;
+        this.email = email;
+        this.salt = SenhaUtils.gerarSalt();
+        this.hashSenha = SenhaUtils.gerarHashSenha(senha, this.salt);
+    }
+
+
+    public Usuario(int id_usuario, String nome, String email, String salt, String hashSenha) {
+        this.nome = nome;
+        this.email = email;
+        this.salt = salt;
+        this.hashSenha = hashSenha;
     }
 
     public String getSalt() {
@@ -25,14 +40,6 @@ public class Usuario {
 
     public void setSalt(String salt) {
         this.salt = salt;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public String getNome() {
@@ -59,4 +66,11 @@ public class Usuario {
         this.hashSenha = hashSenha;
     }
 
+    public void setId(int id) {
+        this.id_usuario = id;
+    }
+
+    public int getId() {
+        return id_usuario;
+    }
 }
