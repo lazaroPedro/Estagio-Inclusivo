@@ -108,14 +108,4 @@ public class DAOCandidato implements DAORepository<Candidato, Integer> {
 		}
 		return null;
 	}
-
-	
-	
-	public void fecharConexao() {
-		try {
-			connection.close();
-		} catch (SQLException e) {
-			throw new RuntimeException(e);
-		}
-	}
 }
