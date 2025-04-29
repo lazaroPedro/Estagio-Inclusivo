@@ -77,9 +77,9 @@ CREATE TABLE vagas(
     FOREIGN KEY (fk_endereco) REFERENCES enderecos(id_endereco)
 );
 CREATE TABLE candidato_vaga (
-    fk_candidato INT UNSIGNED,
-    fk_vaga INT UNSIGNED,
-    data_cadastro TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    fk_candidato INT UNSIGNED NOT NULL,
+    fk_vaga INT UNSIGNED NOT NULL,
+    data_cadastro TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL ,
     FOREIGN KEY (fk_candidato) REFERENCES candidatos(id_candidato),
     FOREIGN KEY (fk_vaga) REFERENCES vagas(id_vaga),
     PRIMARY KEY(fk_candidato,fk_vaga)

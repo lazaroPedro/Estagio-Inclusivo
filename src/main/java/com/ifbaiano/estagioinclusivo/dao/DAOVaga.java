@@ -74,7 +74,6 @@ public class DAOVaga implements DAORepository<Vaga, Integer> {
                         rs.getInt("id"),
                         empresa,
                         regiao,
-                        curso,
                         rs.getString("descricao"),
                         rs.getString("requisitos"),
                         rs.getString("beneficios")
@@ -105,7 +104,6 @@ public class DAOVaga implements DAORepository<Vaga, Integer> {
                         rs.getInt("id"),
                         empresa,
                         regiao,
-                        curso,
                         rs.getString("descricao"),
                         rs.getString("requisitos"),
                         rs.getString("beneficios")
