@@ -16,6 +16,9 @@ public class Curso {
     private LocalDate dataFim;
     private Candidato candidato;
 
+    public Curso(long idCurso) {
+    }
+
 
     public void validar() {
         List<ErroCampo> erros = new ArrayList<>();
