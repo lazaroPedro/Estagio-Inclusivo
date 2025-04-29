@@ -4,26 +4,33 @@ import java.util.List;
 
 public class Candidato extends Usuario{
     private String cpf;
-    private String curso;
     private String telefone;
+    private Regiao regiao;
 
     public void validar(){}
     public Candidato () {
     }
 
-    public Candidato(int id, String nome, String email, String hashSenha, String salt, String cpf, String curso, String telefone) {
+    public Candidato(int id, String nome, String email, String hashSenha, String salt, String cpf, String telefone, List<Curso> cursos, Regiao regiao) {
         super(id, nome, email, hashSenha, salt);
         this.cpf = cpf;
-        this.curso = curso;
+        this.telefone = telefone;
+        this.regiao = regiao;
+    }
+
+    public Candidato(int id, String nome, String email, String hashSenha, String salt,
+                     String cpf, String telefone) {
+        super(id, nome, email, hashSenha, salt);
+        this.cpf = cpf;
         this.telefone = telefone;
     }
 
-    public String getCurso() {
-        return curso;
+    public String getCpf() {
+        return cpf;
     }
 
-    public void setCurso(String curso) {
-        this.curso = curso;
+    public void setCpf(String cpf) {
+        this.cpf = cpf;
     }
 
     public String getTelefone() {
@@ -34,13 +41,11 @@ public class Candidato extends Usuario{
         this.telefone = telefone;
     }
 
-
-    public String getCpf() {
-        return cpf;
+    public Regiao getRegiao() {
+        return regiao;
     }
 
-    public void setCpf(String cpf) {
-        this.cpf = cpf;
+    public void setRegiao(Regiao regiao) {
+        this.regiao = regiao;
     }
-
 }

@@ -1,7 +1,6 @@
 package com.ifbaiano.estagioinclusivo.controller.servlet;
 
 import com.ifbaiano.estagioinclusivo.config.DAOConfig;
-import com.ifbaiano.estagioinclusivo.dao.DAOCandidato;
 import com.ifbaiano.estagioinclusivo.dao.DAOCurso;
 import com.ifbaiano.estagioinclusivo.model.Candidato;
 import com.ifbaiano.estagioinclusivo.model.Curso;
