@@ -18,28 +18,26 @@ public class DAOCandidatoVaga {
 
     public void insert(CandidatoVaga entity) {
         String sql = "INSERT INTO candidato_vaga (fk_candidato, fk_vaga, data_criacao) VALUES (?, ?, ?)";
-        try {
-            PreparedStatement pp = conexao.prepareStatement(sql);
+        try (PreparedStatement pp = conexao.prepareStatement(sql)){
             pp.setInt(1, entity.getCandidato().getId());
             pp.setInt(2, entity.getVaga().getId());
             pp.setTimestamp(3, Timestamp.valueOf(entity.getData()));
             pp.execute();
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Erro ao Inserir Candidato", e);
         }
     }
 
 
     public void delete(int idCandidato, int idVaga) {
         String sql = "DELETE FROM candidato_vaga WHERE fk_candidato = ? AND fk_vaga = ?";
-        try {
-            PreparedStatement pp = conexao.prepareStatement(sql);
+        try (PreparedStatement pp = conexao.prepareStatement(sql)){
             pp.setInt(1, idCandidato);
             pp.setInt(2, idVaga);
 
             pp.execute();
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Erro ao deletar candidato" ,e);
         }
 
 
@@ -48,13 +46,12 @@ public class DAOCandidatoVaga {
 
     public Optional<CandidatoVaga> findById(int idCandidato, int idVaga) {
         String sql = "SELECT FROM candidato_vaga WHERE id_candidato = ? AND fk_vaga = ?";
-
-        try {
-            PreparedStatement pp = conexao.prepareStatement(sql);
+        ResultSet rs = null;
+        try (PreparedStatement pp = conexao.prepareStatement(sql)){
             pp.setInt(1, idCandidato);
             pp.setInt(2, idVaga);
 
-            ResultSet rs = pp.executeQuery();
+            rs = pp.executeQuery();
             if (rs.next()) {
                 CandidatoVaga cv = new CandidatoVaga();
                 Candidato c = new Candidato();
@@ -69,7 +66,7 @@ public class DAOCandidatoVaga {
             }
             return Optional.empty();
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Erro ao procurar candidato",e);
         }
 
 
@@ -96,7 +93,7 @@ public class DAOCandidatoVaga {
             return lista;
 
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Erro ao listar Candidato",e);
         }
     }
         public List<CandidatoVaga> findByCandidato(int idCandidato) {
@@ -122,7 +119,7 @@ public class DAOCandidatoVaga {
             return lista;
 
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Erro ao listar vagas",e);
         }
 
     }

@@ -13,6 +13,8 @@ public class Usuario {
     public Usuario() {
     }
 
+
+
     public Usuario(int id, String nome, String email, Endereco endereco, String salt, String hashSenha) {
         this.id = id;
         this.nome = nome;

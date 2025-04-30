@@ -71,8 +71,11 @@ CREATE TABLE vagas(
     beneficios TEXT NOT NULL,
     status ENUM("ATIVA", "FINALIZADA") NOT NULL,
     data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    fk_empresa INT UNSIGNED NOT NULL,
     fk_endereco INT UNSIGNED NOT NULL,
+    FOREIGN KEY (fk_empresa) REFERENCES empresas(id_empresa),
     FOREIGN KEY (fk_endereco) REFERENCES enderecos(id_endereco)
+
 );
 CREATE TABLE candidato_vaga (
     fk_candidato INT UNSIGNED NOT NULL,

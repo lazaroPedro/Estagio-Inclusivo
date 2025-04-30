@@ -1,60 +1,47 @@
 package com.ifbaiano.estagioinclusivo.dao;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import com.ifbaiano.estagioinclusivo.model.Candidato;
-import com.ifbaiano.estagioinclusivo.model.TipoDeficiencia;
-import com.ifbaiano.estagioinclusivo.model.Usuario;
-import com.ifbaiano.estagioinclusivo.dao.DAOUsuario;
+import com.ifbaiano.estagioinclusivo.model.Endereco;
 
 public class DAOCandidato implements DAORepository<Candidato, Integer> {
 
     private Connection connection;
-    private DAOUsuario daoUsuario;
 
     public DAOCandidato(Connection connection) {
         this.connection = connection;
-        this.daoUsuario = new DAOUsuario(connection);
     }
 
     @Override
-    public void insert(Candidato entity) {
+    public Optional<Integer> insert(Candidato entity) {
         String sql = "INSERT INTO candidatos (id_candidato, telefone, cpf) VALUES (?, ?, ?)";
-        try {
-            connection.setAutoCommit(false);
-            int id_candidato = daoUsuario.insertAndReturnid(entity);
-            try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-                stmt.setInt(1, id_candidato);
-                stmt.setString(2, entity.getTelefone());
-                stmt.setString(3, entity.getCpf());
-                stmt.executeUpdate();
+        ResultSet rs = null;
+        try (PreparedStatement stmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)){
+            stmt.setInt(1, entity.getId());
+            stmt.setString(2, entity.getTelefone());
+            stmt.setString(3, entity.getCpf());
+            stmt.executeUpdate();
+            rs = stmt.getGeneratedKeys();
+            if (rs.next()) {
+                return Optional.of(rs.getInt(1));
             }
-            connection.commit();
+
 
         } catch (SQLException e) {
-            try {
-                connection.rollback();
-            } catch (SQLException e2){
-                throw new RuntimeException("Erro no rollback", e);
-            }
-            throw new RuntimeException("Erro ao inserir candidato", e);
-        } finally {
-            try {
-                connection.setAutoCommit(true);
-            } catch (SQLException e) {
-                throw new RuntimeException("Erro no reset dos commits", e);
-            }
+            throw new RuntimeException("Falha ao inserir candidato.",e);
+        }finally {
+            fechar(rs);
         }
+        return Optional.empty();
     }
 
     @Override
     public void update(Candidato entity) {
-        String sql = "UPDATE candidatos SET telefone = ?, cpf = ?, WHERE id = ?";
+        String sql = "UPDATE candidatos SET telefone = ?, cpf = ?, WHERE id_usuario = ?";
 
         try(PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, entity.getTelefone());
@@ -62,7 +49,7 @@ public class DAOCandidato implements DAORepository<Candidato, Integer> {
             stmt.setInt(3, entity.getId());
             stmt.executeUpdate();
         } catch (Exception e){
-            throw new RuntimeException("Erro ao da update", e);
+            throw new RuntimeException("Erro ao atualizar os dados do candidato", e);
         }
 
     }
@@ -70,12 +57,13 @@ public class DAOCandidato implements DAORepository<Candidato, Integer> {
     @Override
     public void delete(Integer id) {
 
-        try {
-            String sql = "DELETE FROM candidatos WHERE id = ?";
-            try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-                stmt.setInt(1, id);
-                stmt.executeUpdate();
-            }
+
+        String sql = "DELETE FROM candidatos WHERE id_usuario = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(sql))
+        {
+            stmt.setInt(1, id);
+            stmt.executeUpdate();
+
         } catch (SQLException e) {
             throw new RuntimeException("Erro ao deletar candidato", e);
         }
@@ -85,13 +73,23 @@ public class DAOCandidato implements DAORepository<Candidato, Integer> {
    @Override
     public List<Candidato> findAll() {
         List<Candidato> candidatos = new ArrayList<>();
-        String sql = "SELECT * FROM candidatos";
+    String sql = "SELECT * FROM candidatos JOIN usuarios ON candidatos.id_candidato = usuarios.id_candidato";
 
-        try (PreparedStatement stmt = connection.prepareStatement(sql);
-             ResultSet rs = stmt.executeQuery()) {
+        try (
+            PreparedStatement stmt = connection.prepareStatement(sql);
+            ResultSet rs = stmt.executeQuery()
+        ){
             while (rs.next()) {
-                Candidato candidato = new Candidato(rs.getInt("id"), rs.getString("nome"), rs.getString("email"),
-                        rs.getString("hashSenha"), rs.getString("salt"), rs.getString("cpf"), rs.getString("curso"),
+                Endereco e = new Endereco();
+                e.setId(rs.getInt("fk_endereco"));
+                Candidato candidato = new Candidato(
+                        rs.getInt("id_candidato"),
+                        rs.getString("nome"),
+                        rs.getString("email"),
+                        e,
+                        rs.getString("salt"),
+                        rs.getString("hashSenha"),
+                        rs.getString("cpf"),
                         rs.getString("telefone"));
                 candidatos.add(candidato);
             }
@@ -102,53 +100,56 @@ public class DAOCandidato implements DAORepository<Candidato, Integer> {
     }
 
     @Override
-    public Candidato findById(Integer id) {
-        String sql = "SELECT * FROM candidatos WHERE id = ?";
-        try(PreparedStatement stmt = connection.prepareStatement(sql);) {
+    public Optional<Candidato> findById(Integer id) {
+        String sql = "SELECT * FROM candidatos JOIN usuarios ON candidatos.id_candidato = usuarios.id_candidato WHERE candidatos.id_candidato = ?";
+        ResultSet rs = null;
+        try(PreparedStatement stmt = connection.prepareStatement(sql)){
             stmt.setInt(1, id);
-            ResultSet rs = stmt.executeQuery();
+            rs = stmt.executeQuery();
             if (rs.next()) {
-                return new Candidato(
-                        rs.getInt("id_usuario"),
-                        rs.getString("cpf"),
-                        rs.getString("telefone")
-                );
+                Candidato c = new Candidato();
+                Endereco e = new Endereco();
+                e.setId(rs.getInt("fk_endereco"));
+                c.setEndereco(e);
+                c.setId(rs.getInt("id_candidato"));
+                c.setNome(rs.getString("nome"));
+                c.setEmail(rs.getString("email"));
+                c.setSalt(rs.getString("salt"));
+                c.setHashSenha(rs.getString("hashSenha"));
+                c.setCpf(rs.getString("cpf"));
+                c.setTelefone(rs.getString("telefone"));
+
+                return Optional.of(c);
+
+
             }
         } catch (SQLException e) {
             throw new RuntimeException("Erro ao buscar usuario por id ", e);
+        } finally {
+            fechar(rs);
         }
-        return null;
+        return Optional.empty();
     }
 
-
-    @Override
-    public Usuario findById(Integer id) {
-        String sql = "SELECT * FROM usuarios WHERE id = ?";
-        try(PreparedStatement stmt = connection.prepareStatement(sql);) {
-            stmt.setInt(1, id);
-            ResultSet rs = stmt.executeQuery();
-            if (rs.next()) {
-                return new Usuario(
-                        rs.getInt("id_usuario"),
-                        rs.getString("nome"),
-                        rs.getString("email"),
-                        rs.getString("hashSenha"),
-                        rs.getString("salt")
-                );
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException("Erro ao buscar usuario por id ", e);
-        }
-
-        return null;
-    }
-
-    public void fecharConexao() {
+    public void fechar(AutoCloseable closeable) {
         try {
-            connection.close();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+            if (closeable != null) {
+                closeable.close();
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("Erro ao fechar conexão",e);
         }
     }
+    public void fechar() {
+        try {
+            if (connection != null) {
+                connection.close();
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("Erro ao fechar conexão",e);
+        }
+    }
+
+
 }
 

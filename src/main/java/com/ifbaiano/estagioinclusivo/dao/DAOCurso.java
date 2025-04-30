@@ -33,7 +33,7 @@ public class DAOCurso implements DAORepository<Curso, Integer> {
             }
             return Optional.empty();
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Erro ao inserir C",e);
         }
 
     }
