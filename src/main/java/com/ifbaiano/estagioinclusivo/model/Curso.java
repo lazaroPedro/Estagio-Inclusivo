@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Curso {
-    private Long id;
+    private int id;
     private String instituicao;
     private String nomeCurso;
     private String descricao;
@@ -39,7 +39,7 @@ public class Curso {
 
     public Curso() {}
 
-    public Curso(Long id, String instituicao, String nomeCurso, String descricao, LocalDate dataInicio, LocalDate dataFim, Candidato candidato) {
+    public Curso(int id, String instituicao, String nomeCurso, String descricao, LocalDate dataInicio, LocalDate dataFim, Candidato candidato) {
         this.id = id;
         this.instituicao = instituicao;
         this.nomeCurso = nomeCurso;
@@ -48,11 +48,11 @@ public class Curso {
         this.dataFim = dataFim;
         this.candidato = candidato;
     }
-    public Long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(int id) {
         this.id = id;
     }
 

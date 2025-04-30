@@ -1,5 +1,7 @@
 package com.ifbaiano.estagioinclusivo.model;
 
+import com.ifbaiano.estagioinclusivo.model.enums.TipoVaga;
+
 public class Vaga {
 	private int id;
 	private Empresa empresa;
@@ -7,16 +9,15 @@ public class Vaga {
 	private String descricao;
 	private String requisitos;
 	private String beneficios;
-	private String status;
+	private TipoVaga status;
 
 
 	public void validar() {}
 
-	public Vaga() {
-	}
+	public Vaga() {}
 
-	public Vaga(int id, Empresa empresa, Endereco endereco,  String descricao, String requisitos,
-				String beneficios, String status) {
+	public Vaga(int id, Empresa empresa, Endereco endereco, String descricao, String requisitos,
+				String beneficios, TipoVaga status) {
 		super();
 		this.id = id;
 		this.empresa = empresa;
@@ -63,11 +64,11 @@ public class Vaga {
 		this.beneficios = beneficios;
 	}
 
-	public String getStatus() {
+	public TipoVaga getStatus() {
 		return status;
 	}
 
-	public void setStatus(String status) {
+	public void setStatus(TipoVaga status) {
 		this.status = status;
 	}
 }

@@ -1,10 +1,13 @@
 package com.ifbaiano.estagioinclusivo.dao;
 
 import com.ifbaiano.estagioinclusivo.model.*;
+import com.ifbaiano.estagioinclusivo.model.enums.TipoVaga;
 
+import javax.swing.text.html.Option;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class DAOVaga implements DAORepository<Vaga, Integer> {
 
@@ -15,16 +18,21 @@ public class DAOVaga implements DAORepository<Vaga, Integer> {
     }
 
     @Override
-    public void insert(Vaga entity) {
+    public Optional<Integer> insert(Vaga entity) {
         String sql = "INSERT INTO vagas (id_empresa, fk_endereco, descricao, requisitos, beneficios, status) VALUES (?, ?, ?, ?, ?, ?)";
-        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+        try (PreparedStatement stmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             stmt.setInt(1, entity.getEmpresa().getId());
             stmt.setInt(2, entity.getEndereco().getId());
             stmt.setString(4, entity.getDescricao());
             stmt.setString(5, entity.getRequisitos());
             stmt.setString(6, entity.getBeneficios());
-            stmt.setString(7, "ATIVA");
+            stmt.setString(7, entity.getStatus().name());
             stmt.executeUpdate();
+            ResultSet rs = stmt.getGeneratedKeys();
+            if (rs.next()) {
+                return Optional.of(rs.getInt(1));
+            }
+                return Optional.empty();
         } catch (SQLException e) {
             throw new RuntimeException("Erro ao inserir vaga", e);
         }
@@ -39,7 +47,7 @@ public class DAOVaga implements DAORepository<Vaga, Integer> {
             stmt.setString(4, entity.getDescricao());
             stmt.setString(5, entity.getRequisitos());
             stmt.setString(6, entity.getBeneficios());
-            stmt.setString(7, entity.getStatus());
+            stmt.setString(7, entity.getStatus().name());
             stmt.setInt(8, entity.getId());
             stmt.executeUpdate();
         } catch (SQLException e) {
@@ -68,7 +76,9 @@ public class DAOVaga implements DAORepository<Vaga, Integer> {
                 Empresa empresa = new Empresa();
                 empresa.setId(rs.getInt("id_empresa"));
 
-                Endereco endereco = new Endereco(rs.getInt("fk_endereco"), null, null);
+                Endereco endereco = new Endereco();
+                endereco.setId(rs.getInt("fk_endereco"));
+
 
                 Curso curso = new Curso(rs.getLong("id_curso"));
 
@@ -78,7 +88,8 @@ public class DAOVaga implements DAORepository<Vaga, Integer> {
                         endereco,
                         rs.getString("descricao"),
                         rs.getString("requisitos"),
-                        rs.getString("beneficios")
+                        rs.getString("beneficios"),
+                        TipoVaga.valueOf(rs.getString("status"))
                 );
                 vagas.add(vaga);
             }
@@ -89,7 +100,7 @@ public class DAOVaga implements DAORepository<Vaga, Integer> {
     }
 
     @Override
-    public Vaga findById(Integer id) {
+    public Optional<Vaga> findById(Integer id) {
         String sql = "SELECT * FROM vagas WHERE id = ?";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setInt(1, id);
@@ -98,22 +109,23 @@ public class DAOVaga implements DAORepository<Vaga, Integer> {
                 Empresa empresa = new Empresa();
                 empresa.setId(rs.getInt("id_empresa"));
 
-                Endereco endereco = new Endereco(rs.getInt("fk_endereco"), null, null);
+                Endereco endereco = new Endereco();
+                endereco.setId(rs.getInt("fk_endereco"));
 
-                Curso curso = new Curso(rs.getLong("id_curso"));
-
-                return new Vaga(
+                return Optional.of(new Vaga(
                         rs.getInt("id"),
                         empresa,
                         endereco,
                         rs.getString("descricao"),
                         rs.getString("requisitos"),
-                        rs.getString("beneficios")
-                );
+                        rs.getString("beneficios"),
+                        TipoVaga.valueOf(rs.getString("status"))
+                ));
             }
+            return Optional.empty();
         } catch (SQLException e) {
             throw new RuntimeException("Erro ao buscar vaga por ID", e);
         }
-        return null;
+
     }
 }

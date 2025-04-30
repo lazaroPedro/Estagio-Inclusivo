@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TipoDeficiencia {
-    private Long id;
+    private int id;
     private String nome;
     private String descricao;
     private TipoDeficienciaEnum tipo;
@@ -33,7 +33,7 @@ public class TipoDeficiencia {
 
     public TipoDeficiencia() {}
 
-    public TipoDeficiencia(Long id, String nome, String descricao, TipoDeficienciaEnum tipo, String tipoApoio, Candidato candidato) {
+    public TipoDeficiencia(int id, String nome, String descricao, TipoDeficienciaEnum tipo, String tipoApoio, Candidato candidato) {
         this.id = id;
         this.nome = nome;
         this.descricao = descricao;
@@ -42,11 +42,11 @@ public class TipoDeficiencia {
         this.candidato = candidato;
     }
 
-    public Long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(int id) {
         this.id = id;
     }
 

@@ -9,14 +9,8 @@ public class Empresa extends Usuario {
     public Empresa() {
     }
 
-    public Empresa(int id, String nome, String email, String hashSenha, String salt, String cnpj, String razaoSocial) {
-        super(id, nome, email, hashSenha, salt);
-        this.cnpj = cnpj;
-        this.razaoSocial = razaoSocial;
-    }
-
-    public Empresa(String nome, String email, String hashSenha, String salt, String cnpj, String razaoSocial) {
-        super(nome, email, hashSenha, salt);
+    public Empresa(int id, String nome, String email, Endereco endereco, String salt, String hashSenha, String cnpj, String razaoSocial) {
+        super(id, nome, email, endereco, salt, hashSenha);
         this.cnpj = cnpj;
         this.razaoSocial = razaoSocial;
     }

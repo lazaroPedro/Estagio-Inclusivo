@@ -20,7 +20,7 @@ public class CursoServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Integer idCandidato = Integer.parseInt(req.getParameter("idCandidato"));
-        Long idCurso = Long.parseLong(req.getParameter("idCurso"));
+        Integer idCurso = Long.parseLong(req.getParameter("idCurso"));
         DAOCurso dao = new DAOCurso(DAOConfig.criarConexao());
 
         if(idCandidato != null) {
@@ -71,7 +71,7 @@ public class CursoServlet extends HttpServlet {
 
     @Override
     protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        Long idCurso = Long.parseLong(req.getParameter("idCurso"));
+        Integer idCurso = Long.parseLong(req.getParameter("idCurso"));
 
         DAOCurso dao = new DAOCurso(DAOConfig.criarConexao());
 

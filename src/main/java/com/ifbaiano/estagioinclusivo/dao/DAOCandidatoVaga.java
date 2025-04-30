@@ -20,8 +20,8 @@ public class DAOCandidatoVaga {
         String sql = "INSERT INTO candidato_vaga (fk_candidato, fk_vaga, data_criacao) VALUES (?, ?, ?)";
         try {
             PreparedStatement pp = conexao.prepareStatement(sql);
-            pp.setLong(1, entity.getCandidato().getId());
-            pp.setLong(2, entity.getVaga().getId());
+            pp.setInt(1, entity.getCandidato().getId());
+            pp.setInt(2, entity.getVaga().getId());
             pp.setTimestamp(3, Timestamp.valueOf(entity.getData()));
             pp.execute();
         } catch (SQLException e) {
@@ -30,12 +30,12 @@ public class DAOCandidatoVaga {
     }
 
 
-    public void delete(Long idCandidato, Long idVaga) {
+    public void delete(int idCandidato, int idVaga) {
         String sql = "DELETE FROM candidato_vaga WHERE fk_candidato = ? AND fk_vaga = ?";
         try {
             PreparedStatement pp = conexao.prepareStatement(sql);
-            pp.setLong(1, idCandidato);
-            pp.setLong(2, idVaga);
+            pp.setInt(1, idCandidato);
+            pp.setInt(2, idVaga);
 
             pp.execute();
         } catch (SQLException e) {
@@ -46,13 +46,13 @@ public class DAOCandidatoVaga {
     }
 
 
-    public Optional<CandidatoVaga> findById(Long idCandidato, Long idVaga) {
+    public Optional<CandidatoVaga> findById(int idCandidato, int idVaga) {
         String sql = "SELECT FROM candidato_vaga WHERE id_candidato = ? AND fk_vaga = ?";
 
         try {
             PreparedStatement pp = conexao.prepareStatement(sql);
-            pp.setLong(1, idCandidato);
-            pp.setLong(2, idVaga);
+            pp.setInt(1, idCandidato);
+            pp.setInt(2, idVaga);
 
             ResultSet rs = pp.executeQuery();
             if (rs.next()) {
@@ -74,11 +74,11 @@ public class DAOCandidatoVaga {
 
 
     }
-    public List<CandidatoVaga> findByVaga(Long idVaga) {
+    public List<CandidatoVaga> findByVaga(int idVaga) {
         String sql = "SELECT FROM candidato_vaga WHERE fk_vaga = ?";
         try {
             PreparedStatement pp = conexao.prepareStatement(sql);
-            pp.setLong(1, idVaga);
+            pp.setInt(1, idVaga);
             ResultSet rs = pp.executeQuery();
             List<CandidatoVaga> lista = new ArrayList<>();
             while (rs.next()) {
@@ -99,12 +99,12 @@ public class DAOCandidatoVaga {
             throw new RuntimeException(e);
         }
     }
-        public List<CandidatoVaga> findByCandidato(Long idCandidato) {
+        public List<CandidatoVaga> findByCandidato(int idCandidato) {
         String sql = "SELECT FROM candidato_vaga WHERE id_candidato = ?";
 
         try {
             PreparedStatement pp = conexao.prepareStatement(sql);
-            pp.setLong(1, idCandidato);
+            pp.setInt(1, idCandidato);
             ResultSet rs = pp.executeQuery();
             List<CandidatoVaga> lista = new ArrayList<>();
             while (rs.next()) {
