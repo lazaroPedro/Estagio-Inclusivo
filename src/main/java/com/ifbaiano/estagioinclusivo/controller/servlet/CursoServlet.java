@@ -65,7 +65,7 @@ public class CursoServlet extends HttpServlet {
             curso.validar();
             dao.insert(curso);
         }catch(ValidationException e) {
-            req.setAttribute("erro", e.getMessage());
+            req.setAttribute("erro", e.getErroCampos());
         }
     }
 

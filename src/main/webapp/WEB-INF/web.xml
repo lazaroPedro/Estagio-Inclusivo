@@ -16,7 +16,6 @@
         <load-on-startup>3</load-on-startup>
     </servlet>
 
-    <!-- Mapeamento do servlet para arquivos .jsp -->
     <servlet-mapping>
         <servlet-name>jsp</servlet-name>
         <url-pattern>*.jsp</url-pattern>
