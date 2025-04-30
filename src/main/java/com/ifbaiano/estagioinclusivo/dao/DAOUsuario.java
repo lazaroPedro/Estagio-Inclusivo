@@ -1,5 +1,6 @@
 package com.ifbaiano.estagioinclusivo.dao;
 
+import com.ifbaiano.estagioinclusivo.model.Endereco;
 import com.ifbaiano.estagioinclusivo.model.Usuario;
 import java.sql.*;
 import java.util.ArrayList;
@@ -14,12 +15,13 @@ public class DAOUsuario implements DAORepository<Usuario, Integer> {
 
     @Override
     public void insert(Usuario entity) {
-        String sql = "INSERT INTO usuarios (nome, email, hashSenha, salt) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO usuarios (nome, email, hashSenha, salt, fk_endereco) VALUES (?, ?, ?, ?, ?)";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, entity.getNome());
             stmt.setString(2, entity.getEmail());
             stmt.setString(3, entity.getHashSenha());
             stmt.setString(4, entity.getSalt());
+            stmt.setInt(5, entity.getEndereco().getId());
             stmt.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException("Erro ao inserir usuário ", e);
@@ -27,11 +29,12 @@ public class DAOUsuario implements DAORepository<Usuario, Integer> {
     }
 
     public int insertAndReturnid(Usuario entity) {
-        String sql = "INSERT INTO usuarios (nome, email, hashSenha, salt) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO usuarios (nome, email, hashSenha, salt, fk_endereco) VALUES (?, ?, ?, ?, ?)";
         try (PreparedStatement stmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             stmt.setString(1, entity.getNome());
             stmt.setString(2, entity.getEmail());
             stmt.setString(3, entity.getHashSenha());
+            stmt.setInt(5, entity.getEndereco().getId());
             stmt.setString(4, entity.getSalt());
             stmt.executeUpdate();
 
@@ -48,13 +51,14 @@ public class DAOUsuario implements DAORepository<Usuario, Integer> {
 
     @Override
     public void update(Usuario entity) {
-        String sql = "UPDATE usuarios SET nome = ?, email = ?, hashSenha = ?, salt = ? WHERE id_usuario = ?";
+        String sql = "UPDATE usuarios SET nome = ?, email = ?, hashSenha = ?, salt = ?, fk_endereco = ? WHERE id_usuario = ?";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, entity.getNome());
             stmt.setString(2, entity.getEmail());
             stmt.setString(3, entity.getHashSenha());
             stmt.setString(4, entity.getSalt());
-            stmt.setInt(5, entity.getId());
+            stmt.setInt(5, entity.getEndereco().getId());
+            stmt.setInt(6, entity.getId());
             stmt.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException("Erro ao da o update no usuario ", e);
@@ -85,6 +89,9 @@ public class DAOUsuario implements DAORepository<Usuario, Integer> {
             usuario.setEmail(rs.getString("email"));
             usuario.setHashSenha(rs.getString("hashSenha"));
             usuario.setSalt(rs.getString("salt"));
+            Endereco endereco = new Endereco();
+            endereco.setId(rs.getInt("fk_endereco"));
+            usuario.setEndereco(endereco);
             usuarios.add(usuario);
         }
         } catch (SQLException e) {
@@ -100,13 +107,18 @@ public class DAOUsuario implements DAORepository<Usuario, Integer> {
            stmt.setInt(1, id);
            ResultSet rs = stmt.executeQuery();
            if (rs.next()) {
-               return new Usuario(
-                       rs.getInt("id_usuario"),
-                       rs.getString("nome"),
-                       rs.getString("email"),
-                       rs.getString("hashSenha"),
-                       rs.getString("salt")
-               );
+               Endereco endereco = new Endereco();
+               endereco.setId(rs.getInt("fk_endereco"));
+
+               Usuario usuario = new Usuario();
+               usuario.setId(rs.getInt("id_usuario"));
+               usuario.setNome(rs.getString("nome"));
+               usuario.setEmail(rs.getString("email"));
+               usuario.setHashSenha(rs.getString("hashSenha"));
+               usuario.setSalt(rs.getString("salt"));
+               usuario.setEndereco(endereco);
+
+               return usuario;
            }
        } catch (SQLException e) {
            throw new RuntimeException("Erro ao buscar usuario por id ", e);
@@ -121,13 +133,18 @@ public class DAOUsuario implements DAORepository<Usuario, Integer> {
             stmt.setString(1, email);
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
-                    return new Usuario(
-                            rs.getInt("id_usuario"),
-                            rs.getString("nome"),
-                            rs.getString("email"),
-                            rs.getString("hashSenha"),
-                            rs.getString("salt")
-                    );
+                    Endereco endereco = new Endereco();
+                    endereco.setId(rs.getInt("fk_endereco"));
+
+                    Usuario usuario = new Usuario();
+                    usuario.setId(rs.getInt("id_usuario"));
+                    usuario.setNome(rs.getString("nome"));
+                    usuario.setEmail(rs.getString("email"));
+                    usuario.setHashSenha(rs.getString("hashSenha"));
+                    usuario.setSalt(rs.getString("salt"));
+                    usuario.setEndereco(endereco);
+
+                    return usuario;
                 }
             }
         }

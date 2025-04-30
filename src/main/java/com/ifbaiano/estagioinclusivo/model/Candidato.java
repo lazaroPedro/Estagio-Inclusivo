@@ -1,26 +1,17 @@
 package com.ifbaiano.estagioinclusivo.model;
 
-import java.util.List;
+
 
 public class Candidato extends Usuario{
     private String cpf;
     private String telefone;
-    private Regiao regiao;
 
     public void validar(){}
     public Candidato () {
     }
 
-    public Candidato(int id, String nome, String email, String hashSenha, String salt, String cpf, String telefone, List<Curso> cursos, Regiao regiao) {
-        super(id, nome, email, hashSenha, salt);
-        this.cpf = cpf;
-        this.telefone = telefone;
-        this.regiao = regiao;
-    }
-
-    public Candidato(int id, String nome, String email, String hashSenha, String salt,
-                     String cpf, String telefone) {
-        super(id, nome, email, hashSenha, salt);
+    public Candidato(int id, String nome, String email, Endereco endereco, String salt, String hashSenha, String cpf, String telefone) {
+        super(id, nome, email, endereco, salt, hashSenha);
         this.cpf = cpf;
         this.telefone = telefone;
     }
@@ -39,13 +30,5 @@ public class Candidato extends Usuario{
 
     public void setTelefone(String telefone) {
         this.telefone = telefone;
-    }
-
-    public Regiao getRegiao() {
-        return regiao;
-    }
-
-    public void setRegiao(Regiao regiao) {
-        this.regiao = regiao;
     }
 }

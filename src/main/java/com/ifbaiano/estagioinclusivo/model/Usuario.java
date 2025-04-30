@@ -2,9 +2,10 @@ package com.ifbaiano.estagioinclusivo.model;
 import com.ifbaiano.estagioinclusivo.utils.SenhaUtils;
 
 public class Usuario {
-    private int id_usuario;
+    private int id;
     private String nome;
     private String email;
+    private Endereco endereco;
     private String salt;
     private String hashSenha;
 
@@ -12,34 +13,21 @@ public class Usuario {
     public Usuario() {
     }
 
-    public Usuario(String nome, String email, String salt, String hashSenha) {
+    public Usuario(int id, String nome, String email, Endereco endereco, String salt, String hashSenha) {
+        this.id = id;
         this.nome = nome;
         this.email = email;
+        this.endereco = endereco;
         this.salt = salt;
         this.hashSenha = hashSenha;
     }
 
-    public Usuario(String nome, String email, String senha) {
-        this.nome = nome;
-        this.email = email;
-        this.salt = SenhaUtils.gerarSalt();
-        this.hashSenha = SenhaUtils.gerarHashSenha(senha, this.salt);
+    public int getId() {
+        return id;
     }
 
-
-    public Usuario(int id_usuario, String nome, String email, String salt, String hashSenha) {
-        this.nome = nome;
-        this.email = email;
-        this.salt = salt;
-        this.hashSenha = hashSenha;
-    }
-
-    public String getSalt() {
-        return salt;
-    }
-
-    public void setSalt(String salt) {
-        this.salt = salt;
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getNome() {
@@ -58,19 +46,27 @@ public class Usuario {
         this.email = email;
     }
 
+    public Endereco getEndereco() {
+        return endereco;
+    }
+
+    public void setEndereco(Endereco endereco) {
+        this.endereco = endereco;
+    }
+
+    public String getSalt() {
+        return salt;
+    }
+
+    public void setSalt(String salt) {
+        this.salt = salt;
+    }
+
     public String getHashSenha() {
         return hashSenha;
     }
 
     public void setHashSenha(String hashSenha) {
         this.hashSenha = hashSenha;
-    }
-
-    public void setId(int id) {
-        this.id_usuario = id;
-    }
-
-    public int getId() {
-        return id_usuario;
     }
 }

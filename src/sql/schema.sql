@@ -64,8 +64,6 @@ CREATE TABLE empresas(
 
 );
 
-
-
 CREATE TABLE vagas(
     id_vaga INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     descricao TEXT NOT NULL,

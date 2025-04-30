@@ -12,6 +12,7 @@ import jakarta.servlet.http.HttpServletResponse;
 
 
 import java.io.IOException;
+import java.sql.SQLException;
 
 @WebServlet("/candidato")
 public class CandidatoServlet extends HttpServlet {
@@ -20,7 +21,12 @@ public class CandidatoServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Integer idCandidato = Integer.parseInt(req.getParameter("id"));
 
-        DAOCandidato daoCandidato = new DAOCandidato(DAOConfig.criarConexao());
+        DAOCandidato daoCandidato = null;
+        try {
+            daoCandidato = new DAOCandidato(DAOConfig.criarConexao());
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
         Candidato c = daoCandidato.findById(idCandidato);
         req.setAttribute("nome", c.getNome());
         req.setAttribute("email", c.getEmail());
@@ -53,7 +59,12 @@ public class CandidatoServlet extends HttpServlet {
     protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Integer id = Integer.parseInt(req.getParameter("id"));
 
-        DAOCandidato daoCandidato = new DAOCandidato(DAOConfig.criarConexao());
+        DAOCandidato daoCandidato = null;
+        try {
+            daoCandidato = new DAOCandidato(DAOConfig.criarConexao());
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
 
         daoCandidato.delete(id);
         daoCandidato.fecharConexao();
