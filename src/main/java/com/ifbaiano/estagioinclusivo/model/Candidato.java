@@ -5,7 +5,6 @@ import java.util.List;
 public class Candidato extends Usuario{
     private String cpf;
     private String telefone;
-    private Regiao regiao;
 
     public void validar(){}
     public Candidato () {
@@ -15,7 +14,6 @@ public class Candidato extends Usuario{
         super(id, nome, email, hashSenha, salt);
         this.cpf = cpf;
         this.telefone = telefone;
-        this.regiao = regiao;
     }
 
     public Candidato(int id, String nome, String email, String hashSenha, String salt,
@@ -39,13 +37,5 @@ public class Candidato extends Usuario{
 
     public void setTelefone(String telefone) {
         this.telefone = telefone;
-    }
-
-    public Regiao getRegiao() {
-        return regiao;
-    }
-
-    public void setRegiao(Regiao regiao) {
-        this.regiao = regiao;
     }
 }

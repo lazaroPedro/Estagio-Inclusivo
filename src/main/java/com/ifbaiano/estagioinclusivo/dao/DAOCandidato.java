@@ -24,7 +24,7 @@ public class DAOCandidato implements DAORepository<Candidato, Integer> {
 
     @Override
     public void insert(Candidato entity) {
-        String sql = "INSERT INTO candidatos (id_candidato, telefone, cpf, Regiao) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO candidatos (id_candidato, telefone, cpf) VALUES (?, ?, ?)";
         try {
             connection.setAutoCommit(false);
             int id_candidato = daoUsuario.insertAndReturnid(entity);
@@ -32,7 +32,6 @@ public class DAOCandidato implements DAORepository<Candidato, Integer> {
                 stmt.setInt(1, id_candidato);
                 stmt.setString(2, entity.getTelefone());
                 stmt.setString(3, entity.getCpf());
-                stmt.setInt(4, entity.getRegiao().getId());
                 stmt.executeUpdate();
             }
             connection.commit();
@@ -55,13 +54,12 @@ public class DAOCandidato implements DAORepository<Candidato, Integer> {
 
     @Override
     public void update(Candidato entity) {
-        String sql = "UPDATE candidatos SET telefone = ?, cpf = ?, Regiao = ? WHERE id = ?";
+        String sql = "UPDATE candidatos SET telefone = ?, cpf = ?, WHERE id = ?";
 
         try(PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, entity.getTelefone());
             stmt.setString(2, entity.getCpf());
-            stmt.setObject(3, entity.getRegiao());
-            stmt.setInt(4, entity.getId());
+            stmt.setInt(3, entity.getId());
             stmt.executeUpdate();
         } catch (Exception e){
             throw new RuntimeException("Erro ao da update", e);
@@ -83,7 +81,8 @@ public class DAOCandidato implements DAORepository<Candidato, Integer> {
         }
     }
 
-    @Override
+
+   @Override
     public List<Candidato> findAll() {
         List<Candidato> candidatos = new ArrayList<>();
         String sql = "SELECT * FROM candidatos";
@@ -104,41 +103,46 @@ public class DAOCandidato implements DAORepository<Candidato, Integer> {
 
     @Override
     public Candidato findById(Integer id) {
-        String sql = "SELECT * from candidatos WHERE id = ?";
-
-        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+        String sql = "SELECT * FROM candidatos WHERE id = ?";
+        try(PreparedStatement stmt = connection.prepareStatement(sql);) {
             stmt.setInt(1, id);
-            try (ResultSet rs = stmt.executeQuery()) {
-                if (rs.next()) {
-                    return new Candidato(rs.getInt("id"), rs.getString("nome"), rs.getString("email"),
-                            rs.getString("hashSenha"), rs.getString("salt"), rs.getString("cpf"), rs.getString("curso"),
-                            rs.getString("telefone"));
-                }
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return new Candidato(
+                        rs.getInt("id_usuario"),
+                        rs.getString("cpf"),
+                        rs.getString("telefone")
+                );
             }
         } catch (SQLException e) {
-            throw new RuntimeException("Erro ao buscar candidato por ID", e);
+            throw new RuntimeException("Erro ao buscar usuario por id ", e);
         }
         return null;
     }
 
 
+    @Override
+    public Usuario findById(Integer id) {
+        String sql = "SELECT * FROM usuarios WHERE id = ?";
+        try(PreparedStatement stmt = connection.prepareStatement(sql);) {
+            stmt.setInt(1, id);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return new Usuario(
+                        rs.getInt("id_usuario"),
+                        rs.getString("nome"),
+                        rs.getString("email"),
+                        rs.getString("hashSenha"),
+                        rs.getString("salt")
+                );
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao buscar usuario por id ", e);
+        }
 
-<<<<<<< HEAD
-		try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-			stmt.setInt(1, id);
-			try (ResultSet rs = stmt.executeQuery()) {
-				if (rs.next()) {
-					return new Candidato(rs.getInt("id"), rs.getString("nome"), rs.getString("email"),
-							rs.getString("hashSenha"), rs.getString("salt"), rs.getString("cpf"), rs.getString("curso"),
-							rs.getString("telefone"));
-				}
-			}
-		} catch (SQLException e) {
-			throw new RuntimeException("Erro ao buscar candidato por ID", e);
-		}
-		return null;
-	}
-=======
+        return null;
+    }
+
     public void fecharConexao() {
         try {
             connection.close();
@@ -146,5 +150,5 @@ public class DAOCandidato implements DAORepository<Candidato, Integer> {
             throw new RuntimeException(e);
         }
     }
->>>>>>> 70f6b1e46e9025819cb9e953ca34da0a85c07fff
 }
+

@@ -3,10 +3,11 @@ package com.ifbaiano.estagioinclusivo.model;
 public class Vaga {
 	private int id;
 	private Empresa empresa;
-	private Regiao regiao;
+	private Endereco endereco;
 	private String descricao;
 	private String requisitos;
 	private String beneficios;
+	private String status;
 
 
 	public void validar() {}
@@ -14,15 +15,16 @@ public class Vaga {
 	public Vaga() {
 	}
 
-	public Vaga(int id, Empresa empresa, Regiao regiao,  String descricao, String requisitos,
-				String beneficios) {
+	public Vaga(int id, Empresa empresa, Endereco endereco,  String descricao, String requisitos,
+				String beneficios, String status) {
 		super();
 		this.id = id;
 		this.empresa = empresa;
-		this.regiao = regiao;
+		this.endereco = endereco;
 		this.descricao = descricao;
 		this.requisitos = requisitos;
 		this.beneficios = beneficios;
+		this.status = status;
 	}
 	public int getId() {
 		return id;
@@ -36,11 +38,11 @@ public class Vaga {
 	public void setEmpresa(Empresa empresa) {
 		this.empresa = empresa;
 	}
-	public Regiao getRegiao() {
-		return regiao;
+	public Endereco getEndereco() {
+		return endereco;
 	}
-	public void setRegiao(Regiao regiao) {
-		this.regiao = regiao;
+	public void setEndereco(Endereco endereco) {
+		this.endereco = endereco;
 	}
 	public String getDescricao() {
 		return descricao;
@@ -60,7 +62,12 @@ public class Vaga {
 	public void setBeneficios(String beneficios) {
 		this.beneficios = beneficios;
 	}
-	
-	
-		
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
 }

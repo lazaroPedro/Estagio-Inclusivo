@@ -5,6 +5,7 @@ public class Usuario {
     private int id_usuario;
     private String nome;
     private String email;
+    private Endereco endereco;
     private String salt;
     private String hashSenha;
 
@@ -12,24 +13,28 @@ public class Usuario {
     public Usuario() {
     }
 
-    public Usuario(String nome, String email, String salt, String hashSenha) {
+    public Usuario(int id_usuario, String nome, String email, Endereco endereco, String salt, String hashSenha) {
+        this.id_usuario = id_usuario;
         this.nome = nome;
         this.email = email;
+        this.endereco = endereco;
         this.salt = salt;
         this.hashSenha = hashSenha;
     }
 
-    public Usuario(String nome, String email, String senha) {
+    public Usuario(String nome, String email, Endereco endereco, String senha) {
         this.nome = nome;
         this.email = email;
+        this.endereco = endereco;
         this.salt = SenhaUtils.gerarSalt();
         this.hashSenha = SenhaUtils.gerarHashSenha(senha, this.salt);
     }
 
 
-    public Usuario(int id_usuario, String nome, String email, String salt, String hashSenha) {
+    public Usuario(int id_usuario, String nome, String email, Endereco endereco, String salt, String hashSenha) {
         this.nome = nome;
         this.email = email;
+        this.endereco = endereco;
         this.salt = salt;
         this.hashSenha = hashSenha;
     }
@@ -56,6 +61,22 @@ public class Usuario {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public int getId_usuario() {
+        return id_usuario;
+    }
+
+    public void setId_usuario(int id_usuario) {
+        this.id_usuario = id_usuario;
+    }
+
+    public Endereco getEndereco() {
+        return endereco;
+    }
+
+    public void setEndereco(Endereco endereco) {
+        this.endereco = endereco;
     }
 
     public String getHashSenha() {

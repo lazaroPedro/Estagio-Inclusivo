@@ -15,14 +15,15 @@ public class DAOVaga implements DAORepository<Vaga, Integer> {
     }
 
     @Override
-    public void insert(Vaga vaga) {
-        String sql = "INSERT INTO vaga (id_empresa, id_regiao, id_curso, descricao, requisitos, beneficios) VALUES (?, ?, ?, ?, ?, ?)";
+    public void insert(Vaga entity) {
+        String sql = "INSERT INTO vagas (id_empresa, fk_endereco, descricao, requisitos, beneficios, status) VALUES (?, ?, ?, ?, ?, ?)";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setInt(1, vaga.getEmpresa().getId());
-            stmt.setInt(2, vaga.getRegiao().getId());
-            stmt.setString(4, vaga.getDescricao());
-            stmt.setString(5, vaga.getRequisitos());
-            stmt.setString(6, vaga.getBeneficios());
+            stmt.setInt(1, entity.getEmpresa().getId());
+            stmt.setInt(2, entity.getEndereco().getId());
+            stmt.setString(4, entity.getDescricao());
+            stmt.setString(5, entity.getRequisitos());
+            stmt.setString(6, entity.getBeneficios());
+            stmt.setString(7, "ATIVA");
             stmt.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException("Erro ao inserir vaga", e);
@@ -30,15 +31,16 @@ public class DAOVaga implements DAORepository<Vaga, Integer> {
     }
 
     @Override
-    public void update(Vaga vaga) {
-        String sql = "UPDATE vaga SET id_empresa = ?, id_regiao = ?, id_curso = ?, descricao = ?, requisitos = ?, beneficios = ? WHERE id = ?";
+    public void update(Vaga entity) {
+        String sql = "UPDATE vagas SET id_empresa = ?, fk_endereco = ?, descricao = ?, requisitos = ?, beneficios = ? status = ? WHERE id = ?";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setInt(1, vaga.getEmpresa().getId());
-            stmt.setInt(2, vaga.getRegiao().getId());
-            stmt.setString(4, vaga.getDescricao());
-            stmt.setString(5, vaga.getRequisitos());
-            stmt.setString(6, vaga.getBeneficios());
-            stmt.setInt(7, vaga.getId());
+            stmt.setInt(1, entity.getEmpresa().getId());
+            stmt.setInt(2, entity.getEndereco().getId());
+            stmt.setString(4, entity.getDescricao());
+            stmt.setString(5, entity.getRequisitos());
+            stmt.setString(6, entity.getBeneficios());
+            stmt.setString(7, entity.getStatus());
+            stmt.setInt(8, entity.getId());
             stmt.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException("Erro ao atualizar vaga", e);
@@ -47,7 +49,7 @@ public class DAOVaga implements DAORepository<Vaga, Integer> {
 
     @Override
     public void delete(Integer id) {
-        String sql = "DELETE FROM vaga WHERE id = ?";
+        String sql = "DELETE FROM vagas WHERE id = ?";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setInt(1, id);
             stmt.executeUpdate();
@@ -59,21 +61,21 @@ public class DAOVaga implements DAORepository<Vaga, Integer> {
     @Override
     public List<Vaga> findAll() {
         List<Vaga> vagas = new ArrayList<>();
-        String sql = "SELECT * FROM vaga";
+        String sql = "SELECT * FROM vagas";
         try (PreparedStatement stmt = connection.prepareStatement(sql);
              ResultSet rs = stmt.executeQuery()) {
             while (rs.next()) {
                 Empresa empresa = new Empresa();
                 empresa.setId(rs.getInt("id_empresa"));
 
-                Regiao regiao = new Regiao(rs.getInt("id_regiao"), null, null);
+                Endereco endereco = new Endereco(rs.getInt("fk_endereco"), null, null);
 
                 Curso curso = new Curso(rs.getLong("id_curso"));
 
                 Vaga vaga = new Vaga(
                         rs.getInt("id"),
                         empresa,
-                        regiao,
+                        endereco,
                         rs.getString("descricao"),
                         rs.getString("requisitos"),
                         rs.getString("beneficios")
@@ -88,7 +90,7 @@ public class DAOVaga implements DAORepository<Vaga, Integer> {
 
     @Override
     public Vaga findById(Integer id) {
-        String sql = "SELECT * FROM vaga WHERE id = ?";
+        String sql = "SELECT * FROM vagas WHERE id = ?";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setInt(1, id);
             ResultSet rs = stmt.executeQuery();
@@ -96,14 +98,14 @@ public class DAOVaga implements DAORepository<Vaga, Integer> {
                 Empresa empresa = new Empresa();
                 empresa.setId(rs.getInt("id_empresa"));
 
-                Regiao regiao = new Regiao(rs.getInt("id_regiao"), null, null);
+                Endereco endereco = new Endereco(rs.getInt("fk_endereco"), null, null);
 
                 Curso curso = new Curso(rs.getLong("id_curso"));
 
                 return new Vaga(
                         rs.getInt("id"),
                         empresa,
-                        regiao,
+                        endereco,
                         rs.getString("descricao"),
                         rs.getString("requisitos"),
                         rs.getString("beneficios")
