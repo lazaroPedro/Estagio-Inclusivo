@@ -1,6 +1,6 @@
 package com.ifbaiano.estagioinclusivo.controller.servlet;
 
-import com.ifbaiano.estagioinclusivo.config.DAOConfig;
+import com.ifbaiano.estagioinclusivo.config.DBConfig;
 import com.ifbaiano.estagioinclusivo.dao.DAOCurso;
 import com.ifbaiano.estagioinclusivo.model.Candidato;
 import com.ifbaiano.estagioinclusivo.model.Curso;
@@ -21,7 +21,7 @@ public class CursoServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Integer idCandidato = Integer.parseInt(req.getParameter("idCandidato"));
         Integer idCurso = Long.parseLong(req.getParameter("idCurso"));
-        DAOCurso dao = new DAOCurso(DAOConfig.criarConexao());
+        DAOCurso dao = new DAOCurso(DBConfig.criarConexao());
 
         if(idCandidato != null) {
 
@@ -49,7 +49,7 @@ public class CursoServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Integer idCandidato = Integer.parseInt(req.getParameter("idCandidato"));
 
-        DAOCurso dao = new DAOCurso(DAOConfig.criarConexao());
+        DAOCurso dao = new DAOCurso(DBConfig.criarConexao());
 
         Curso curso = new Curso();
         curso.setNomeCurso(req.getParameter("nomeCurso"));
@@ -73,7 +73,7 @@ public class CursoServlet extends HttpServlet {
     protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Integer idCurso = Long.parseLong(req.getParameter("idCurso"));
 
-        DAOCurso dao = new DAOCurso(DAOConfig.criarConexao());
+        DAOCurso dao = new DAOCurso(DBConfig.criarConexao());
 
         dao.delete(idCurso);
         resp.sendRedirect(req.getContextPath() + "/");

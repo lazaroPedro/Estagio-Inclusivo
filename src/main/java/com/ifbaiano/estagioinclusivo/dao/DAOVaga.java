@@ -20,6 +20,7 @@ public class DAOVaga implements DAORepository<Vaga, Integer> {
     @Override
     public Optional<Integer> insert(Vaga entity) {
         String sql = "INSERT INTO vagas (id_empresa, fk_endereco, descricao, requisitos, beneficios, status) VALUES (?, ?, ?, ?, ?, ?)";
+        ResultSet rs = null;
         try (PreparedStatement stmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             stmt.setInt(1, entity.getEmpresa().getId());
             stmt.setInt(2, entity.getEndereco().getId());
@@ -28,19 +29,22 @@ public class DAOVaga implements DAORepository<Vaga, Integer> {
             stmt.setString(6, entity.getBeneficios());
             stmt.setString(7, entity.getStatus().name());
             stmt.executeUpdate();
-            ResultSet rs = stmt.getGeneratedKeys();
+            rs = stmt.getGeneratedKeys();
             if (rs.next()) {
                 return Optional.of(rs.getInt(1));
             }
-                return Optional.empty();
+
         } catch (SQLException e) {
             throw new RuntimeException("Erro ao inserir vaga", e);
+        } finally {
+            fechar(rs);
         }
+        return Optional.empty();
     }
 
     @Override
     public void update(Vaga entity) {
-        String sql = "UPDATE vagas SET id_empresa = ?, fk_endereco = ?, descricao = ?, requisitos = ?, beneficios = ? status = ? WHERE id = ?";
+        String sql = "UPDATE vagas SET id_empresa = ?, fk_endereco = ?, descricao = ?, requisitos = ?, beneficios = ? status = ? WHERE id_vaga = ?";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setInt(1, entity.getEmpresa().getId());
             stmt.setInt(2, entity.getEndereco().getId());
@@ -57,7 +61,7 @@ public class DAOVaga implements DAORepository<Vaga, Integer> {
 
     @Override
     public void delete(Integer id) {
-        String sql = "DELETE FROM vagas WHERE id = ?";
+        String sql = "DELETE FROM vagas WHERE id_vaga = ?";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setInt(1, id);
             stmt.executeUpdate();
@@ -83,7 +87,7 @@ public class DAOVaga implements DAORepository<Vaga, Integer> {
                 Curso curso = new Curso(rs.getLong("id_curso"));
 
                 Vaga vaga = new Vaga(
-                        rs.getInt("id"),
+                        rs.getInt("id_vaga"),
                         empresa,
                         endereco,
                         rs.getString("descricao"),
@@ -101,10 +105,11 @@ public class DAOVaga implements DAORepository<Vaga, Integer> {
 
     @Override
     public Optional<Vaga> findById(Integer id) {
-        String sql = "SELECT * FROM vagas WHERE id = ?";
+        String sql = "SELECT * FROM vagas WHERE id_vaga = ?";
+        ResultSet rs = null;
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setInt(1, id);
-            ResultSet rs = stmt.executeQuery();
+            rs = stmt.executeQuery();
             if (rs.next()) {
                 Empresa empresa = new Empresa();
                 empresa.setId(rs.getInt("id_empresa"));
@@ -113,7 +118,7 @@ public class DAOVaga implements DAORepository<Vaga, Integer> {
                 endereco.setId(rs.getInt("fk_endereco"));
 
                 return Optional.of(new Vaga(
-                        rs.getInt("id"),
+                        rs.getInt("id_vaga"),
                         empresa,
                         endereco,
                         rs.getString("descricao"),
@@ -122,10 +127,23 @@ public class DAOVaga implements DAORepository<Vaga, Integer> {
                         TipoVaga.valueOf(rs.getString("status"))
                 ));
             }
-            return Optional.empty();
+
         } catch (SQLException e) {
             throw new RuntimeException("Erro ao buscar vaga por ID", e);
+        } finally {
+            fechar(rs);
         }
+        return Optional.empty();
+    }
 
+    @Override
+    public void fechar(AutoCloseable closeable) {
+        try {
+            if (closeable != null) {
+                closeable.close();
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }

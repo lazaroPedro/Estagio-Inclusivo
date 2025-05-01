@@ -13,4 +13,5 @@ public interface DAORepository<T, I> {
     public Optional<T> findById(I id);
 
 
+    void fechar(AutoCloseable closeable);
 }

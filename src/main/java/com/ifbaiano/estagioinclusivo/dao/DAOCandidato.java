@@ -130,7 +130,7 @@ public class DAOCandidato implements DAORepository<Candidato, Integer> {
         }
         return Optional.empty();
     }
-
+    @Override
     public void fechar(AutoCloseable closeable) {
         try {
             if (closeable != null) {
@@ -140,15 +140,7 @@ public class DAOCandidato implements DAORepository<Candidato, Integer> {
             throw new RuntimeException("Erro ao fechar conexão",e);
         }
     }
-    public void fechar() {
-        try {
-            if (connection != null) {
-                connection.close();
-            }
-        } catch (Exception e) {
-            throw new RuntimeException("Erro ao fechar conexão",e);
-        }
-    }
+
 
 
 }

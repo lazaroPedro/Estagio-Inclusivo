@@ -19,34 +19,31 @@ public class DAOTipoDeficiencia implements DAORepository<TipoDeficiencia, Intege
     @Override
     public Optional<Integer> insert(TipoDeficiencia entity) {
         String sql = "INSERT INTO deficiencias (nome, descricao, tipo, tipo_apoio, fk_candidato) VALUES (?,?,?,?,?)";
-        try {
-            PreparedStatement pp = conexao.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+        ResultSet rs = null;
+        try (PreparedStatement pp = conexao.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)){
             pp.setString(1, entity.getNome());
             pp.setString(2, entity.getDescricao());
             pp.setString(3, entity.getTipo().name());
             pp.setString(4, entity.getTipoApoio());
             pp.setInt(5, entity.getCandidato().getId());
-            ResultSet rs = pp.executeQuery();
+            rs = pp.executeQuery();
             if (rs.next()) {
                 return Optional.of(rs.getInt(1));
             }
-            return Optional.empty();
-
-
-
 
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Erro ao inserir deficiencia", e);
+        } finally {
+            fechar(rs);
         }
-
+        return Optional.empty();
     }
 
     @Override
     public void update(TipoDeficiencia entity) {
-        String sql = "UPDATE deficiencias SET nome = ?, descricao = ?, tipo = ?, tipo_apoio = ?, fk_candidato = ? WHERE id = ?";
+        String sql = "UPDATE deficiencias SET nome = ?, descricao = ?, tipo_deficiencia = ?, tipo_apoio = ?, fk_candidato = ? WHERE id_deficiencia = ?";
 
-        try {
-            PreparedStatement pp = conexao.prepareStatement(sql);
+        try (PreparedStatement pp = conexao.prepareStatement(sql)){
             pp.setString(1, entity.getNome());
             pp.setString(2, entity.getDescricao());
             pp.setString(3, entity.getTipo().name());
@@ -56,7 +53,7 @@ public class DAOTipoDeficiencia implements DAORepository<TipoDeficiencia, Intege
             pp.execute();
 
         } catch (SQLException e){
-            throw new RuntimeException(e);
+            throw new RuntimeException("Erro ao atualizar deficiencias", e);
         }
 
 
@@ -64,15 +61,14 @@ public class DAOTipoDeficiencia implements DAORepository<TipoDeficiencia, Intege
 
     @Override
     public void delete(Integer id) {
-        String sql = "DELETE FROM deficiencias WHERE id = ?";
+        String sql = "DELETE FROM deficiencias WHERE id_deficiencia = ?";
 
-        try {
-            PreparedStatement pp = conexao.prepareStatement(sql);
+        try (PreparedStatement pp = conexao.prepareStatement(sql)){
             pp.setInt(1, id);
             pp.execute();
 
         }catch (SQLException e){
-            throw new RuntimeException(e);
+            throw new RuntimeException("Erro ao deletar deficiencia", e);
         }
 
     }
@@ -80,61 +76,71 @@ public class DAOTipoDeficiencia implements DAORepository<TipoDeficiencia, Intege
     @Override
     public List<TipoDeficiencia> findAll() {
         String sql = "SELECT * FROM deficiencias";
-
-        try {
-            PreparedStatement pp = conexao.prepareStatement(sql);
-            ResultSet rs = pp.executeQuery();
-            List<TipoDeficiencia> lista = new ArrayList<>();
+        List<TipoDeficiencia> lista = new ArrayList<>();
+        try (PreparedStatement pp = conexao.prepareStatement(sql);
+            ResultSet rs = pp.executeQuery()){
             while (rs.next()) {
                 TipoDeficiencia tipoDeficiencia = new TipoDeficiencia();
-                tipoDeficiencia.setId(rs.getInt("id"));
+                tipoDeficiencia.setId(rs.getInt("id_deficiencia"));
                 tipoDeficiencia.setNome(rs.getString("nome"));
                 tipoDeficiencia.setDescricao(rs.getString("descricao"));
                 tipoDeficiencia.setTipoApoio(rs.getString("tipo_apoio"));
-                tipoDeficiencia.setTipo(TipoDeficienciaEnum.valueOf(rs.getString("tipo")));
+                tipoDeficiencia.setTipo(TipoDeficienciaEnum.valueOf(rs.getString("tipo_deficiencia")));
                 Candidato c = new Candidato();
                 c.setId(rs.getInt("fk_candidato"));
                 tipoDeficiencia.setCandidato(c);
             }
             pp.execute();
-            return lista;
+
 
         }catch (SQLException e){
-            throw new RuntimeException(e);
+            throw new RuntimeException("Erro ao listar deficiencia", e);
         }
+        return lista;
     }
 
     @Override
     public Optional<TipoDeficiencia> findById(Integer id) {
-    String sql = "SELECT * FROM deficiencias WHERE id = ?";
-
-        try {
-            PreparedStatement pp = conexao.prepareStatement(sql);
+        String sql = "SELECT * FROM deficiencias WHERE id_deficiencia = ?";
+        ResultSet rs = null;
+        try (PreparedStatement pp = conexao.prepareStatement(sql)){
             pp.setInt(1, id);
-            ResultSet rs = pp.executeQuery();
-            TipoDeficiencia tipoDeficiencia = null;
+            rs = pp.executeQuery();
+
 
             if (rs.next()) {
-                tipoDeficiencia = new TipoDeficiencia();
-                tipoDeficiencia.setId(rs.getInt("id"));
+                TipoDeficiencia tipoDeficiencia = new TipoDeficiencia();
+                tipoDeficiencia.setId(rs.getInt("id_deficiencia"));
                 tipoDeficiencia.setNome(rs.getString("nome"));
                 tipoDeficiencia.setDescricao(rs.getString("descricao"));
                 tipoDeficiencia.setTipoApoio(rs.getString("tipo_apoio"));
-                tipoDeficiencia.setTipo(TipoDeficienciaEnum.valueOf(rs.getString("tipo")));
+                tipoDeficiencia.setTipo(TipoDeficienciaEnum.valueOf(rs.getString("tipo_deficiencia")));
                 Candidato c = new Candidato();
                 c.setId(rs.getInt("fk_candidato"));
                 tipoDeficiencia.setCandidato(c);
                 return Optional.of(tipoDeficiencia);
             }
-            return Optional.empty();
+
 
 
 
 
         }catch (SQLException e){
-            throw new RuntimeException(e);
+            throw new RuntimeException("Erro ao listar deficiencias", e);
+        } finally {
+            fechar(rs);
         }
-
+        return Optional.empty();
+    }
+    @Override
+    public void fechar(AutoCloseable closeable) {
+        try {
+            if (closeable != null) {
+                closeable.close();
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("Erro ao fechar conexão",e);
+        }
     }
 
 }

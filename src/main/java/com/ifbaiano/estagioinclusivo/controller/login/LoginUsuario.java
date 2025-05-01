@@ -1,10 +1,9 @@
 package com.ifbaiano.estagioinclusivo.controller.login;
 
-import com.ifbaiano.estagioinclusivo.config.DAOConfig;
+import com.ifbaiano.estagioinclusivo.config.DBConfig;
 import com.ifbaiano.estagioinclusivo.dao.DAOUsuario;
 import  com.ifbaiano.estagioinclusivo.model.Usuario;
 import com.ifbaiano.estagioinclusivo.model.dto.SessionDTO;
-import com.ifbaiano.estagioinclusivo.utils.SenhaUtils;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -22,7 +21,7 @@ public class LoginUsuario extends HttpServlet {
         String email = req.getParameter("email");
         String senha = req.getParameter("senha");
 
-        DAOUsuario dao = new DAOUsuario(DAOConfig.criarConexao());
+        DAOUsuario dao = new DAOUsuario(DBConfig.criarConexao());
         Usuario u;
         try {
             u = dao.findByEmail(email);

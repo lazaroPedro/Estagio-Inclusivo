@@ -1,6 +1,6 @@
 package com.ifbaiano.estagioinclusivo.controller.servlet;
 
-import com.ifbaiano.estagioinclusivo.config.DAOConfig;
+import com.ifbaiano.estagioinclusivo.config.DBConfig;
 import com.ifbaiano.estagioinclusivo.dao.DAOCandidato;
 import com.ifbaiano.estagioinclusivo.model.Candidato;
 import com.ifbaiano.estagioinclusivo.utils.validation.ValidationException;
@@ -23,7 +23,7 @@ public class CandidatoServlet extends HttpServlet {
 
         DAOCandidato daoCandidato = null;
         try {
-            daoCandidato = new DAOCandidato(DAOConfig.criarConexao());
+            daoCandidato = new DAOCandidato(DBConfig.criarConexao());
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -61,7 +61,7 @@ public class CandidatoServlet extends HttpServlet {
 
         DAOCandidato daoCandidato = null;
         try {
-            daoCandidato = new DAOCandidato(DAOConfig.criarConexao());
+            daoCandidato = new DAOCandidato(DBConfig.criarConexao());
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

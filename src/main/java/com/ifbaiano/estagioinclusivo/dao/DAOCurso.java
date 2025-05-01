@@ -18,8 +18,8 @@ public class DAOCurso implements DAORepository<Curso, Integer> {
     @Override
     public Optional<Integer> insert(Curso entity) {
         String sql = "INSERT INTO cursos (instituicao, nome, descricao, data_inicio, data_fim, fk_candidato) VALUES (?,?,?,?,?,?)";
-        try {
-            PreparedStatement pp = conexao.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+        ResultSet rs = null;
+        try (PreparedStatement pp = conexao.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)){
             pp.setString(1, entity.getInstituicao());
             pp.setString(2,entity.getNomeCurso());
             pp.setString(3, entity.getDescricao());
@@ -27,13 +27,15 @@ public class DAOCurso implements DAORepository<Curso, Integer> {
             pp.setDate(5, Date.valueOf(entity.getDataFim()));
             pp.setInt(6, entity.getCandidato().getId());
             pp.executeUpdate();
-            ResultSet rs = pp.getGeneratedKeys();
+            rs = pp.getGeneratedKeys();
             if (rs.next()) {
                 return Optional.of(rs.getInt(1));
             }
             return Optional.empty();
         } catch (SQLException e) {
-            throw new RuntimeException("Erro ao inserir C",e);
+            throw new RuntimeException("Erro ao inserir Curso",e);
+        } finally {
+            fechar(rs);
         }
 
     }
@@ -41,9 +43,8 @@ public class DAOCurso implements DAORepository<Curso, Integer> {
 
     @Override
     public void update(Curso entity) {
-        String sql = "UPDATE cursos SET instituicao = ?, nome = ?, descricao = ?, data_inicio = ?, data_fim = ?, fk_candidato = ? WHERE id = ?)";
-            try {
-                PreparedStatement pp = conexao.prepareStatement(sql);
+        String sql = "UPDATE cursos SET instituicao = ?, nome = ?, descricao = ?, data_inicio = ?, data_fim = ?, fk_candidato = ? WHERE id_curso = ?)";
+            try (PreparedStatement pp = conexao.prepareStatement(sql)){
                 pp.setString(1, entity.getInstituicao());
                 pp.setString(2,entity.getNomeCurso());
                 pp.setString(3, entity.getDescricao());
@@ -53,21 +54,20 @@ public class DAOCurso implements DAORepository<Curso, Integer> {
                 pp.setInt(7, entity.getId());
                 pp.executeUpdate();
             } catch (SQLException e) {
-                throw new RuntimeException(e);
+                throw new RuntimeException("Erro ao atualizar Curso",e);
             }
     }
 
     @Override
     public void delete(Integer id) {
-        String sql = "DELETE FROM cursos WHERE id = ?";
+        String sql = "DELETE FROM cursos WHERE id_curso = ?";
 
-        try {
-            PreparedStatement pp = conexao.prepareStatement(sql);
+        try (PreparedStatement pp = conexao.prepareStatement(sql)){
             pp.setInt(1, id);
             pp.execute();
 
         }catch (SQLException e){
-            throw new RuntimeException(e);
+            throw new RuntimeException("Erro ao deletar Curso",e);
         }
 
     }
@@ -75,14 +75,15 @@ public class DAOCurso implements DAORepository<Curso, Integer> {
     @Override
     public List<Curso> findAll() {
         String sql = "SELECT * FROM cursos";
+        List<Curso> lista = new ArrayList<>();
+        try (
+                PreparedStatement pp = conexao.prepareStatement(sql);
+                ResultSet rs = pp.executeQuery()
+        ){
 
-        try {
-            PreparedStatement pp = conexao.prepareStatement(sql);
-            ResultSet rs = pp.executeQuery();
-            List<Curso> lista = new ArrayList<>();
             while (rs.next()) {
                 Curso curso = new Curso();
-                curso.setId(rs.getInt("id"));
+                curso.setId(rs.getInt("id_curso"));
                 curso.setInstituicao(rs.getString("instituicao"));
                 curso.setNomeCurso(rs.getString("nome"));
                 curso.setDescricao(rs.getString("descricao"));
@@ -94,25 +95,24 @@ public class DAOCurso implements DAORepository<Curso, Integer> {
                 lista.add(curso);
 
             }
-            return lista;
-            }catch (SQLException e){
-            throw new RuntimeException(e);
-        }
 
+            } catch (SQLException e){
+            throw new RuntimeException("Erro ao listar Curso",e);
+        }
+        return lista;
     }
 
     @Override
     public Optional<Curso> findById(Integer id) {
-        String sql = "SELECT * FROM cursos where id = ?";
-
-        try {
-            PreparedStatement pp = conexao.prepareStatement(sql);
+        String sql = "SELECT * FROM cursos where id_curso = ?";
+        ResultSet rs = null;
+        try (PreparedStatement pp = conexao.prepareStatement(sql)){
             pp.setInt(1, id);
-            ResultSet rs = pp.executeQuery();
+            rs = pp.executeQuery();
             Curso curso = new Curso();
             if (rs.next()) {
                 curso = new Curso();
-                curso.setId(rs.getInt("id"));
+                curso.setId(rs.getInt("id_curso"));
                 curso.setInstituicao(rs.getString("instituicao"));
                 curso.setNomeCurso(rs.getString("nome"));
                 curso.setDescricao(rs.getString("descricao"));
@@ -123,26 +123,26 @@ public class DAOCurso implements DAORepository<Curso, Integer> {
                 curso.setCandidato(c);
                 return Optional.of(curso);
             }
-            return Optional.empty();
-            }catch (SQLException e){
-            throw new RuntimeException(e);
-        }
 
+            }catch (SQLException e){
+            throw new RuntimeException("Erro ao buscar Curso",e);
+        } finally {
+            fechar(rs);
+        }
+        return Optional.empty();
     }
 
     public List<Curso> findByFkCandidato(Integer idCandidato) {
 
-         String sql = "SELECT * FROM cursos WHERE fk_candidato = ?";
-
-        try {
-            PreparedStatement pp = conexao.prepareStatement(sql);
-            ResultSet rs = pp.executeQuery();
+        String sql = "SELECT * FROM cursos WHERE fk_candidato = ?";
+        ResultSet rs = null;
+        List<Curso> lista = new ArrayList<>();
+        try (PreparedStatement pp = conexao.prepareStatement(sql)){
             pp.setInt(1, idCandidato);
-
-            List<Curso> lista = new ArrayList<>();
+            rs = pp.executeQuery();
             while (rs.next()) {
                 Curso curso = new Curso();
-                curso.setId(rs.getInt("id"));
+                curso.setId(rs.getInt("id_curso"));
                 curso.setInstituicao(rs.getString("instituicao"));
                 curso.setNomeCurso(rs.getString("nome"));
                 curso.setDescricao(rs.getString("descricao"));
@@ -154,12 +154,24 @@ public class DAOCurso implements DAORepository<Curso, Integer> {
                 lista.add(curso);
 
             }
-            return lista;
-            }catch (SQLException e){
-            throw new RuntimeException(e);
+
+            } catch (SQLException e){
+            throw new RuntimeException("Erro ao buscar Curso",e);
+        } finally {
+            fechar(rs);
         }
+        return lista;
 
 
-
+    }
+    @Override
+    public void fechar(AutoCloseable closeable) {
+        try {
+            if (closeable != null) {
+                closeable.close();
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("Erro ao fechar conexão",e);
+        }
     }
 }

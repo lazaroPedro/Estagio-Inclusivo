@@ -67,16 +67,18 @@ public class DAOCandidatoVaga {
             return Optional.empty();
         } catch (SQLException e) {
             throw new RuntimeException("Erro ao procurar candidato",e);
+        }   finally {
+            fechar(rs);
         }
 
 
     }
     public List<CandidatoVaga> findByVaga(int idVaga) {
         String sql = "SELECT FROM candidato_vaga WHERE fk_vaga = ?";
-        try {
-            PreparedStatement pp = conexao.prepareStatement(sql);
+        ResultSet rs = null;
+        try (PreparedStatement pp = conexao.prepareStatement(sql)){
             pp.setInt(1, idVaga);
-            ResultSet rs = pp.executeQuery();
+            rs = pp.executeQuery();
             List<CandidatoVaga> lista = new ArrayList<>();
             while (rs.next()) {
                 CandidatoVaga cv = new CandidatoVaga();
@@ -94,15 +96,16 @@ public class DAOCandidatoVaga {
 
         } catch (SQLException e) {
             throw new RuntimeException("Erro ao listar Candidato",e);
+        }   finally {
+            fechar(rs);
         }
     }
         public List<CandidatoVaga> findByCandidato(int idCandidato) {
         String sql = "SELECT FROM candidato_vaga WHERE id_candidato = ?";
-
-        try {
-            PreparedStatement pp = conexao.prepareStatement(sql);
+        ResultSet rs = null;
+        try (PreparedStatement pp = conexao.prepareStatement(sql)){
             pp.setInt(1, idCandidato);
-            ResultSet rs = pp.executeQuery();
+            rs = pp.executeQuery();
             List<CandidatoVaga> lista = new ArrayList<>();
             while (rs.next()) {
                 CandidatoVaga cv = new CandidatoVaga();
@@ -120,9 +123,21 @@ public class DAOCandidatoVaga {
 
         } catch (SQLException e) {
             throw new RuntimeException("Erro ao listar vagas",e);
+        } finally {
+            fechar(rs);
         }
 
     }
 
+
+        public void fechar(AutoCloseable closeable) {
+            try {
+                if (closeable != null) {
+                    closeable.close();
+                }
+            } catch (Exception e) {
+                throw new RuntimeException("Erro ao fechar conexão",e);
+            }
+        }
 
 }

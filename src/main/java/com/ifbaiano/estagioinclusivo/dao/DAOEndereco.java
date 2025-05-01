@@ -18,6 +18,7 @@ public class DAOEndereco implements DAORepository<Endereco, Integer> {
     @Override
     public Optional<Integer> insert(Endereco entity) {
         String sql = "INSERT INTO enderecos (rua, bairro, municipio, estado, cep) VALUES (?, ?, ?, ?, ?)";
+        ResultSet rs = null;
         try (PreparedStatement stmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             stmt.setString(1, entity.getRua());
             stmt.setString(2, entity.getBairro());
@@ -25,14 +26,17 @@ public class DAOEndereco implements DAORepository<Endereco, Integer> {
             stmt.setString(4, entity.getEstado());
             stmt.setString(5, entity.getCep());
             stmt.executeUpdate();
-            ResultSet rs = stmt.getGeneratedKeys();
+            rs = stmt.getGeneratedKeys();
             if (rs.next()) {
                 return Optional.of(rs.getInt(1));
             }
-            return Optional.empty();
+
         } catch (SQLException e) {
             throw new RuntimeException("Erro ao inserir endereço", e);
+        } finally {
+            fechar(rs);
         }
+        return Optional.empty();
     }
 
     @Override
@@ -88,23 +92,37 @@ public class DAOEndereco implements DAORepository<Endereco, Integer> {
     @Override
     public Optional<Endereco> findById(Integer id) {
         String sql = "SELECT * FROM enderecos WHERE id_endereco = ?";
+        ResultSet rs = null;
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setInt(1, id);
-            try (ResultSet rs = stmt.executeQuery()) {
-                if (rs.next()) {
-                    return Optional.of(new Endereco(
-                            rs.getInt("id_endereco"),
-                            rs.getString("rua"),
-                            rs.getString("bairro"),
-                            rs.getString("municipio"),
-                            rs.getString("estado"),
-                            rs.getString("cep")
-                    ));
-                }
+            rs = stmt.executeQuery();
+            if (rs.next()) {
+                return Optional.of(new Endereco(
+                        rs.getInt("id_endereco"),
+                        rs.getString("rua"),
+                        rs.getString("bairro"),
+                        rs.getString("municipio"),
+                        rs.getString("estado"),
+                        rs.getString("cep")
+                ));
+
             }
         } catch (SQLException e) {
             throw new RuntimeException("Erro ao buscar endereço por ID", e);
+        } finally {
+            fechar(rs);
         }
-        return null;
+        return Optional.empty();
+    }
+
+    @Override
+    public void fechar(AutoCloseable closeable) {
+        try {
+            if (closeable != null) {
+                closeable.close();
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("Erro ao fechar conexão",e);
+        }
     }
 }

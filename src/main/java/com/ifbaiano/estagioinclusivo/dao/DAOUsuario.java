@@ -158,14 +158,5 @@ public class DAOUsuario implements DAORepository<Usuario, Integer> {
             throw new RuntimeException(e);
         }
     }
-    public void fechar() {
-        try {
-            if (connection != null) {
-                connection.close();
-            }
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
 
 }
