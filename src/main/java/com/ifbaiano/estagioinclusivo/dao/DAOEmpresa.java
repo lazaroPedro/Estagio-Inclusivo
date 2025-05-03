@@ -4,6 +4,7 @@ import com.ifbaiano.estagioinclusivo.model.Candidato;
 import com.ifbaiano.estagioinclusivo.model.Empresa;
 import com.ifbaiano.estagioinclusivo.dao.DAOUsuario;
 import com.ifbaiano.estagioinclusivo.model.Endereco;
+import com.ifbaiano.estagioinclusivo.model.enums.TipoUsuario;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -13,30 +14,47 @@ import java.util.Stack;
 
 public class DAOEmpresa implements DAORepository<Empresa, Integer> {
     private Connection connection;
+    private DAOUsuario daoUsuario;
 
 
     public DAOEmpresa(Connection connection) {
         this.connection = connection;
+        this.daoUsuario = new DAOUsuario(connection);
     }
 
     @Override
     public Optional<Integer> insert(Empresa entity) {
+
         String sql = "INSERT INTO empresas (id_empresa, cnpj, razaoSocial) VALUES (?, ?, ?)";
+        PreparedStatement stmt = null;
         ResultSet rs = null;
-            try (PreparedStatement stmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            try {
+                connection.setAutoCommit(false);
+                daoUsuario.insert(entity).ifPresent(entity::setId);
+                stmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
                 stmt.setInt(1, entity.getId());
                 stmt.setString(2, entity.getCnpj());
                 stmt.setString(3, entity.getRazaoSocial());
                 stmt.executeUpdate();
                 rs = stmt.getGeneratedKeys();
+                connection.commit();
+                connection.setAutoCommit(true);
                 if (rs.next()) {
                     return Optional.of(rs.getInt(1));
                 }
 
             } catch (SQLException e) {
+                try {
+                    connection.rollback();
+                    connection.setAutoCommit(true);
+                } catch (SQLException ex) {
+                    throw new RuntimeException(ex);
+                }
+
                 throw new RuntimeException("Erro ao inserir empresa.", e);
             } finally {
                 fechar(rs);
+                fechar(stmt);
             }
             return Optional.empty();
     }
@@ -44,29 +62,55 @@ public class DAOEmpresa implements DAORepository<Empresa, Integer> {
 
     @Override
     public void update(Empresa entity) {
-        String sql = "UPDATE empresas SET nome = ?, email = ?, hashSenha = ?, salt = ?, cnpj = ?, razaoSocial = ? WHERE id_empresa = ?";
-        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setString(1, entity.getNome());
-            stmt.setString(2, entity.getEmail());
-            stmt.setString(3, entity.getHashSenha());
-            stmt.setString(4, entity.getSalt());
-            stmt.setString(5, entity.getCnpj());
-            stmt.setString(6, entity.getRazaoSocial());
-            stmt.setInt(7, entity.getId());
+        String sql = "UPDATE empresas SET cnpj = ?, razaoSocial = ? WHERE id_empresa = ?";
+        PreparedStatement stmt = null;
+        try {
+            connection.setAutoCommit(false);
+            daoUsuario.update(entity);
+            stmt = connection.prepareStatement(sql);
+            stmt.setString(1, entity.getCnpj());
+            stmt.setString(2, entity.getRazaoSocial());
+            stmt.setInt(3, entity.getId());
             stmt.executeUpdate();
+            connection.commit();
+            connection.setAutoCommit(true);
         } catch (SQLException e) {
+            try {
+                connection.rollback();
+                connection.setAutoCommit(true);
+            } catch (SQLException ex) {
+                throw new RuntimeException(ex);
+            }
+
             throw new RuntimeException("Erro ao atualizar empresa", e);
+        } finally {
+            fechar(stmt);
         }
     }
 
     @Override
     public void delete(Integer id) {
         String sql = "DELETE FROM empresas WHERE id_empresa = ?";
-        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+        PreparedStatement stmt = null;
+        try {
+            connection.setAutoCommit(false);
+            daoUsuario.delete(id);
+            stmt = connection.prepareStatement(sql);
             stmt.setInt(1, id);
             stmt.executeUpdate();
+            connection.commit();
+            connection.setAutoCommit(true);
         } catch (SQLException e) {
+            try {
+                connection.rollback();
+                connection.setAutoCommit(true);
+            } catch (SQLException ex) {
+                throw new RuntimeException(ex);
+            }
+
             throw new RuntimeException("Erro ao deletar empresa", e);
+        } finally {
+            fechar(stmt);
         }
     }
 
@@ -88,6 +132,9 @@ public class DAOEmpresa implements DAORepository<Empresa, Integer> {
                 empresa.setCnpj(rs.getString("cnpj"));
                 empresa.setRazaoSocial(rs.getString("razaoSocial"));
                 empresa.setEndereco(e);
+                empresa.setTelefone("telefone");
+                empresa.setPapel(TipoUsuario.valueOf("papel"));
+
                 empresas.add(empresa);
 
             }
@@ -116,6 +163,8 @@ public class DAOEmpresa implements DAORepository<Empresa, Integer> {
                 empresa.setCnpj(rs.getString("cnpj"));
                 empresa.setRazaoSocial(rs.getString("razaoSocial"));
                 empresa.setEndereco(e);
+                empresa.setPapel(TipoUsuario.valueOf("papel"));
+                empresa.setTelefone("telefone");
 
                 return Optional.of(empresa);
 

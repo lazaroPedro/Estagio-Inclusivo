@@ -1,54 +1,91 @@
 package com.ifbaiano.estagioinclusivo.dao;
 
 import java.sql.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import com.ifbaiano.estagioinclusivo.model.Candidato;
 import com.ifbaiano.estagioinclusivo.model.Endereco;
+import com.ifbaiano.estagioinclusivo.model.enums.Genero;
 
 public class DAOCandidato implements DAORepository<Candidato, Integer> {
 
     private Connection connection;
+    private DAOUsuario daoUsuario;
 
     public DAOCandidato(Connection connection) {
+        daoUsuario = new DAOUsuario(connection);
         this.connection = connection;
     }
 
     @Override
     public Optional<Integer> insert(Candidato entity) {
-        String sql = "INSERT INTO candidatos (id_candidato, telefone, cpf) VALUES (?, ?, ?)";
+        String sql = "INSERT INTO candidatos (id_candidato, genero, nascimento, cpf) VALUES (?, ?, ?, ?)";
         ResultSet rs = null;
-        try (PreparedStatement stmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)){
+        PreparedStatement stmt = null;
+        try{
+            connection.setAutoCommit(false);
+            daoUsuario.insert(entity).ifPresent(entity::setId);
+            stmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             stmt.setInt(1, entity.getId());
-            stmt.setString(2, entity.getTelefone());
-            stmt.setString(3, entity.getCpf());
+            stmt.setString(2, entity.getGenero().name());
+            stmt.setDate(3, Date.valueOf(entity.getDataNascimento()));
+            stmt.setString(4, entity.getCpf());
             stmt.executeUpdate();
+            connection.commit();
+             connection.setAutoCommit(true);
             rs = stmt.getGeneratedKeys();
+
             if (rs.next()) {
                 return Optional.of(rs.getInt(1));
             }
 
 
         } catch (SQLException e) {
+            try {
+                connection.rollback();
+                connection.setAutoCommit(true);
+            } catch (SQLException ex) {
+                throw new RuntimeException(ex);
+            }
+
             throw new RuntimeException("Falha ao inserir candidato.",e);
         }finally {
             fechar(rs);
+            fechar(stmt);
+
         }
         return Optional.empty();
     }
 
     @Override
     public void update(Candidato entity) {
-        String sql = "UPDATE candidatos SET telefone = ?, cpf = ?, WHERE id_usuario = ?";
+        PreparedStatement stmt = null;
+         try {
 
-        try(PreparedStatement stmt = connection.prepareStatement(sql)) {
+             connection.setAutoCommit(false);
+             daoUsuario.update(entity);
+             String sql = "UPDATE candidatos SET telefone = ?, cpf = ?, genero = ?, nascimento = ? WHERE id_usuario = ?";
+
+            stmt = connection.prepareStatement(sql);
             stmt.setString(1, entity.getTelefone());
             stmt.setString(2, entity.getCpf());
             stmt.setInt(3, entity.getId());
+            stmt.setString(4, entity.getGenero().name());
+            stmt.setDate(5, Date.valueOf(entity.getDataNascimento()));
             stmt.executeUpdate();
+            connection.commit();
+            connection.setAutoCommit(true);
         } catch (Exception e){
+             try {
+                 connection.rollback();
+                 connection.setAutoCommit(true);
+             } catch (SQLException ex) {
+                 throw new RuntimeException(ex);
+             }
+
             throw new RuntimeException("Erro ao atualizar os dados do candidato", e);
         }
 
@@ -59,12 +96,23 @@ public class DAOCandidato implements DAORepository<Candidato, Integer> {
 
 
         String sql = "DELETE FROM candidatos WHERE id_usuario = ?";
-        try (PreparedStatement stmt = connection.prepareStatement(sql))
-        {
+        try {
+            connection.setAutoCommit(false);
+            daoUsuario.delete(id);
+            PreparedStatement stmt = connection.prepareStatement(sql);
             stmt.setInt(1, id);
             stmt.executeUpdate();
+            connection.commit();
+            connection.setAutoCommit(true);
 
         } catch (SQLException e) {
+            try {
+                connection.rollback();
+                connection.setAutoCommit(true);
+            } catch (SQLException ex) {
+                throw new RuntimeException(ex);
+            }
+
             throw new RuntimeException("Erro ao deletar candidato", e);
         }
     }
@@ -88,9 +136,12 @@ public class DAOCandidato implements DAORepository<Candidato, Integer> {
                         rs.getString("email"),
                         e,
                         rs.getString("salt"),
-                        rs.getString("hashSenha"),
+                        rs.getString("hash_senha"),
+                        rs.getString("telefone"),
                         rs.getString("cpf"),
-                        rs.getString("telefone"));
+                        Genero.valueOf(rs.getString("genero")),
+                        rs.getDate("nascimento").toLocalDate()
+                );
                 candidatos.add(candidato);
             }
         } catch (SQLException e) {
@@ -115,9 +166,11 @@ public class DAOCandidato implements DAORepository<Candidato, Integer> {
                 c.setNome(rs.getString("nome"));
                 c.setEmail(rs.getString("email"));
                 c.setSalt(rs.getString("salt"));
-                c.setHashSenha(rs.getString("hashSenha"));
+                c.setHashSenha(rs.getString("hash_senha"));
                 c.setCpf(rs.getString("cpf"));
                 c.setTelefone(rs.getString("telefone"));
+                c.setGenero(Genero.valueOf(rs.getString("genero")));
+                c.setDataNascimento(rs.getDate("nascimento").toLocalDate());
 
                 return Optional.of(c);
 

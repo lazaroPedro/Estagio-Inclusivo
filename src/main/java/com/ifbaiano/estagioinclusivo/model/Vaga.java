@@ -9,24 +9,23 @@ public class Vaga {
 	private String descricao;
 	private String requisitos;
 	private String beneficios;
+	private int qtdVagas;
 	private TipoVaga status;
 
 
-	public void validar() {}
-
 	public Vaga() {}
 
-	public Vaga(int id, Empresa empresa, Endereco endereco, String descricao, String requisitos,
-				String beneficios, TipoVaga status) {
-		super();
+	public Vaga(int id, Empresa empresa, Endereco endereco, String descricao, String requisitos, String beneficios, int qtdVagas, TipoVaga status) {
 		this.id = id;
 		this.empresa = empresa;
 		this.endereco = endereco;
 		this.descricao = descricao;
 		this.requisitos = requisitos;
 		this.beneficios = beneficios;
+		this.qtdVagas = qtdVagas;
 		this.status = status;
 	}
+
 	public int getId() {
 		return id;
 	}
@@ -62,6 +61,14 @@ public class Vaga {
 	}
 	public void setBeneficios(String beneficios) {
 		this.beneficios = beneficios;
+	}
+
+	public int getQtdVagas() {
+		return qtdVagas;
+	}
+
+	public void setQtdVagas(int qtdVagas) {
+		this.qtdVagas = qtdVagas;
 	}
 
 	public TipoVaga getStatus() {

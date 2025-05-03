@@ -1,7 +1,6 @@
 package com.ifbaiano.estagioinclusivo.model;
 import com.ifbaiano.estagioinclusivo.utils.validation.ErroCampo;
 import com.ifbaiano.estagioinclusivo.utils.validation.ValidationException;
-import com.ifbaiano.estagioinclusivo.utils.validation.Validator;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -20,22 +19,7 @@ public class Curso {
     }
 
 
-    public void validar() {
-        List<ErroCampo> erros = new ArrayList<>();
 
-        Validator.notBlank(instituicao, "instituicao", erros);
-        Validator.notBlank(nomeCurso, "nomeCurso", erros);
-        Validator.notBlank(descricao, "descricao", erros);
-        Validator.notNull(dataInicio, "dataInicio", erros);
-        Validator.notNull(dataFim, "dataFim", erros);
-        Validator.notNull(candidato, "candidato", erros);
-        Validator.periodoValido(dataInicio, dataFim, "dataInicio", "dataFim", erros);
-
-        if (!erros.isEmpty()) {
-            throw new ValidationException(erros);
-        }
-
-    }
 
     public Curso() {}
 

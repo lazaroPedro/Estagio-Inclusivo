@@ -6,7 +6,7 @@ import com.google.gson.GsonBuilder;
 import java.util.List;
 
 public class ValidationException extends RuntimeException {
-    private List<ErroCampo> erroCampos;
+    private final List<ErroCampo> erroCampos;
 
     public ValidationException(List<ErroCampo> erroCampos) {
         super("Validação Falhou. Total de Campos Incorretos: " + erroCampos.size());

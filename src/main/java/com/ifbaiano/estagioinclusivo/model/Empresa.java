@@ -1,16 +1,16 @@
 package com.ifbaiano.estagioinclusivo.model;
 
+import com.ifbaiano.estagioinclusivo.model.enums.TipoUsuario;
+
 public class Empresa extends Usuario {
     private String cnpj;
     private String razaoSocial;
 
-    public void validar(){}
-
     public Empresa() {
     }
 
-    public Empresa(int id, String nome, String email, Endereco endereco, String salt, String hashSenha, String cnpj, String razaoSocial) {
-        super(id, nome, email, endereco, salt, hashSenha);
+    public Empresa(int id, String nome, String email, Endereco endereco, String salt, String hashSenha, String telefone,String cnpj, String razaoSocial) {
+        super(id, nome, email, endereco, salt, hashSenha, TipoUsuario.EMPRESA ,telefone);
         this.cnpj = cnpj;
         this.razaoSocial = razaoSocial;
     }

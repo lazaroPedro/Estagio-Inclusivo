@@ -1,19 +1,43 @@
 package com.ifbaiano.estagioinclusivo.model;
 
 
+import com.ifbaiano.estagioinclusivo.model.enums.Genero;
+import com.ifbaiano.estagioinclusivo.model.enums.TipoUsuario;
+
+import java.time.LocalDate;
 
 public class Candidato extends Usuario{
     private String cpf;
-    private String telefone;
+    private Genero genero;
+    private LocalDate dataNascimento;
 
-    public void validar(){}
+
     public Candidato () {
     }
 
-    public Candidato(int id, String nome, String email, Endereco endereco, String salt, String hashSenha, String cpf, String telefone) {
-        super(id, nome, email, endereco, salt, hashSenha);
+
+
+    public Candidato(int id, String nome, String email, Endereco endereco, String salt, String hashSenha, String telefone, String cpf, Genero genero, LocalDate dataNascimento) {
+        super(id, nome, email, endereco, salt, hashSenha, TipoUsuario.CANDIDATO, telefone);
         this.cpf = cpf;
-        this.telefone = telefone;
+        this.genero = genero;
+        this.dataNascimento = dataNascimento;
+    }
+
+    public Genero getGenero() {
+        return genero;
+    }
+
+    public void setGenero(Genero genero) {
+        this.genero = genero;
+    }
+
+    public LocalDate getDataNascimento() {
+        return dataNascimento;
+    }
+
+    public void setDataNascimento(LocalDate dataNascimento) {
+        this.dataNascimento = dataNascimento;
     }
 
     public String getCpf() {
@@ -24,11 +48,5 @@ public class Candidato extends Usuario{
         this.cpf = cpf;
     }
 
-    public String getTelefone() {
-        return telefone;
-    }
 
-    public void setTelefone(String telefone) {
-        this.telefone = telefone;
-    }
 }

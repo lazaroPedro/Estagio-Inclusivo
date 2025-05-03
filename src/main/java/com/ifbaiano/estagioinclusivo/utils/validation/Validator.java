@@ -1,12 +1,63 @@
 package com.ifbaiano.estagioinclusivo.utils.validation;
 
-import java.time.LocalDate;
+import com.ifbaiano.estagioinclusivo.utils.validation.annotations.*;
+
+import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Validator {
-    public static boolean notNull(Object valor, String nomeCampo, List<ErroCampo> erros) {
-        return notNull(valor, nomeCampo, "O campo " + nomeCampo + " não pode ser nulo", erros);
+    public static void validar(Object o) throws ValidationException, IllegalAccessException {
+        Class<?> clazz = o.getClass();
+        List<ErroCampo> erroCampos = new ArrayList<>();
+
+        for (Field f : clazz.getDeclaredFields()) {
+            f.setAccessible(true);
+            Object value =  f.get(o);
+
+            if(f.isAnnotationPresent(NotNull.class)) {
+                String message = f.getAnnotation(NotNull.class).message();
+                message = message.replace("{field}", f.getName());
+                notNull(value, f.getName(), message, erroCampos);
+            }
+            if(f.isAnnotationPresent(NotBlank.class)){
+                String message = f.getAnnotation(NotBlank.class).message();
+                message = message.replace("{field}", f.getName());
+                notBlank((String) value, f.getName(), message, erroCampos);
+            }
+            if (f.isAnnotationPresent(Max.class)){
+                String message = f.getAnnotation(Max.class).message();
+                message = message.replace("{field}", f.getName());
+                message = message.replace("{max}",Long.toString(f.getAnnotation(Max.class).value()));
+                maxNumber((Number) value, f.getAnnotation(Max.class).value(), f.getName(), message, erroCampos);
+            }
+            if (f.isAnnotationPresent(Min.class)){
+                String message = f.getAnnotation(Min.class).message();
+                message = message.replace("{field}", f.getName());
+                message = message.replace("{min}",Long.toString(f.getAnnotation(Min.class).value()));
+                minNumber((Number) value, f.getAnnotation(Min.class).value(), f.getName(), message, erroCampos);
+            }
+            if(f.isAnnotationPresent(Positive.class)){
+                String message = f.getAnnotation(Positive.class).message();
+                message = message.replace("{field}", f.getName());
+
+                positive((Number) value, f.getName(), message, erroCampos);
+            }
+            if(f.isAnnotationPresent(Negative.class)){
+                String message = f.getAnnotation(Negative.class).message();
+                message = message.replace("{field}", f.getName());
+
+                negative((Number) value,f.getName(), message, erroCampos);
+            }
+
+        }
+        if(!erroCampos.isEmpty()){
+            throw new ValidationException(erroCampos);
+        }
     }
+
+    public void validarNotNull(List<ErroCampo> erroCampos) throws ValidationException, IllegalAccessException {}
+
 
     public static boolean notNull(Object valor, String nomeCampo, String mensagemErro, List<ErroCampo> erros) {
         if (valor == null) {
@@ -17,10 +68,10 @@ public class Validator {
     }
 
 
-    public static boolean notBlank(String valor, String nomeCampo, List<ErroCampo> erros) {
-        if(notNull(valor, nomeCampo, erros)){
+    public static boolean notBlank(String valor, String nomeCampo, String messagem , List<ErroCampo> erros) {
+        if(notNull(valor, nomeCampo, messagem, erros)){
             if(valor.trim().isEmpty()){
-                erros.add(new ErroCampo(nomeCampo, valor, "O campo " + nomeCampo + " não pode ser vazio"));
+                erros.add(new ErroCampo(nomeCampo, valor, messagem));
                 return false;
             }
             return true;
@@ -28,10 +79,10 @@ public class Validator {
         return false;
     }
 
-    public static boolean maxNumber(Number number, Number max, String nomeCampo, List<ErroCampo> erros) {
-        if (notNull(number,nomeCampo,erros)) {
+    public static boolean maxNumber(Number number, Number max, String nomeCampo,String messagem, List<ErroCampo> erros) {
+        if (notNull(number,nomeCampo,messagem,erros)) {
             if(number.doubleValue() > max.doubleValue()){
-                erros.add(new ErroCampo(nomeCampo,number, "O campo " + nomeCampo + " deve ser menor ou igual a " + max ));
+                erros.add(new ErroCampo(nomeCampo,number, messagem));
                 return false;
 
             }
@@ -40,41 +91,37 @@ public class Validator {
         return false;
     }
 
-    public static boolean minNumber(Number number, Number min, String nomeCampo, List<ErroCampo> erros) {
-        if (notNull(number,nomeCampo,erros)) {
+    public static boolean minNumber(Number number, Number min, String nomeCampo, String messagem,  List<ErroCampo> erros) {
+        if (notNull(number,nomeCampo,messagem, erros)) {
             if(number.doubleValue() < min.doubleValue()){
-                erros.add(new ErroCampo(nomeCampo,number, "O campo " + nomeCampo + " deve ser maior ou igual a " + min ));
+                erros.add(new ErroCampo(nomeCampo,number, messagem));
                 return false;
             }
             return true;
         }
         return false;
     }
+    public static boolean positive(Number number, String nomeCampo,String messagem, List<ErroCampo> erros) {
+        if (notNull(number,nomeCampo,messagem,erros)) {
+            if(number.doubleValue() <= 0){
+                erros.add(new ErroCampo(nomeCampo,number, messagem));
+                return false;
 
-    public static boolean isPositivo(Number valor, String nomeCampo, List<ErroCampo> erros) {
-        return minNumber(valor, 0, nomeCampo, erros);
-    }
-    public static boolean isNegativo(Number valor, String nomeCampo, List<ErroCampo> erros) {
-        return maxNumber(valor, 0, nomeCampo, erros);
-    }
-    public void checkLocalDateTime(String data, String nomeCampo, List<ErroCampo> erros) {
-
-    }
-    public static boolean periodoValido(LocalDate inicio, LocalDate fim, String nomeCampoInicio, String nomeCampoFim, List<ErroCampo> erros) {
-    if (notNull(inicio, nomeCampoInicio, erros) && notNull(fim, nomeCampoFim, erros)) {
-        if (!inicio.isBefore(fim)) {
-            erros.add(new ErroCampo(
-                nomeCampoInicio,
-                inicio,
-                "A data de início deve ser antes da data de fim"
-            ));
-            return false;
+            }
+            return true;
         }
-        return true;
+        return false;
     }
-    return false;
-}
-    private static boolean isValidCPF(String cpf){
-        return true;
+    public static boolean negative(Number number, String nomeCampo,String messagem, List<ErroCampo> erros) {
+        if (notNull(number,nomeCampo,messagem,erros)) {
+            if(number.doubleValue() >= 0){
+                erros.add(new ErroCampo(nomeCampo,number, messagem));
+                return false;
+
+            }
+            return true;
+        }
+        return false;
     }
+
 }

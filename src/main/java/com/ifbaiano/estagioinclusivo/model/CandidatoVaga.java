@@ -8,9 +8,7 @@ public class CandidatoVaga {
     private LocalDateTime data;
 
 
-    public void validar(){
 
-    }
 
     public CandidatoVaga() {
     }

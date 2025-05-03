@@ -13,8 +13,10 @@ CREATE TABLE usuarios (
     id_usuario INT AUTO_INCREMENT PRIMARY KEY,
     nome VARCHAR(255) NOT NULL,
     email VARCHAR(255) NOT NULL UNIQUE,
-    hashSenha TEXT NOT NULL,
+    hash_senha TEXT NOT NULL,
     salt TEXT NOT NULL,
+    telefone VARCHAR(16) NOT NULL,
+    papel ENUM("CANDIDATO", "EMPRESA", "ADMIN") NOT NULL,
     data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     fk_endereco INT UNSIGNED NOT NULL,
     FOREIGN KEY (fk_endereco) REFERENCES enderecos(id_endereco)
@@ -24,8 +26,10 @@ CREATE TABLE usuarios (
 
 CREATE TABLE candidatos(
     id_candidato INT UNSIGNED NOT NULL,
-    cpf CHAR(11) NOT NULL,
-    telefone CHAR(9) NOT NULL,
+    genero ENUM("MASCULINO", "FEMININO", "OUTRO", "NAO_INFORMAR") NOT NULL,
+    nascimento DATE NOT NULL,
+    cpf CHAR(11) NOT NULL UNIQUE,
+
 
     FOREIGN KEY (id_candidato) references usuarios(id_usuario),
     PRIMARY KEY (id_candidato)
@@ -56,7 +60,7 @@ CREATE TABLE cursos(
 
 CREATE TABLE empresas(
     id_empresa INT UNSIGNED NOT NULL,
-    cnpj CHAR(14) NOT NULL,
+    cnpj CHAR(14) NOT NULL UNIQUE,
     razao_social VARCHAR(255) NOT NULL,
     FOREIGN KEY (id_empresa) references usuarios(id_usuario),
     PRIMARY KEY (id_empresa)
@@ -70,6 +74,7 @@ CREATE TABLE vagas(
     requisitos TEXT NOT NULL,
     beneficios TEXT NOT NULL,
     status ENUM("ATIVA", "FINALIZADA") NOT NULL,
+    qtd_vagas INT UNSIGNED NOT NULL,
     data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     fk_empresa INT UNSIGNED NOT NULL,
     fk_endereco INT UNSIGNED NOT NULL,

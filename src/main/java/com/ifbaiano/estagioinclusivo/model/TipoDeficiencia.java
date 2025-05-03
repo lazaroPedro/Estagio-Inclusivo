@@ -3,7 +3,6 @@ package com.ifbaiano.estagioinclusivo.model;
 import com.ifbaiano.estagioinclusivo.model.enums.TipoDeficienciaEnum;
 import com.ifbaiano.estagioinclusivo.utils.validation.ErroCampo;
 import com.ifbaiano.estagioinclusivo.utils.validation.ValidationException;
-import com.ifbaiano.estagioinclusivo.utils.validation.Validator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,19 +16,7 @@ public class TipoDeficiencia {
     private Candidato candidato;
 
 
-    public void validar() {
-        List<ErroCampo> erros = new ArrayList<>();
 
-        Validator.notBlank(nome, "nome", erros);
-        Validator.notBlank(descricao, "descricao", erros);
-        Validator.notNull(tipo, "tipo", erros);
-        // Validator.notNull(tipoApoio, "tipoApoio", erros); aceita null
-        Validator.notNull(candidato, "candidato", erros);
-
-        if (!erros.isEmpty()) {
-            throw new ValidationException(erros);
-        }
-    }
 
     public TipoDeficiencia() {}
 

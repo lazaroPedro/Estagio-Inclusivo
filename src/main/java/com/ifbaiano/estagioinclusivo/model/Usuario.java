@@ -1,4 +1,5 @@
 package com.ifbaiano.estagioinclusivo.model;
+import com.ifbaiano.estagioinclusivo.model.enums.TipoUsuario;
 import com.ifbaiano.estagioinclusivo.utils.SenhaUtils;
 
 public class Usuario {
@@ -8,6 +9,8 @@ public class Usuario {
     private Endereco endereco;
     private String salt;
     private String hashSenha;
+    private TipoUsuario papel;
+    private String telefone;
 
 
     public Usuario() {
@@ -15,13 +18,15 @@ public class Usuario {
 
 
 
-    public Usuario(int id, String nome, String email, Endereco endereco, String salt, String hashSenha) {
+    public Usuario(int id, String nome, String email, Endereco endereco, String salt, String hashSenha, TipoUsuario papel, String telefone) {
         this.id = id;
         this.nome = nome;
         this.email = email;
         this.endereco = endereco;
         this.salt = salt;
         this.hashSenha = hashSenha;
+        this.papel = papel;
+        this.telefone = telefone;
     }
 
     public int getId() {
@@ -70,5 +75,21 @@ public class Usuario {
 
     public void setHashSenha(String hashSenha) {
         this.hashSenha = hashSenha;
+    }
+
+    public TipoUsuario getPapel() {
+        return papel;
+    }
+
+    public void setPapel(TipoUsuario papel) {
+        this.papel = papel;
+    }
+
+    public String getTelefone() {
+        return telefone;
+    }
+
+    public void setTelefone(String telefone) {
+        this.telefone = telefone;
     }
 }

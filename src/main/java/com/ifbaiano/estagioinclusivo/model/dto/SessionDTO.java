@@ -2,7 +2,9 @@ package com.ifbaiano.estagioinclusivo.model.dto;
 
 import com.ifbaiano.estagioinclusivo.model.enums.TipoUsuario;
 
-public class SessionDTO {
+import java.io.Serializable;
+
+public class SessionDTO  implements Serializable {
     private int id;
     private String nome;
     private TipoUsuario tipoUsuario;

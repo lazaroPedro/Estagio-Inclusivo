@@ -19,7 +19,7 @@ public class DAOVaga implements DAORepository<Vaga, Integer> {
 
     @Override
     public Optional<Integer> insert(Vaga entity) {
-        String sql = "INSERT INTO vagas (id_empresa, fk_endereco, descricao, requisitos, beneficios, status) VALUES (?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO vagas (id_empresa, fk_endereco, descricao, requisitos, beneficios, status, qtd_vagas) VALUES (?, ?, ?, ?, ?, ?, ?)";
         ResultSet rs = null;
         try (PreparedStatement stmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             stmt.setInt(1, entity.getEmpresa().getId());
@@ -28,6 +28,7 @@ public class DAOVaga implements DAORepository<Vaga, Integer> {
             stmt.setString(5, entity.getRequisitos());
             stmt.setString(6, entity.getBeneficios());
             stmt.setString(7, entity.getStatus().name());
+            stmt.setInt(8, entity.getQtdVagas());
             stmt.executeUpdate();
             rs = stmt.getGeneratedKeys();
             if (rs.next()) {
@@ -44,7 +45,7 @@ public class DAOVaga implements DAORepository<Vaga, Integer> {
 
     @Override
     public void update(Vaga entity) {
-        String sql = "UPDATE vagas SET id_empresa = ?, fk_endereco = ?, descricao = ?, requisitos = ?, beneficios = ? status = ? WHERE id_vaga = ?";
+        String sql = "UPDATE vagas SET id_empresa = ?, fk_endereco = ?, descricao = ?, requisitos = ?, beneficios = ? status = ? qtd_vagas = ? WHERE id_vaga = ?";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setInt(1, entity.getEmpresa().getId());
             stmt.setInt(2, entity.getEndereco().getId());
@@ -52,7 +53,9 @@ public class DAOVaga implements DAORepository<Vaga, Integer> {
             stmt.setString(5, entity.getRequisitos());
             stmt.setString(6, entity.getBeneficios());
             stmt.setString(7, entity.getStatus().name());
+            stmt.setInt(8, entity.getQtdVagas());
             stmt.setInt(8, entity.getId());
+
             stmt.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException("Erro ao atualizar vaga", e);
@@ -93,7 +96,9 @@ public class DAOVaga implements DAORepository<Vaga, Integer> {
                         rs.getString("descricao"),
                         rs.getString("requisitos"),
                         rs.getString("beneficios"),
+                        rs.getInt("qtd_vagas"),
                         TipoVaga.valueOf(rs.getString("status"))
+
                 );
                 vagas.add(vaga);
             }
@@ -124,6 +129,7 @@ public class DAOVaga implements DAORepository<Vaga, Integer> {
                         rs.getString("descricao"),
                         rs.getString("requisitos"),
                         rs.getString("beneficios"),
+                        rs.getInt("qtd_vagas"),
                         TipoVaga.valueOf(rs.getString("status"))
                 ));
             }

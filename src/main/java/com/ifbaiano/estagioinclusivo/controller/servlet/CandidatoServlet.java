@@ -3,6 +3,7 @@ package com.ifbaiano.estagioinclusivo.controller.servlet;
 import com.ifbaiano.estagioinclusivo.config.DBConfig;
 import com.ifbaiano.estagioinclusivo.dao.DAOCandidato;
 import com.ifbaiano.estagioinclusivo.model.Candidato;
+import com.ifbaiano.estagioinclusivo.services.CandidatoService;
 import com.ifbaiano.estagioinclusivo.utils.validation.ValidationException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -16,18 +17,13 @@ import java.sql.SQLException;
 
 @WebServlet("/candidato")
 public class CandidatoServlet extends HttpServlet {
+    private CandidatoService candidatoService;
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Integer idCandidato = Integer.parseInt(req.getParameter("id"));
 
-        DAOCandidato daoCandidato = null;
-        try {
-            daoCandidato = new DAOCandidato(DBConfig.criarConexao());
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        Candidato c = daoCandidato.findById(idCandidato);
+
         req.setAttribute("nome", c.getNome());
         req.setAttribute("email", c.getEmail());
         req.setAttribute("telefone", c.getTelefone());
