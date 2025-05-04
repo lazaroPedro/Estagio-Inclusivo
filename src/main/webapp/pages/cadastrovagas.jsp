@@ -19,11 +19,15 @@
 			</div>
 			<divclass"card-body"> 
 			
+	<!mensagem>			
 			<c:if test="${not empty mensagem}">
 				<div class="alert alert-success" role="alert">${mensagem}</div>
 			</c:if> <c:if test="${not empty mensagem}">
 				<div class="alert alert-danger" role="alert">${erro}</div>
 			</c:if>
+
+<!mensagem>
+
 
 			<form action="CadastroVagaServlet" method="post">
 				<div class="mb-3">

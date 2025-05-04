@@ -23,41 +23,29 @@ public class DAOCandidato implements DAORepository<Candidato, Integer> {
     @Override
     public Optional<Integer> insert(Candidato entity) {
         String sql = "INSERT INTO candidatos (id_candidato, genero, nascimento, cpf) VALUES (?, ?, ?, ?)";
-        ResultSet rs = null;
         PreparedStatement stmt = null;
         try{
-            connection.setAutoCommit(false);
-            daoUsuario.insert(entity).ifPresent(entity::setId);
-            stmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-            stmt.setInt(1, entity.getId());
+            Optional<Integer> idUsuario = daoUsuario.insert(entity);
+            if (idUsuario.isEmpty()) {
+                return Optional.empty();
+            }
+            int id = idUsuario.get();
+            entity.setId(id);
+            stmt = connection.prepareStatement(sql);
+            stmt.setInt(1, id);
             stmt.setString(2, entity.getGenero().name());
             stmt.setDate(3, Date.valueOf(entity.getDataNascimento()));
             stmt.setString(4, entity.getCpf());
             stmt.executeUpdate();
-            connection.commit();
-             connection.setAutoCommit(true);
-            rs = stmt.getGeneratedKeys();
 
-            if (rs.next()) {
-                return Optional.of(rs.getInt(1));
-            }
-
+            return Optional.of(id);
 
         } catch (SQLException e) {
-            try {
-                connection.rollback();
-                connection.setAutoCommit(true);
-            } catch (SQLException ex) {
-                throw new RuntimeException(ex);
-            }
-
             throw new RuntimeException("Falha ao inserir candidato.",e);
         }finally {
-            fechar(rs);
             fechar(stmt);
 
         }
-        return Optional.empty();
     }
 
     @Override
