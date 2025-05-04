@@ -1,6 +1,8 @@
 package com.ifbaiano.estagioinclusivo.model;
 import com.ifbaiano.estagioinclusivo.utils.validation.ErroCampo;
 import com.ifbaiano.estagioinclusivo.utils.validation.ValidationException;
+import com.ifbaiano.estagioinclusivo.utils.validation.annotations.NotBlank;
+import com.ifbaiano.estagioinclusivo.utils.validation.annotations.NotNull;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -8,11 +10,17 @@ import java.util.List;
 
 public class Curso {
     private int id;
+    @NotBlank
     private String instituicao;
+    @NotBlank
     private String nomeCurso;
+    @NotBlank
     private String descricao;
+    @NotNull
     private LocalDate dataInicio;
+    @NotNull
     private LocalDate dataFim;
+    @NotNull
     private Candidato candidato;
 
     public Curso(long idCurso) {

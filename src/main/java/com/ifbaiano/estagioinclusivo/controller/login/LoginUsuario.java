@@ -23,19 +23,12 @@ public class LoginUsuario extends HttpServlet {
 
         DAOUsuario dao = new DAOUsuario(DBConfig.criarConexao());
         Usuario u;
-        try {
-            u = dao.findByEmail(email);
-            if(u.getHashSenha().equals(senha)){
                 SessionDTO s = new SessionDTO();
-                s.setId(u.getId());
                 req.getSession().setAttribute("user", s);
-                resp.sendRedirect(req.getContextPath() + "/");
+                resp.sendRedirect(req.getContextPath() + "/home");
 
-            }
 
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+
 
     }
 }

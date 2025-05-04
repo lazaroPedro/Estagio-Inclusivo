@@ -19,7 +19,7 @@ public class DAOVaga implements DAORepository<Vaga, Integer> {
 
     @Override
     public Optional<Integer> insert(Vaga entity) {
-        String sql = "INSERT INTO vagas (id_empresa, fk_endereco, descricao, requisitos, beneficios, status, qtd_vagas) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO vagas (fk_empresa, fk_endereco, descricao, requisitos, beneficios, status, qtd_vagas) VALUES (?, ?, ?, ?, ?, ?, ?)";
         ResultSet rs = null;
         try (PreparedStatement stmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             stmt.setInt(1, entity.getEmpresa().getId());
@@ -28,7 +28,7 @@ public class DAOVaga implements DAORepository<Vaga, Integer> {
             stmt.setString(5, entity.getRequisitos());
             stmt.setString(6, entity.getBeneficios());
             stmt.setString(7, entity.getStatus().name());
-            stmt.setInt(8, entity.getQtdVagas());
+            stmt.setLong(8, entity.getQtdVagas());
             stmt.executeUpdate();
             rs = stmt.getGeneratedKeys();
             if (rs.next()) {
@@ -45,15 +45,15 @@ public class DAOVaga implements DAORepository<Vaga, Integer> {
 
     @Override
     public void update(Vaga entity) {
-        String sql = "UPDATE vagas SET id_empresa = ?, fk_endereco = ?, descricao = ?, requisitos = ?, beneficios = ? status = ? qtd_vagas = ? WHERE id_vaga = ?";
+        String sql = "UPDATE vagas SET fk_empresa = ?, fk_endereco = ?, descricao = ?, requisitos = ?, beneficios = ? status = ? qtd_vagas = ? WHERE id_vaga = ?";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setInt(1, entity.getEmpresa().getId());
             stmt.setInt(2, entity.getEndereco().getId());
-            stmt.setString(4, entity.getDescricao());
-            stmt.setString(5, entity.getRequisitos());
-            stmt.setString(6, entity.getBeneficios());
-            stmt.setString(7, entity.getStatus().name());
-            stmt.setInt(8, entity.getQtdVagas());
+            stmt.setString(3, entity.getDescricao());
+            stmt.setString(4, entity.getRequisitos());
+            stmt.setString(5, entity.getBeneficios());
+            stmt.setString(6, entity.getStatus().name());
+            stmt.setLong(7, entity.getQtdVagas());
             stmt.setInt(8, entity.getId());
 
             stmt.executeUpdate();
@@ -81,13 +81,12 @@ public class DAOVaga implements DAORepository<Vaga, Integer> {
              ResultSet rs = stmt.executeQuery()) {
             while (rs.next()) {
                 Empresa empresa = new Empresa();
-                empresa.setId(rs.getInt("id_empresa"));
+                empresa.setId(rs.getInt("fk_empresa"));
 
                 Endereco endereco = new Endereco();
                 endereco.setId(rs.getInt("fk_endereco"));
 
 
-                Curso curso = new Curso(rs.getLong("id_curso"));
 
                 Vaga vaga = new Vaga(
                         rs.getInt("id_vaga"),
@@ -96,7 +95,7 @@ public class DAOVaga implements DAORepository<Vaga, Integer> {
                         rs.getString("descricao"),
                         rs.getString("requisitos"),
                         rs.getString("beneficios"),
-                        rs.getInt("qtd_vagas"),
+                        rs.getLong("qtd_vagas"),
                         TipoVaga.valueOf(rs.getString("status"))
 
                 );
@@ -117,7 +116,7 @@ public class DAOVaga implements DAORepository<Vaga, Integer> {
             rs = stmt.executeQuery();
             if (rs.next()) {
                 Empresa empresa = new Empresa();
-                empresa.setId(rs.getInt("id_empresa"));
+                empresa.setId(rs.getInt("fk_empresa"));
 
                 Endereco endereco = new Endereco();
                 endereco.setId(rs.getInt("fk_endereco"));
@@ -129,7 +128,7 @@ public class DAOVaga implements DAORepository<Vaga, Integer> {
                         rs.getString("descricao"),
                         rs.getString("requisitos"),
                         rs.getString("beneficios"),
-                        rs.getInt("qtd_vagas"),
+                        rs.getLong("qtd_vagas"),
                         TipoVaga.valueOf(rs.getString("status"))
                 ));
             }

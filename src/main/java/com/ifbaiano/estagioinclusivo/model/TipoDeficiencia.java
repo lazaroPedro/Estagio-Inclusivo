@@ -3,16 +3,23 @@ package com.ifbaiano.estagioinclusivo.model;
 import com.ifbaiano.estagioinclusivo.model.enums.TipoDeficienciaEnum;
 import com.ifbaiano.estagioinclusivo.utils.validation.ErroCampo;
 import com.ifbaiano.estagioinclusivo.utils.validation.ValidationException;
+import com.ifbaiano.estagioinclusivo.utils.validation.annotations.NotBlank;
+import com.ifbaiano.estagioinclusivo.utils.validation.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class TipoDeficiencia {
     private int id;
+    @NotBlank
     private String nome;
+    @NotBlank
     private String descricao;
+    @NotNull
     private TipoDeficienciaEnum tipo;
+    @NotNull
     private String tipoApoio;
+    @NotNull
     private Candidato candidato;
 
 
