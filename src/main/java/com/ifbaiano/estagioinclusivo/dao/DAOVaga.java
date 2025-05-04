@@ -140,6 +140,61 @@ public class DAOVaga implements DAORepository<Vaga, Integer> {
         }
         return Optional.empty();
     }
+    public List<Vaga> findByIdCandidato(int candidatoId) {
+        List<Vaga> vagas = new ArrayList<>();
+        String sql = "SELECT v.* FROM vagas v " +
+                     "JOIN candidatos_vagas cv ON v.id_vaga = cv.id_vaga " +
+                     "WHERE cv.id_candidato = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, candidatoId);
+            ResultSet rs = stmt.executeQuery();
+            
+            while (rs.next()) {
+                Empresa empresa = new Empresa();
+                empresa.setId(rs.getInt("fk_empresa"));
+
+                Endereco endereco = new Endereco();
+                endereco.setId(rs.getInt("fk_endereco"));
+
+                Vaga vaga = new Vaga(
+                    rs.getInt("id_vaga"),
+                    empresa,
+                    endereco,
+                    rs.getString("descricao"),
+                    rs.getString("requisitos"),
+                    rs.getString("beneficios"),
+                    rs.getLong("qtd_vagas"),
+                    TipoVaga.valueOf(rs.getString("status"))
+                );
+                vagas.add(vaga);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao buscar vagas do candidato", e);
+        }
+        return vagas;
+    }
+    
+    public List<Vaga> findByIdEmpresa(int idEmpresa) {
+        String sql = "SELECT * FROM vagas WHERE fk_empresa = ?";
+        List<Vaga> vagas = new ArrayList<>();
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, idEmpresa);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                Vaga vaga = new Vaga();
+                // Popule o objeto vaga conforme necessário
+                vaga.setId(rs.getInt("id_vaga"));
+                vaga.setDescricao(rs.getString("descricao"));
+                // outros campos...
+                vagas.add(vaga);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao buscar vagas por empresa", e);
+        }
+        return vagas;
+    }
+
+
 
     @Override
     public void fechar(AutoCloseable closeable) {
