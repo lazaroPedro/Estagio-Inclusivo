@@ -1,4 +1,4 @@
-package com.ifbaiano.estagioinclusivo.controller.servlet;
+/* package com.ifbaiano.estagioinclusivo.controller.servlet;
 
 import com.ifbaiano.estagioinclusivo.config.DBConfig;
 import com.ifbaiano.estagioinclusivo.dao.DAOCurso;
@@ -11,11 +11,11 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
-import java.time.LocalDate;
+import java.time.LocalDate; */
 
 /*Pode receber um idCandidato ou um idCurso*/
 
-public class CursoServlet extends HttpServlet {
+/*public class CursoServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -79,4 +79,4 @@ public class CursoServlet extends HttpServlet {
         resp.sendRedirect(req.getContextPath() + "/");
 
     }
-}
+} */

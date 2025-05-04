@@ -12,7 +12,7 @@ public class DAOCurso implements DAORepository<Curso, Integer> {
     private Connection conexao;
 
     public DAOCurso(Connection connection) {
-        this.conexao = conexao;
+        this.conexao = connection;
     }
 
     @Override
@@ -33,6 +33,11 @@ public class DAOCurso implements DAORepository<Curso, Integer> {
             }
             return Optional.empty();
         } catch (SQLException e) {
+            System.err.println("Erro ao inserir Curso:");
+            System.err.println("Mensagem: " + e.getMessage());
+            System.err.println("SQLState: " + e.getSQLState());
+            System.err.println("Código do erro: " + e.getErrorCode());
+            e.printStackTrace();
             throw new RuntimeException("Erro ao inserir Curso",e);
         } finally {
             fechar(rs);

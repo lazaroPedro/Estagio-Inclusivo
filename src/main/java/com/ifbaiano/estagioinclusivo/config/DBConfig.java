@@ -21,11 +21,13 @@ public class DBConfig {
         String user = properties.getProperty("db.username");
         String password = properties.getProperty("db.password");
         String url = properties.getProperty("db.url");
+        String driver = properties.getProperty("db.driver");
 
         try {
+            Class.forName(driver);
             return DriverManager.getConnection(url,user,password);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+        } catch (ClassNotFoundException | SQLException e) {
+            throw new RuntimeException("Erro ao conectar com o banco de dados", e);
         }
 
     }
