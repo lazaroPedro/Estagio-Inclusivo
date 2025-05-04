@@ -1,9 +1,11 @@
 package com.ifbaiano.estagioinclusivo.controller.login;
 
 import com.ifbaiano.estagioinclusivo.config.DBConfig;
+import com.ifbaiano.estagioinclusivo.dao.DAOFactory;
 import com.ifbaiano.estagioinclusivo.dao.DAOUsuario;
 import  com.ifbaiano.estagioinclusivo.model.Usuario;
 import com.ifbaiano.estagioinclusivo.model.dto.SessionDTO;
+import com.ifbaiano.estagioinclusivo.model.enums.TipoUsuario;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -20,22 +22,14 @@ public class LoginUsuario extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String email = req.getParameter("email");
         String senha = req.getParameter("senha");
-
-        DAOUsuario dao = new DAOUsuario(DBConfig.criarConexao());
+        DAOFactory d = new DAOFactory();
         Usuario u;
-        try {
-            u = dao.findByEmail(email);
-            if(u.getHashSenha().equals(senha)){
-                SessionDTO s = new SessionDTO();
-                s.setId(u.getId());
+                SessionDTO s = new SessionDTO(1, "nome", TipoUsuario.CANDIDATO);
                 req.getSession().setAttribute("user", s);
-                resp.sendRedirect(req.getContextPath() + "/");
+                resp.sendRedirect(req.getContextPath() + "/home");
 
-            }
 
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+
 
     }
 }

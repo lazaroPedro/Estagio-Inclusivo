@@ -8,6 +8,7 @@
     <artifactId>estagioinclusivo</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>war</packaging>
+
     <properties>
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
@@ -15,7 +16,6 @@
     </properties>
 
     <dependencies>
-        <!-- https://mvnrepository.com/artifact/com.mysql/mysql-connector-j -->
         <dependency>
             <groupId>com.mysql</groupId>
             <artifactId>mysql-connector-j</artifactId>
@@ -37,14 +37,15 @@
             <artifactId>bootstrap</artifactId>
             <version>5.3.5</version>
         </dependency>
-<dependency>
-    <groupId>org.apache.tomcat</groupId>
-    <artifactId>tomcat-jasper</artifactId>
-    <version>11.0.6</version>
-</dependency>
 
     </dependencies>
-      <build>
-    <finalName>estagioinclusivo</finalName>
-  </build>
+
+    <build><plugins>
+<plugin>
+    <groupId>org.apache.maven.plugins</groupId>
+    <artifactId>maven-war-plugin</artifactId>
+    <version>3.4.0</version>
+</plugin></plugins>
+        <finalName>estagioinclusivo</finalName>
+    </build>
 </project>

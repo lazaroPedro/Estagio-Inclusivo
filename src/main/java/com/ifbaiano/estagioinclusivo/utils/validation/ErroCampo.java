@@ -26,6 +26,12 @@ public class ErroCampo {
         return nomeCampo;
     }
 
-
-
+    @Override
+    public String toString() {
+        return "ErroCampo{" +
+                "nomeCampo='" + nomeCampo + '\'' +
+                ", valorInserido=" + valorInserido +
+                ", mensagemErro='" + mensagemErro + '\'' +
+                '}';
+    }
 }

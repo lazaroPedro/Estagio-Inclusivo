@@ -1,21 +1,31 @@
 package com.ifbaiano.estagioinclusivo.model;
 
 import com.ifbaiano.estagioinclusivo.model.enums.TipoVaga;
+import com.ifbaiano.estagioinclusivo.utils.validation.annotations.Min;
+import com.ifbaiano.estagioinclusivo.utils.validation.annotations.NotBlank;
+import com.ifbaiano.estagioinclusivo.utils.validation.annotations.NotNull;
 
 public class Vaga {
 	private int id;
+	@NotNull
 	private Empresa empresa;
+	@NotNull
 	private Endereco endereco;
+	@NotBlank
 	private String descricao;
+	@NotBlank
 	private String requisitos;
+	@NotBlank
 	private String beneficios;
-	private int qtdVagas;
+	@Min(1)
+	private long qtdVagas;
+	@NotNull
 	private TipoVaga status;
 
 
 	public Vaga() {}
 
-	public Vaga(int id, Empresa empresa, Endereco endereco, String descricao, String requisitos, String beneficios, int qtdVagas, TipoVaga status) {
+	public Vaga(int id, Empresa empresa, Endereco endereco, String descricao, String requisitos, String beneficios, long qtdVagas, TipoVaga status) {
 		this.id = id;
 		this.empresa = empresa;
 		this.endereco = endereco;
@@ -63,11 +73,11 @@ public class Vaga {
 		this.beneficios = beneficios;
 	}
 
-	public int getQtdVagas() {
+	public long getQtdVagas() {
 		return qtdVagas;
 	}
 
-	public void setQtdVagas(int qtdVagas) {
+	public void setQtdVagas(long qtdVagas) {
 		this.qtdVagas = qtdVagas;
 	}
 

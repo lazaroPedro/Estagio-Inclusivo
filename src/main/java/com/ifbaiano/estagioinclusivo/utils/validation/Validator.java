@@ -1,5 +1,7 @@
 package com.ifbaiano.estagioinclusivo.utils.validation;
 
+import com.ifbaiano.estagioinclusivo.model.Candidato;
+import com.ifbaiano.estagioinclusivo.model.Curso;
 import com.ifbaiano.estagioinclusivo.utils.validation.annotations.*;
 
 import java.lang.reflect.Field;
@@ -10,48 +12,51 @@ public class Validator {
     public static void validar(Object o) throws ValidationException, IllegalAccessException {
         Class<?> clazz = o.getClass();
         List<ErroCampo> erroCampos = new ArrayList<>();
+        Class<?> current = clazz;
+        while (current != null && current != Object.class) {
+            for (Field f : clazz.getDeclaredFields()) {
+                f.setAccessible(true);
+                Object value =  f.get(o);
+                if(f.isAnnotationPresent(NotNull.class)) {
+                    String message = f.getAnnotation(NotNull.class).message();
+                    message = message.replace("{field}", f.getName());
+                    notNull(value, f.getName(), message, erroCampos);
+                }
+                if(f.isAnnotationPresent(NotBlank.class)){
+                    String message = f.getAnnotation(NotBlank.class).message();
+                    message = message.replace("{field}", f.getName());
+                    notBlank((String) value, f.getName(), message, erroCampos);
+                }
+                if (f.isAnnotationPresent(Max.class)){
+                    String message = f.getAnnotation(Max.class).message();
+                    message = message.replace("{field}", f.getName());
+                    message = message.replace("{max}",Long.toString(f.getAnnotation(Max.class).value()));
+                    maxNumber((Number) value, f.getAnnotation(Max.class).value(), f.getName(), message, erroCampos);
+                }
+                if (f.isAnnotationPresent(Min.class)){
+                    String message = f.getAnnotation(Min.class).message();
+                    message = message.replace("{field}", f.getName());
+                    message = message.replace("{min}",Long.toString(f.getAnnotation(Min.class).value()));
+                    minNumber((Number) value, f.getAnnotation(Min.class).value(), f.getName(), message, erroCampos);
+                }
+                if(f.isAnnotationPresent(Positive.class)){
+                    String message = f.getAnnotation(Positive.class).message();
+                    message = message.replace("{field}", f.getName());
 
-        for (Field f : clazz.getDeclaredFields()) {
-            f.setAccessible(true);
-            Object value =  f.get(o);
+                    positive((Number) value, f.getName(), message, erroCampos);
+                }
+                if(f.isAnnotationPresent(Negative.class)){
+                    String message = f.getAnnotation(Negative.class).message();
+                    message = message.replace("{field}", f.getName());
 
-            if(f.isAnnotationPresent(NotNull.class)) {
-                String message = f.getAnnotation(NotNull.class).message();
-                message = message.replace("{field}", f.getName());
-                notNull(value, f.getName(), message, erroCampos);
-            }
-            if(f.isAnnotationPresent(NotBlank.class)){
-                String message = f.getAnnotation(NotBlank.class).message();
-                message = message.replace("{field}", f.getName());
-                notBlank((String) value, f.getName(), message, erroCampos);
-            }
-            if (f.isAnnotationPresent(Max.class)){
-                String message = f.getAnnotation(Max.class).message();
-                message = message.replace("{field}", f.getName());
-                message = message.replace("{max}",Long.toString(f.getAnnotation(Max.class).value()));
-                maxNumber((Number) value, f.getAnnotation(Max.class).value(), f.getName(), message, erroCampos);
-            }
-            if (f.isAnnotationPresent(Min.class)){
-                String message = f.getAnnotation(Min.class).message();
-                message = message.replace("{field}", f.getName());
-                message = message.replace("{min}",Long.toString(f.getAnnotation(Min.class).value()));
-                minNumber((Number) value, f.getAnnotation(Min.class).value(), f.getName(), message, erroCampos);
-            }
-            if(f.isAnnotationPresent(Positive.class)){
-                String message = f.getAnnotation(Positive.class).message();
-                message = message.replace("{field}", f.getName());
+                    negative((Number) value,f.getName(), message, erroCampos);
+                }
 
-                positive((Number) value, f.getName(), message, erroCampos);
             }
-            if(f.isAnnotationPresent(Negative.class)){
-                String message = f.getAnnotation(Negative.class).message();
-                message = message.replace("{field}", f.getName());
+            current = current.getSuperclass();
 
-                negative((Number) value,f.getName(), message, erroCampos);
-            }
 
-        }
-        if(!erroCampos.isEmpty()){
+        }      if(!erroCampos.isEmpty()){
             throw new ValidationException(erroCampos);
         }
     }
@@ -61,7 +66,7 @@ public class Validator {
 
     public static boolean notNull(Object valor, String nomeCampo, String mensagemErro, List<ErroCampo> erros) {
         if (valor == null) {
-            erros.add(new ErroCampo(nomeCampo, null, mensagemErro));
+            erros.add(new ErroCampo(nomeCampo, "null", mensagemErro));
             return false;
         }
         return true;
