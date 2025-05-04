@@ -1,10 +1,16 @@
 package com.ifbaiano.estagioinclusivo.model;
 
+import com.ifbaiano.estagioinclusivo.utils.validation.annotations.NotBlank;
+import com.ifbaiano.estagioinclusivo.utils.validation.annotations.NotNull;
+
 import java.time.LocalDateTime;
 
 public class CandidatoVaga {
+    @NotNull
     private Candidato candidato;
+    @NotNull
     private Vaga vaga;
+    @NotNull
     private LocalDateTime data;
 
 

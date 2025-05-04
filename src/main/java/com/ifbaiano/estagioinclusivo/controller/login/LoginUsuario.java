@@ -36,8 +36,15 @@ public class LoginUsuario extends HttpServlet {
                         u.getHashSenha()
                 );
                 if (senhaValida) {
+
+                    SessionDTO sessionDTO = new SessionDTO(
+                            u.getId(),
+                            u.getNome(),
+                            u.getPapel()
+                    );
+
                     HttpSession session = req.getSession();
-                    session.setAttribute("usuarioLogado", u);
+                    session.setAttribute("usuarioLogado", sessionDTO);
                     resp.sendRedirect("index.jsp");
                     return;
                 }

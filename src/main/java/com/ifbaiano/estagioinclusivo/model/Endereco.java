@@ -1,11 +1,18 @@
 package com.ifbaiano.estagioinclusivo.model;
 
+import com.ifbaiano.estagioinclusivo.utils.validation.annotations.NotBlank;
+
 public class Endereco {
 	private int id;
+	@NotBlank
 	private String rua;
+	@NotBlank
 	private String bairro;
+	@NotBlank
 	private String municipio;
+	@NotBlank
 	private String estado;
+	@NotBlank
 	private String cep;
 
 	public Endereco() {}

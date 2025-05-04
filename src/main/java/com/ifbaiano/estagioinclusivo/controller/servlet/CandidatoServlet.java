@@ -33,6 +33,7 @@ public class CandidatoServlet extends HttpServlet {
         }
 
       try(Connection conexao = DBConfig.criarConexao()){
+          conexao.setAutoCommit(false);
         Endereco endereco = new Endereco();
         endereco.setRua(request.getParameter("rua"));
         endereco.setBairro(request.getParameter("bairro"));
@@ -86,11 +87,16 @@ public class CandidatoServlet extends HttpServlet {
             DAOCurso daoCurso = new DAOCurso(conexao);
             daoCurso.insert(curso);
         }
-
+          conexao.commit();
         response.sendRedirect("pages/login.jsp?sucesso=1");
 
     } catch(Exception e){
         e.printStackTrace();
+        try {
+            DBConfig.criarConexao().rollback();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
         request.setAttribute("erro", "Erro ao realizar o cadastro: " + e.getMessage());
         request.getRequestDispatcher("/pages/cadastrocandidato.jsp").forward(request, response);
     }

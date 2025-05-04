@@ -25,11 +25,8 @@ public class DAOCandidato implements DAORepository<Candidato, Integer> {
         String sql = "INSERT INTO candidatos (id_candidato, genero, nascimento, cpf) VALUES (?, ?, ?, ?)";
         PreparedStatement stmt = null;
         try{
-            connection.setAutoCommit(false);
             Optional<Integer> idUsuario = daoUsuario.insert(entity);
             if (idUsuario.isEmpty()) {
-                connection.rollback();
-                connection.setAutoCommit(true);
                 return Optional.empty();
             }
             int id = idUsuario.get();
@@ -40,20 +37,10 @@ public class DAOCandidato implements DAORepository<Candidato, Integer> {
             stmt.setDate(3, Date.valueOf(entity.getDataNascimento()));
             stmt.setString(4, entity.getCpf());
             stmt.executeUpdate();
-            connection.commit();
-            connection.setAutoCommit(true);
 
             return Optional.of(id);
 
         } catch (SQLException e) {
-            try {
-                if (!connection.getAutoCommit()) {
-                    connection.rollback();
-                    connection.setAutoCommit(true);
-                }
-            } catch (SQLException ex) {
-                throw new RuntimeException(ex);
-            }
             throw new RuntimeException("Falha ao inserir candidato.",e);
         }finally {
             fechar(stmt);

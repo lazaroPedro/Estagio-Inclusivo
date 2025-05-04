@@ -17,9 +17,16 @@ public class ValidationException extends RuntimeException {
     public List<ErroCampo> getErroCampos() {
         return erroCampos;
     }
-
     public String getMessage() {
-        Gson gson = new GsonBuilder().serializeNulls().create();
+        StringBuilder mensagemCompleta = new StringBuilder("Erros de validação:\n");
+            for (ErroCampo erro : erroCampos) {
+                mensagemCompleta.append(erro.toString()).append("\n");
+            }
+            return mensagemCompleta.toString();
+    }
+    public String getJson() {
+        Gson gson = new GsonBuilder().disableHtmlEscaping().create();
         return gson.toJson(erroCampos);
+
     }
 }

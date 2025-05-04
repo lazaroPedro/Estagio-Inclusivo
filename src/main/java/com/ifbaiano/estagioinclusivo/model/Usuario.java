@@ -1,15 +1,26 @@
 package com.ifbaiano.estagioinclusivo.model;
 import com.ifbaiano.estagioinclusivo.model.enums.TipoUsuario;
 import com.ifbaiano.estagioinclusivo.utils.SenhaUtils;
+import com.ifbaiano.estagioinclusivo.utils.validation.annotations.NotBlank;
+import com.ifbaiano.estagioinclusivo.utils.validation.annotations.NotNull;
 
 public class Usuario {
+
     private int id;
+    @NotBlank
     private String nome;
+    @NotBlank
     private String email;
+    @NotNull
     private Endereco endereco;
+
     private String salt;
+
     private String hashSenha;
+
+    @NotNull
     private TipoUsuario papel;
+    @NotBlank
     private String telefone;
 
 

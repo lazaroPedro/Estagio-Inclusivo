@@ -3,12 +3,17 @@ package com.ifbaiano.estagioinclusivo.model;
 
 import com.ifbaiano.estagioinclusivo.model.enums.Genero;
 import com.ifbaiano.estagioinclusivo.model.enums.TipoUsuario;
+import com.ifbaiano.estagioinclusivo.utils.validation.annotations.NotBlank;
+import com.ifbaiano.estagioinclusivo.utils.validation.annotations.NotNull;
 
 import java.time.LocalDate;
 
 public class Candidato extends Usuario{
+    @NotBlank
     private String cpf;
+    @NotNull
     private Genero genero;
+    @NotNull
     private LocalDate dataNascimento;
 
 
