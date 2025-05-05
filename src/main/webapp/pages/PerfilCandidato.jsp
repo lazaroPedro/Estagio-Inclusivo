@@ -6,10 +6,10 @@
     Candidato candidato = (Candidato) request.getAttribute("candidato");
     List<Vaga> vagasInscritas = (List<Vaga>) request.getAttribute("vagasInscritas");
     
-    if (candidato == null) {
+  /*  if (candidato == null) {
         out.println("<h3>Erro: Não foi possível carregar o perfil do candidato.</h3>");
     } else {
-%>
+*/%>
 
 <!DOCTYPE html>
 <html lang="pt-BR">
