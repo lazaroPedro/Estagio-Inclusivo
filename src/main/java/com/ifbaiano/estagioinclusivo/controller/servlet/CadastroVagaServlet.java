@@ -19,22 +19,21 @@ public class CadastroVagaServlet extends HttpServlet {
 
 	private Connection connection;
 
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		request.setCharacterEncoding("UFT-8");
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		request.setCharacterEncoding("UTF-8");
 
-			HttpSession session = request.getSession(false);
-			SessionDTO usuariologado = (session != null) ? (SessionDTO)session.getAttribute("usuarioLogado") : null;
-			
-			if (usuariologado == null || usuariologado.getTipoUsuario() == null) {
-				response.sendRedirect("login.jsp");
-				return;
-			}
-		
-		
+		HttpSession session = request.getSession(false);
+		SessionDTO usuariologado = (session != null) ? (SessionDTO) session.getAttribute("usuarioLogado") : null;
 
-		try (Connection connection = DBConfig.criarConexao()){
+		if (usuariologado == null || usuariologado.getTipoUsuario() == null) {
+			response.sendRedirect("login.jsp");
+			return;
+		}
+
+		try (Connection connection = DBConfig.criarConexao()) {
 			connection.setAutoCommit(false);
-			
+
 			String descricao = request.getParameter("descricao");
 			String requisitos = request.getParameter("requisitos");
 			String beneficios = request.getParameter("beneficios");
@@ -42,36 +41,35 @@ public class CadastroVagaServlet extends HttpServlet {
 			String statusParam = request.getParameter("status");
 			String empresaNome = request.getParameter("empresa_nome");
 
-			
-			if (descricao == null || descricao.trim().isEmpty() ||
-					requisitos == null || requisitos.trim().isEmpty() ||
-					beneficios == null || beneficios.trim().isEmpty() || 
-					statusParam == null || statusParam.trim().isEmpty() || 
-					empresaNome == null || empresaNome.trim().isEmpty()) {
-				
-				
+			if (descricao == null || descricao.trim().isEmpty() || requisitos == null || requisitos.trim().isEmpty()
+					|| beneficios == null || beneficios.trim().isEmpty() || statusParam == null
+					|| statusParam.trim().isEmpty() || empresaNome == null || empresaNome.trim().isEmpty()) {
+
 				request.setAttribute("erro", "todos os campos são obrigatórios.");
 				request.getRequestDispatcher("CadastroVagas.jsp").forward(request, response);
 				return;
 			}
 
-			TipoVaga status = TipoVaga.valueOf(statusParam.toUpperCase());
-
+			TipoVaga status;
+			try {
+			 status = TipoVaga.valueOf(statusParam.toUpperCase());
+			} catch (IllegalArgumentException e) {
+				request.setAttribute("erro", "Status inválido.");
+				request.getRequestDispatcher("CadastroVagas.jsp").forward(request, response);
+				return;
+			}
 			Vaga vaga = new Vaga();
 			vaga.setDescricao(descricao);
 			vaga.setRequisitos(requisitos);
 			vaga.setBeneficios(beneficios);
 			vaga.setQtdVagas(Integer.parseInt(request.getParameter("qtd_vagas")));
 			vaga.setStatus(status);
-		
 
-			
-			
 			DAOVaga vagaDAO = new DAOVaga(connection);
 			vagaDAO.insert(vaga);
 
-			request.setAttribute("mensagem", "Vaga cadastrada com sucesso!");
-			request.getRequestDispatcher("CadastroVagas.jsp").forward(request, response);
+			connection.commit();
+			response.sendRedirect("CadastroVagas.jsp?sucesso=1");
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -79,6 +77,6 @@ public class CadastroVagaServlet extends HttpServlet {
 			request.getRequestDispatcher("CadastroVagas.jsp").forward(request, response);
 
 		}
-		
-}
+
+	}
 }
