@@ -7,6 +7,8 @@ import com.ifbaiano.estagioinclusivo.model.enums.Genero;
 import com.ifbaiano.estagioinclusivo.model.enums.TipoDeficienciaEnum;
 import com.ifbaiano.estagioinclusivo.model.enums.TipoUsuario;
 import com.ifbaiano.estagioinclusivo.utils.SenhaUtils;
+import com.ifbaiano.estagioinclusivo.utils.validation.ValidationException;
+import com.ifbaiano.estagioinclusivo.utils.validation.Validator;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -49,6 +51,8 @@ public class CandidatoServlet extends HttpServlet {
         endereco.setEstado(request.getParameter("estado"));
         endereco.setCep(request.getParameter("cep"));
 
+        Validator.validar(endereco);
+
         Integer idEndereco = daoEndereco.insert(endereco).orElseThrow(()->new RuntimeException("Não foi possivel cadastrar o endereço"));
 
         endereco.setId(idEndereco);
@@ -68,6 +72,8 @@ public class CandidatoServlet extends HttpServlet {
         candidato.setGenero(Genero.valueOf(request.getParameter("genero")));
         candidato.setDataNascimento(LocalDate.parse(request.getParameter("nascimento")));
 
+        Validator.validar(candidato);
+
         Integer idCandidato = daoCandidato.insert(candidato).orElseThrow(() -> new RuntimeException("Erro ao inserir candidato."));
           candidato.setId(idCandidato);
 
@@ -77,6 +83,8 @@ public class CandidatoServlet extends HttpServlet {
         tipoDeficiencia.setTipo(TipoDeficienciaEnum.valueOf(request.getParameter("def_tipo")));
         tipoDeficiencia.setDescricao(request.getParameter("def_descricao"));
         tipoDeficiencia.setTipoApoio(request.getParameter("def_apoio"));
+
+        Validator.validar(tipoDeficiencia);
 
         daoTipoDeficiencia.insert(tipoDeficiencia).orElseThrow(() -> new RuntimeException("Erro ao cadastrar deficiência"));
 
@@ -90,20 +98,33 @@ public class CandidatoServlet extends HttpServlet {
             curso.setDataFim(LocalDate.parse(request.getParameter("curso_fim")));
             curso.setCandidato(candidato);
 
+            Validator.validar(curso);
+
             daoCurso.insert(curso);
         }
         factory.closeTransaction();
         response.sendRedirect("pages/login.jsp?sucesso=1");
-        } catch(Exception e){
+        } catch(ValidationException ve){
+            try {
             factory.rollbackTransaction();
-            throw e;
-        }
-            } catch (Exception e) {
-                e.printStackTrace();
-                request.setAttribute("erro", "Erro ao realizar o cadastro: " + e.getMessage());
-                request.getRequestDispatcher("/pages/cadastrocandidato.jsp").forward(request, response);
+            }catch (SQLException ex){
+                ex.printStackTrace();
             }
-        }
+            request.setAttribute("errosValidacao", ve.getErroCampos());
+            request.getRequestDispatcher("/pages/cadastrocandidato.jsp").forward(request, response);
+        } catch (Exception e) {
+            try {
+                factory.rollbackTransaction();
+            }catch (SQLException ex){
+                ex.printStackTrace();
+            }
+            throw new ServletException("Erro ao cadastrar candidato", e);
+            }
+        } catch (SQLException e) {
+          throw new RuntimeException(e);
+      }
+
+    }
     }
 
 

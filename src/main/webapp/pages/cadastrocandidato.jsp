@@ -1,3 +1,5 @@
+<%@ page import="com.ifbaiano.estagioinclusivo.utils.validation.ErroCampo" %>
+<%@ page import="java.util.List" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -8,13 +10,22 @@
 <body class="container mt-5">
 <h2 class="mb-4">Cadastro de Candidato</h2>
 <%
-    String erro = (String) request.getAttribute("erro");
-    if (erro != null) {
+    List<ErroCampo> erros =
+            (List<com.ifbaiano.estagioinclusivo.utils.validation.ErroCampo>) request.getAttribute("errosValidacao");
+
+    if (erros != null && !erros.isEmpty()) {
 %>
-<div class="alert alert-danger"><%= erro %></div>
+<div class="alert alert-danger">
+    <ul>
+        <% for (com.ifbaiano.estagioinclusivo.utils.validation.ErroCampo erro : erros) { %>
+        <li><strong><%= erro.getNomeCampo() %>:</strong> <%= erro.getMensagemErro() %></li>
+        <% } %>
+    </ul>
+</div>
 <%
     }
 %>
+
 
 <form action="${pageContext.request.contextPath}/cadastrocandidato" method="post">
     <h4>Dados gerais</h4>
