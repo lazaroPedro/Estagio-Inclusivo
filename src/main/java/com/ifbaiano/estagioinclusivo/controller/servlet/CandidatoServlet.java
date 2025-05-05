@@ -1,11 +1,10 @@
 package com.ifbaiano.estagioinclusivo.controller.servlet;
 
 import com.ifbaiano.estagioinclusivo.config.DBConfig;
-import com.ifbaiano.estagioinclusivo.dao.DAOCurso;
+import com.ifbaiano.estagioinclusivo.dao.*;
 import com.ifbaiano.estagioinclusivo.model.*;
-import com.ifbaiano.estagioinclusivo.dao.DAOCandidato;
-import com.ifbaiano.estagioinclusivo.dao.DAOEndereco;
 import com.ifbaiano.estagioinclusivo.model.enums.Genero;
+import com.ifbaiano.estagioinclusivo.model.enums.TipoDeficienciaEnum;
 import com.ifbaiano.estagioinclusivo.model.enums.TipoUsuario;
 import com.ifbaiano.estagioinclusivo.utils.SenhaUtils;
 import jakarta.servlet.ServletException;
@@ -32,8 +31,17 @@ public class CandidatoServlet extends HttpServlet {
             return;
         }
 
-      try(Connection conexao = DBConfig.criarConexao()){
-          conexao.setAutoCommit(false);
+
+      try(DAOFactory factory = new DAOFactory()){
+        factory.openTransaction();
+        try {
+
+        DAOEndereco daoEndereco = factory.buildDAOEndereco();
+        DAOCandidato daoCandidato = factory.buildDAOCandidato();
+        DAOCurso daoCurso = factory.buildDAOCurso();
+        DAOTipoDeficiencia daoTipoDeficiencia = factory.buildDAOTipoDeficiencia();
+
+
         Endereco endereco = new Endereco();
         endereco.setRua(request.getParameter("rua"));
         endereco.setBairro(request.getParameter("bairro"));
@@ -41,14 +49,9 @@ public class CandidatoServlet extends HttpServlet {
         endereco.setEstado(request.getParameter("estado"));
         endereco.setCep(request.getParameter("cep"));
 
-        DAOEndereco daoEndereco = new DAOEndereco(conexao);
-        Optional<Integer> idEndereco = daoEndereco.insert(endereco);
+        Integer idEndereco = daoEndereco.insert(endereco).orElseThrow(()->new RuntimeException("Não foi possivel cadastrar o endereço"));
 
-        if (idEndereco.isEmpty()) {
-            throw new RuntimeException("Não foi possível cadastrar o endereço.");
-        }
-
-        endereco.setId(idEndereco.get());
+        endereco.setId(idEndereco);
 
         String salt = SenhaUtils.gerarSalt();
         String hash = SenhaUtils.gerarHashSenha(request.getParameter("password"), salt);
@@ -65,14 +68,17 @@ public class CandidatoServlet extends HttpServlet {
         candidato.setGenero(Genero.valueOf(request.getParameter("genero")));
         candidato.setDataNascimento(LocalDate.parse(request.getParameter("nascimento")));
 
-        DAOCandidato daoCandidato = new DAOCandidato(conexao);
-        Optional<Integer> idCandidato = daoCandidato.insert(candidato);
+        Integer idCandidato = daoCandidato.insert(candidato).orElseThrow(() -> new RuntimeException("Erro ao inserir candidato."));
+          candidato.setId(idCandidato);
 
-        if (idCandidato.isPresent()) {
-            candidato.setId(idCandidato.get());
-        } else {
-            throw new RuntimeException("Erro ao cadastrar o candidato.");
-        }
+        TipoDeficiencia tipoDeficiencia = new TipoDeficiencia();
+        tipoDeficiencia.setNome(request.getParameter("def_nome"));
+        tipoDeficiencia.setCandidato(candidato);
+        tipoDeficiencia.setTipo(TipoDeficienciaEnum.valueOf(request.getParameter("def_tipo")));
+        tipoDeficiencia.setDescricao(request.getParameter("def_descricao"));
+        tipoDeficiencia.setTipoApoio(request.getParameter("def_apoio"));
+
+        daoTipoDeficiencia.insert(tipoDeficiencia).orElseThrow(() -> new RuntimeException("Erro ao cadastrar deficiência"));
 
         String nomeCurso = request.getParameter("curso_nome");
         if (nomeCurso != null && !nomeCurso.trim().isEmpty()) {
@@ -84,23 +90,22 @@ public class CandidatoServlet extends HttpServlet {
             curso.setDataFim(LocalDate.parse(request.getParameter("curso_fim")));
             curso.setCandidato(candidato);
 
-            DAOCurso daoCurso = new DAOCurso(conexao);
             daoCurso.insert(curso);
         }
-          conexao.commit();
+        factory.closeTransaction();
         response.sendRedirect("pages/login.jsp?sucesso=1");
-
-    } catch(Exception e){
-        e.printStackTrace();
-        try {
-            DBConfig.criarConexao().rollback();
-        } catch (SQLException ex) {
-            ex.printStackTrace();
+        } catch(Exception e){
+            factory.rollbackTransaction();
+            throw e;
         }
-        request.setAttribute("erro", "Erro ao realizar o cadastro: " + e.getMessage());
-        request.getRequestDispatcher("/pages/cadastrocandidato.jsp").forward(request, response);
+            } catch (Exception e) {
+                e.printStackTrace();
+                request.setAttribute("erro", "Erro ao realizar o cadastro: " + e.getMessage());
+                request.getRequestDispatcher("/pages/cadastrocandidato.jsp").forward(request, response);
+            }
+        }
     }
-}
 
-}
+
+
 
