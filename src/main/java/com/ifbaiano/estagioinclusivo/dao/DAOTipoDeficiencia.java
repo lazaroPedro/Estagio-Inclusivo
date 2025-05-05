@@ -18,7 +18,7 @@ public class DAOTipoDeficiencia implements DAORepository<TipoDeficiencia, Intege
     }
     @Override
     public Optional<Integer> insert(TipoDeficiencia entity) {
-        String sql = "INSERT INTO deficiencias (nome, descricao, tipo, tipo_apoio, fk_candidato) VALUES (?,?,?,?,?)";
+        String sql = "INSERT INTO deficiencias (nome, descricao, tipo_deficiencia, tipo_apoio, fk_candidato) VALUES (?,?,?,?,?)";
         ResultSet rs = null;
         try (PreparedStatement pp = conexao.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)){
             pp.setString(1, entity.getNome());
@@ -26,7 +26,8 @@ public class DAOTipoDeficiencia implements DAORepository<TipoDeficiencia, Intege
             pp.setString(3, entity.getTipo().name());
             pp.setString(4, entity.getTipoApoio());
             pp.setInt(5, entity.getCandidato().getId());
-            rs = pp.executeQuery();
+            pp.executeUpdate();
+            rs = pp.getGeneratedKeys();
             if (rs.next()) {
                 return Optional.of(rs.getInt(1));
             }
