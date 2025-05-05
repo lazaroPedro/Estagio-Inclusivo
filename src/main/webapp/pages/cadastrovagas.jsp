@@ -10,7 +10,6 @@
 	rel="stylesheet">
 </head>
 
-</head>
 <body>
 	<div class="conatiner mt-5 mb-5">
 		<div class="card shadow">
@@ -75,6 +74,6 @@
 
 	</div>
 
-	</div>
+
 </body>
 </html>
