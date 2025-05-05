@@ -5,11 +5,7 @@
 <%
     Candidato candidato = (Candidato) request.getAttribute("candidato");
     List<Vaga> vagasInscritas = (List<Vaga>) request.getAttribute("vagasInscritas");
-    
-  /*  if (candidato == null) {
-        out.println("<h3>Erro: Não foi possível carregar o perfil do candidato.</h3>");
-    } else {
-*/%>
+%>
 
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -17,12 +13,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Perfil do Candidato</title>
-    <!-- Inclusão do Bootstrap 5 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body {
             font-family: Arial, sans-serif;
             margin: 40px;
+            background-color: #f8f9fa;
         }
 
         h1, h2 {
@@ -30,10 +26,20 @@
         }
 
         .perfil, .vagas {
-            background-color: #ecf0f1;
+            background-color: #ffffff;
             padding: 20px;
             border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             margin-bottom: 30px;
+        }
+
+        .perfil p, .vagas p {
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+        }
+
+        .perfil p strong, .vagas p strong {
+            color: #34495e;
         }
 
         .vaga {
@@ -47,33 +53,39 @@
             padding: 10px 15px;
             text-decoration: none;
             border-radius: 5px;
+            font-size: 1rem;
         }
 
         .btn-logout:hover {
             background-color: #c0392b;
         }
+
+        .alert-warning {
+            background-color: #f39c12;
+            color: white;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
-
-    <!-- Cabeçalho -->
     <header class="bg-primary text-white text-center py-4">
         <h1>Bem-vindo, <%= candidato.getNome() %>!</h1>
         <a href="logout" class="btn btn-danger mt-2">Sair</a>
     </header>
 
     <div class="container mt-5">
-        <!-- Perfil do Candidato -->
         <section class="perfil mb-5">
-            <h2 class="text-primary">Seus dados</h2>
+            <h2 class="text-primary">Seus Dados</h2>
+              <p><strong>ID:</strong> <%= candidato.getId() %></p>
             <p><strong>Nome:</strong> <%= candidato.getNome() %></p>
+            <p><strong>Gênero:</strong> <%= candidato.getGenero() %></p>
+            <p><strong>Data de Nascimento:</strong> <%= candidato.getDataNascimento() %></p>
+            <p><strong>Endereço:</strong> <%= candidato.getEndereco() %></p>
             <p><strong>Email:</strong> <%= candidato.getEmail() %></p>
             <p><strong>CPF:</strong> <%= candidato.getCpf() %></p>
             <p><strong>Telefone:</strong> <%= candidato.getTelefone() %></p>
-            <!-- Adicione mais campos conforme existirem no seu modelo Candidato -->
         </section>
 
-        <!-- Vagas Inscritas -->
         <section class="vagas">
             <h2 class="text-primary">Vagas em que você está inscrito</h2>
 
@@ -85,21 +97,15 @@
                 <% for (Vaga vaga : vagasInscritas) { %>
                     <div class="vaga">
                         <p><strong>Empresa:</strong> <%= vaga.getEmpresa().getNome() %></p>
+                        <p><strong>Endereço:</strong> <%= vaga.getEndereco() %></p>
                         <p><strong>Descrição:</strong> <%= vaga.getDescricao() %></p>
                         <p><strong>Benefícios:</strong> <%= vaga.getBeneficios() %></p>
-                        <p><strong>Quantidade:</strong> <%= vaga.getQtdVagas() %></p>
+                        <p><strong>Quantidade de Vagas:</strong> <%= vaga.getQtdVagas() %></p>
                         <p><strong>Localização:</strong> <%= vaga.getEndereco().getMunicipio() + " - " + vaga.getEndereco().getEstado() %></p>
                     </div>
                 <% } %>
             <% } %>
         </section>
-
-        <a href="logout" class="btn btn-danger mt-4">Sair</a>
     </div>
-
 </body>
 </html>
-
-<%
-    }
-%>

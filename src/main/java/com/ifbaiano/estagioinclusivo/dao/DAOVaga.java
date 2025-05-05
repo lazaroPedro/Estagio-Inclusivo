@@ -174,18 +174,30 @@ public class DAOVaga implements DAORepository<Vaga, Integer> {
         return vagas;
     }
     
-    public List<Vaga> findByIdEmpresa(int idEmpresa) {
-        String sql = "SELECT * FROM vagas WHERE fk_empresa = ?";
+    public List<Vaga> findByIdEmpresa(int empresaId) {
         List<Vaga> vagas = new ArrayList<>();
+        String sql = "SELECT * FROM vagas WHERE fk_empresa = ?";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setInt(1, idEmpresa);
+            stmt.setInt(1, empresaId);
             ResultSet rs = stmt.executeQuery();
+
             while (rs.next()) {
-                Vaga vaga = new Vaga();
-                // Popule o objeto vaga conforme necessário
-                vaga.setId(rs.getInt("id_vaga"));
-                vaga.setDescricao(rs.getString("descricao"));
-                // outros campos...
+                Empresa empresa = new Empresa();
+                empresa.setId(rs.getInt("fk_empresa"));
+
+                Endereco endereco = new Endereco();
+                endereco.setId(rs.getInt("fk_endereco"));
+
+                Vaga vaga = new Vaga(
+                    rs.getInt("id_vaga"),
+                    empresa,
+                    endereco,
+                    rs.getString("descricao"),
+                    rs.getString("requisitos"),
+                    rs.getString("beneficios"),
+                    rs.getLong("qtd_vagas"),
+                    TipoVaga.valueOf(rs.getString("status"))
+                );
                 vagas.add(vaga);
             }
         } catch (SQLException e) {
@@ -193,6 +205,7 @@ public class DAOVaga implements DAORepository<Vaga, Integer> {
         }
         return vagas;
     }
+
 
 
 

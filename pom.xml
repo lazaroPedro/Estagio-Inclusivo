@@ -33,6 +33,12 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
+  			<groupId>jakarta.servlet.jsp</groupId>
+  			<artifactId>jakarta.servlet.jsp-api</artifactId>
+  			<version>4.0.0</version>
+  			<scope>provided</scope>
+		</dependency>
+        <dependency>
             <groupId>org.webjars</groupId>
             <artifactId>bootstrap</artifactId>
             <version>5.3.5</version>

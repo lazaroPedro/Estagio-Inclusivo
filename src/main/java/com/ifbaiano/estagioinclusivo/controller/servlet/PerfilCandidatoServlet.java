@@ -1,12 +1,11 @@
 package com.ifbaiano.estagioinclusivo.controller.servlet;
 
 import java.io.IOException;
-import java.sql.Connection;
 import java.util.List;
 import java.util.Optional;
 
-import com.ifbaiano.estagioinclusivo.config.DBConfig;
 import com.ifbaiano.estagioinclusivo.dao.DAOCandidato;
+import com.ifbaiano.estagioinclusivo.dao.DAOFactory;
 import com.ifbaiano.estagioinclusivo.dao.DAOVaga;
 import com.ifbaiano.estagioinclusivo.model.Candidato;
 import com.ifbaiano.estagioinclusivo.model.Vaga;
@@ -21,7 +20,8 @@ public class PerfilCandidatoServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        HttpSession session = req.getSession(false); 
+        HttpSession session = req.getSession(false);
+
         if (session == null || session.getAttribute("user") == null) {
             resp.sendRedirect("pages/login.jsp");
             return;
@@ -29,12 +29,9 @@ public class PerfilCandidatoServlet extends HttpServlet {
 
         SessionDTO sessionDTO = (SessionDTO) session.getAttribute("user");
 
-        Connection conexao = null;
-
-        try {
-            conexao = DBConfig.criarConexao();
-            DAOCandidato daoCandidato = new DAOCandidato(conexao);
-            DAOVaga daoVaga = new DAOVaga(conexao);
+        try (DAOFactory daoFactory = new DAOFactory()) {
+            DAOCandidato daoCandidato = daoFactory.buildDAOCandidato();
+            DAOVaga daoVaga = daoFactory.buildDAOVaga();
 
             Optional<Candidato> candidatoOpt = daoCandidato.findById(sessionDTO.getId());
             if (!candidatoOpt.isPresent()) {
@@ -55,9 +52,6 @@ public class PerfilCandidatoServlet extends HttpServlet {
             e.printStackTrace();
             req.setAttribute("erro", "Erro ao carregar perfil do candidato.");
             req.getRequestDispatcher("pages/login.jsp").forward(req, resp);
-
-      
-            }
         }
     }
-
+}
