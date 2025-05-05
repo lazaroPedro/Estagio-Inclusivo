@@ -1,3 +1,5 @@
+<%@ page import="com.ifbaiano.estagioinclusivo.utils.validation.ErroCampo" %>
+<%@ page import="java.util.List" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -8,13 +10,22 @@
 <body class="container mt-5">
 <h2 class="mb-4">Cadastro de Candidato</h2>
 <%
-    String erro = (String) request.getAttribute("erro");
-    if (erro != null) {
+    List<ErroCampo> erros =
+            (List<com.ifbaiano.estagioinclusivo.utils.validation.ErroCampo>) request.getAttribute("errosValidacao");
+
+    if (erros != null && !erros.isEmpty()) {
 %>
-<div class="alert alert-danger"><%= erro %></div>
+<div class="alert alert-danger">
+    <ul>
+        <% for (com.ifbaiano.estagioinclusivo.utils.validation.ErroCampo erro : erros) { %>
+        <li><strong><%= erro.getNomeCampo() %>:</strong> <%= erro.getMensagemErro() %></li>
+        <% } %>
+    </ul>
+</div>
 <%
     }
 %>
+
 
 <form action="${pageContext.request.contextPath}/cadastrocandidato" method="post">
     <h4>Dados gerais</h4>
@@ -95,6 +106,33 @@
         <input type="date" name="curso_fim" class="form-control" id="dataTe">
     </div>
 
+    <h4>Deficiência</h4>
+    <div class="mb-3">
+        <label for="def_nome" class="form-label">Nome da Deficiência</label>
+        <input type="text" name="def_nome" class="form-control" id="defNome" required>
+    </div>
+    <div class="mb-3">
+        <label for="def_descricao" class="form-label">Descrição</label>
+        <textarea name="def_descricao" class="form-control" id="defDesc" required></textarea>
+    </div>
+    <div class="mb-3">
+        <label for="def_tipo" class="form-label">Tipo de Deficiência</label>
+        <select name="def_tipo" class="form-select" id="defTipo" required>
+            <option value="">Selecione</option>
+            <option value="FISICA">Física</option>
+            <option value="VISUAL">Visual</option>
+            <option value="AUDITIVA">Auditiva</option>
+            <option value="INTELECTUAL">Intelectual</option>
+            <option value="MENTAL">Mental</option>
+            <option value="SENSORIAL">Sensorial</option>
+            <option value="MULTIPLA">Múltipla</option>
+            <option value="OUTRA">Outra</option>
+        </select>
+    </div>
+    <div class="mb-3">
+        <label for="def_apoio" class="form-label">Tipo de Apoio Necessário</label>
+        <textarea name="def_apoio" class="form-control" id="defApoi" required></textarea>
+    </div>
     <div class="form-check mb-4">
         <input class="form-check-input" type="checkbox" id="termos" name="aceitaTermos" required>
         <label class="form-check-label" for="termos">

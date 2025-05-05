@@ -1,6 +1,7 @@
 package com.ifbaiano.estagioinclusivo.controller.login;
 
 import com.ifbaiano.estagioinclusivo.config.DBConfig;
+import com.ifbaiano.estagioinclusivo.dao.DAOFactory;
 import com.ifbaiano.estagioinclusivo.dao.DAOUsuario;
 import  com.ifbaiano.estagioinclusivo.model.Usuario;
 import com.ifbaiano.estagioinclusivo.model.dto.SessionDTO;
@@ -24,9 +25,9 @@ public class LoginUsuario extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String email = req.getParameter("email");
         String senhaDigitada = req.getParameter("senha");
-        try( Connection conexao = DBConfig.criarConexao()) {
+        try(DAOFactory factory = new DAOFactory()) {
 
-            DAOUsuario dao = new DAOUsuario(conexao);
+            DAOUsuario dao = factory.buildDAOUsuario();
             Optional<Usuario> optionalUsuario = dao.findByEmail(email);
             if (optionalUsuario.isPresent()) {
                 Usuario u = optionalUsuario.get();
@@ -54,7 +55,7 @@ public class LoginUsuario extends HttpServlet {
 
         } catch (Exception e) {
             e.printStackTrace();
-            resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Deu pau.");
+            resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Erro interno no login: " + e.getMessage());
         }
 
     }
