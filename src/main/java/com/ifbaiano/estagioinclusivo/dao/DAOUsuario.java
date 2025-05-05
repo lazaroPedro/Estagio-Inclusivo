@@ -31,15 +31,17 @@ public class DAOUsuario implements DAORepository<Usuario, Integer> {
             stmt.executeUpdate();
             rs = stmt.getGeneratedKeys();
             if (rs.next()) {
-                return Optional.of(rs.getInt(1));
+                int idGerado = rs.getInt(1);
+                return Optional.of(idGerado);
             }
+
+            return Optional.empty();
 
         } catch (SQLException e) {
             throw new RuntimeException("Erro ao inserir usuário ", e);
         } finally {
             fechar(rs);
         }
-        return Optional.empty();
     }
 
     @Override
@@ -53,7 +55,7 @@ public class DAOUsuario implements DAORepository<Usuario, Integer> {
             stmt.setInt(5, entity.getEndereco().getId());
             stmt.setString(6, entity.getPapel().name());
             stmt.setString(7, entity.getTelefone());
-            stmt.setInt(7, entity.getId());
+            stmt.setInt(8, entity.getId());
             stmt.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException("Erro ao atualizar o usuario ", e);
@@ -102,8 +104,7 @@ public class DAOUsuario implements DAORepository<Usuario, Integer> {
     public Optional<Usuario> findById(Integer id) {
         String sql = "SELECT * FROM usuarios WHERE id_usuario = ?";
         ResultSet rs = null;
-       try{
-           PreparedStatement stmt = connection.prepareStatement(sql);
+       try(PreparedStatement stmt = connection.prepareStatement(sql)){
            stmt.setInt(1, id);
            rs = stmt.executeQuery();
            if (rs.next()) {
@@ -124,8 +125,6 @@ public class DAOUsuario implements DAORepository<Usuario, Integer> {
            }
        } catch (SQLException e) {
            throw new RuntimeException("Erro ao buscar usuario por id ", e);
-       } finally {
-           fechar(rs);
        }
 
         return Optional.empty();
@@ -134,8 +133,7 @@ public class DAOUsuario implements DAORepository<Usuario, Integer> {
     public Optional<Usuario> findByEmail(String email) {
         String sql = "SELECT * FROM usuarios WHERE email = ?";
         ResultSet rs = null;
-        try{
-                PreparedStatement stmt = connection.prepareStatement(sql);
+        try(PreparedStatement stmt = connection.prepareStatement(sql)){
             stmt.setString(1, email);
             rs = stmt.executeQuery();
             if (rs.next()) {
@@ -157,8 +155,6 @@ public class DAOUsuario implements DAORepository<Usuario, Integer> {
 
         } catch (SQLException e) {
             throw new RuntimeException("Erro ao buscar usuario por email ", e);
-        }finally {
-            fechar(rs);
         }
         return Optional.empty();
     }
