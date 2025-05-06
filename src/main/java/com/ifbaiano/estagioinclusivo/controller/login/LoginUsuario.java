@@ -4,8 +4,11 @@ import com.ifbaiano.estagioinclusivo.config.DBConfig;
 import com.ifbaiano.estagioinclusivo.dao.DAOFactory;
 import com.ifbaiano.estagioinclusivo.dao.DAOUsuario;
 import  com.ifbaiano.estagioinclusivo.model.Usuario;
+import com.ifbaiano.estagioinclusivo.model.dto.LoginDTO;
 import com.ifbaiano.estagioinclusivo.model.dto.SessionDTO;
 import com.ifbaiano.estagioinclusivo.utils.SenhaUtils;
+import com.ifbaiano.estagioinclusivo.utils.validation.ValidationException;
+import com.ifbaiano.estagioinclusivo.utils.validation.Validator;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -25,7 +28,12 @@ public class LoginUsuario extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String email = req.getParameter("email");
         String senhaDigitada = req.getParameter("senha");
+
+        LoginDTO login = new LoginDTO();
+        login.setEmail(email);
+        login.setSenha(senhaDigitada);
         try(DAOFactory factory = new DAOFactory()) {
+            Validator.validar(login);
 
             DAOUsuario dao = factory.buildDAOUsuario();
             Optional<Usuario> optionalUsuario = dao.findByEmail(email);
@@ -50,12 +58,17 @@ public class LoginUsuario extends HttpServlet {
                     return;
                 }
             }
-
+            req.setAttribute("erro", "Email ou senha inválidos.");
             resp.sendRedirect("pages/login.jsp?erro=1");
+            /*req.getRequestDispatcher("/pages/login.jsp").forward(req, resp);*/
 
-        } catch (Exception e) {
+        } catch (ValidationException ve) {
+            req.setAttribute("errosValidacao", ve.getErroCampos());
+            req.getRequestDispatcher("/pages/login.jsp").forward(req, resp);
+        }catch (Exception e){
             e.printStackTrace();
-            resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Erro interno no login: " + e.getMessage());
+            req.setAttribute("erro", "Erro interno no login: " + e.getMessage());
+            req.getRequestDispatcher("/pages/login.jsp").forward(req, resp);
         }
 
     }
