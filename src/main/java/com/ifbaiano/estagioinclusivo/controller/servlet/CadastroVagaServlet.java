@@ -27,7 +27,7 @@ public class CadastroVagaServlet extends HttpServlet {
 		SessionDTO usuariologado = (session != null) ? (SessionDTO) session.getAttribute("usuarioLogado") : null;
 
 		if (usuariologado == null || usuariologado.getTipoUsuario() == null) {
-			response.sendRedirect("login.jsp");
+			response.sendRedirect("pages/login.jsp");
 			return;
 		}
 
@@ -52,7 +52,7 @@ public class CadastroVagaServlet extends HttpServlet {
 
 			TipoVaga status;
 			try {
-			 status = TipoVaga.valueOf(statusParam.toUpperCase());
+				status = TipoVaga.valueOf(statusParam.toUpperCase());
 			} catch (IllegalArgumentException e) {
 				request.setAttribute("erro", "Status inválido.");
 				request.getRequestDispatcher("CadastroVagas.jsp").forward(request, response);
@@ -79,4 +79,11 @@ public class CadastroVagaServlet extends HttpServlet {
 		}
 
 	}
+
+	@Override
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		request.getRequestDispatcher("/pages/CadastroVagas.jsp").forward(request, response);
+	}
+
 }

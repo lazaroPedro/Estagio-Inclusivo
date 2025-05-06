@@ -18,19 +18,18 @@
 
 		<div class="card shadow-sm">
 					<div class-"card-header bg-primary text-white">
-						<h3>Detalhes da Vaga</h3>
-						>
+						<h3>${vaga.titulo}</h3>
+						
 					</div>
 
 					<div class="card-body">
-						<p>
-							<strong>Código da Vaga:</strong> EST-${vaga.id}</p>
-						<p>
-							<strong>Empresa (ID):</strong>
-							${vaga.empresa.id}</p>
+						
+							<strong>Empresa:</strong>
+							${vaga.empresa.nome}</p>
 						<p>
 							<strong>Endereço (ID):</strong>
-							${vaga.endereco.id}</p>
+							${vaga.endereco.rua} - ${vaga.endereco.bairro} - ${vaga.endereco.municipio} - ${vaga.endereco.estado} </p>
+							CEP: ${vaga.endereco.cep}
 						<p>
 							<strong>Descrição:</strong>
 							${vaga.descricao}</p>
@@ -46,14 +45,19 @@
 						<p>
 							<strong>Status:</strong>
 							${vaga.status}</p>
+							
+						<p> 
+							<strong>Publicada em:</strong> <fmt:formatDate value="$vaga.dataPublicacao}" pattern="dd/MM/yyyy" /></p>
 					</div>
 				</div>
 
 			</c:when>
 			<c:otherwise>
-				<p class="text-danger">${erro}</p>
+				<div class="alert alert-danger">Erro: ${erro}</div>
 			</c:otherwise>
 		</c:choose>
 	</div>
+	
+    <script src="${pageContext.request.contextPath}/webjars/bootstrap/5.3.5/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
