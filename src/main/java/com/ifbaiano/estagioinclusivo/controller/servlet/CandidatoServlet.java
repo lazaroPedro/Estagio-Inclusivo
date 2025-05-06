@@ -43,13 +43,17 @@ public class CandidatoServlet extends HttpServlet {
         DAOCurso daoCurso = factory.buildDAOCurso();
         DAOTipoDeficiencia daoTipoDeficiencia = factory.buildDAOTipoDeficiencia();
 
+        String cep = request.getParameter("cep").replaceAll("[^\\d]", "");
+        String telefone = request.getParameter("telefone").replaceAll("[^\\d]", "");
+        String cpf = request.getParameter("cpf").replaceAll("[^\\d]", "");
+
 
         Endereco endereco = new Endereco();
         endereco.setRua(request.getParameter("rua"));
         endereco.setBairro(request.getParameter("bairro"));
         endereco.setMunicipio(request.getParameter("municipio"));
         endereco.setEstado(request.getParameter("estado"));
-        endereco.setCep(request.getParameter("cep"));
+        endereco.setCep(cep);
 
         Validator.validar(endereco);
 
@@ -66,9 +70,9 @@ public class CandidatoServlet extends HttpServlet {
         candidato.setHashSenha(hash);
         candidato.setSalt(salt);
         candidato.setEndereco(endereco);
-        candidato.setTelefone(request.getParameter("telefone"));
+        candidato.setTelefone(telefone);
         candidato.setPapel(TipoUsuario.CANDIDATO);
-        candidato.setCpf(request.getParameter("cpf"));
+        candidato.setCpf(cpf);
         candidato.setGenero(Genero.valueOf(request.getParameter("genero")));
         candidato.setDataNascimento(LocalDate.parse(request.getParameter("nascimento")));
 

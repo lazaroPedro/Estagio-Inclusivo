@@ -143,6 +143,6 @@
     <button type="submit" class="btn btn-success">Cadastrar</button>
 </form>
 <script src="${pageContext.request.contextPath}/webjars/bootstrap/5.3.5/js/bootstrap.bundle.min.js"></script>
-
+<script src="${pageContext.request.contextPath}/js/validacoes.js"></script>
 </body>
 </html>
