@@ -1,7 +1,5 @@
 package com.ifbaiano.estagioinclusivo.utils.validation;
 
-import com.ifbaiano.estagioinclusivo.model.Candidato;
-import com.ifbaiano.estagioinclusivo.model.Curso;
 import com.ifbaiano.estagioinclusivo.utils.validation.annotations.*;
 
 import java.lang.reflect.Field;
@@ -9,124 +7,138 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Validator {
-    public static void validar(Object o) throws ValidationException, IllegalAccessException {
+    private Validator() {}
+    public static void validar(Object o) throws ValidationException{
         Class<?> clazz = o.getClass();
-        List<ErroCampo> erroCampos = new ArrayList<>();
+        ListErrors errors = new ListErrors();
         Class<?> current = clazz;
         while (current != null && current != Object.class) {
-            for (Field f : clazz.getDeclaredFields()) {
+            for (Field f : current.getDeclaredFields()) {
                 f.setAccessible(true);
-                Object value =  f.get(o);
-                if(f.isAnnotationPresent(NotNull.class)) {
-                    String message = f.getAnnotation(NotNull.class).message();
-                    message = message.replace("{field}", f.getName());
-                    notNull(value, f.getName(), message, erroCampos);
+                Object value = null;
+                try {
+                    value = f.get(o);
+                } catch (IllegalAccessException e) {
+                    throw new RuntimeException(e);
                 }
-                if(f.isAnnotationPresent(NotBlank.class)){
+                boolean notNull = f.isAnnotationPresent(NotNull.class);
+                boolean notBlank = f.isAnnotationPresent(NotBlank.class);
+                boolean min = f.isAnnotationPresent(Min.class);
+                boolean max = f.isAnnotationPresent(Max.class);
+                boolean positive = f.isAnnotationPresent(Positive.class);
+                boolean negative = f.isAnnotationPresent(Negative.class);
+
+
+                if(notNull || notBlank || min || max || positive || negative) {
+                    String message;
+                    if(notNull) {
+                        message = f.getAnnotation(NotNull.class).message();
+
+                    } else {
+                        message = "O campo {field} não pode ser nulo";
+
+                    }
+                    message = message.replace("{field}", f.getName());
+                    if (!notNull(clazz.getSimpleName(), value, f.getName(), message, errors)) {
+                        continue;
+                    }
+
+                }
+
+                if(notBlank && value instanceof String) {
                     String message = f.getAnnotation(NotBlank.class).message();
                     message = message.replace("{field}", f.getName());
-                    notBlank((String) value, f.getName(), message, erroCampos);
+                    notBlank(clazz.getSimpleName(), (String) value, f.getName(), message, errors);
                 }
-                if (f.isAnnotationPresent(Max.class)){
+                if (max && value instanceof Number) {
                     String message = f.getAnnotation(Max.class).message();
                     message = message.replace("{field}", f.getName());
                     message = message.replace("{max}",Long.toString(f.getAnnotation(Max.class).value()));
-                    maxNumber((Number) value, f.getAnnotation(Max.class).value(), f.getName(), message, erroCampos);
+                    maxNumber(clazz.getSimpleName(), (Number) value, f.getAnnotation(Max.class).value(), f.getName(), message, errors);
                 }
-                if (f.isAnnotationPresent(Min.class)){
+                if (min && value instanceof Number){
                     String message = f.getAnnotation(Min.class).message();
                     message = message.replace("{field}", f.getName());
                     message = message.replace("{min}",Long.toString(f.getAnnotation(Min.class).value()));
-                    minNumber((Number) value, f.getAnnotation(Min.class).value(), f.getName(), message, erroCampos);
+                    minNumber(clazz.getSimpleName(), (Number) value, f.getAnnotation(Min.class).value(), f.getName(), message, errors);
                 }
-                if(f.isAnnotationPresent(Positive.class)){
+                if(positive && value instanceof Number){
                     String message = f.getAnnotation(Positive.class).message();
                     message = message.replace("{field}", f.getName());
 
-                    positive((Number) value, f.getName(), message, erroCampos);
+                    positive(clazz.getSimpleName(), (Number) value, f.getName(), message, errors);
                 }
-                if(f.isAnnotationPresent(Negative.class)){
+                if(negative && value instanceof Number){
                     String message = f.getAnnotation(Negative.class).message();
                     message = message.replace("{field}", f.getName());
 
-                    negative((Number) value,f.getName(), message, erroCampos);
+                    negative(clazz.getSimpleName(), (Number) value,f.getName(), message, errors);
                 }
 
             }
             current = current.getSuperclass();
 
 
-        }      if(!erroCampos.isEmpty()){
-            throw new ValidationException(erroCampos);
+        }      if(!errors.isEmpty()){
+            throw new ValidationException(o.getClass().getSimpleName(),errors);
         }
     }
 
-    public void validarNotNull(List<ErroCampo> erroCampos) throws ValidationException, IllegalAccessException {}
 
 
-    public static boolean notNull(Object valor, String nomeCampo, String mensagemErro, List<ErroCampo> erros) {
+    public static boolean notNull(String classe , Object valor, String nomeCampo, String mensagemErro, ListErrors erroCampos) {
         if (valor == null) {
-            erros.add(new ErroCampo(nomeCampo, "null", mensagemErro));
+            erroCampos.add(new ErroCampo(nomeCampo, "null", mensagemErro, classe));
             return false;
         }
         return true;
     }
 
 
-    public static boolean notBlank(String valor, String nomeCampo, String messagem , List<ErroCampo> erros) {
-        if(notNull(valor, nomeCampo, messagem, erros)){
+    public static boolean notBlank(String classe, String valor, String nomeCampo, String messagem , ListErrors erros) {
             if(valor.trim().isEmpty()){
-                erros.add(new ErroCampo(nomeCampo, valor, messagem));
+                erros.add(new ErroCampo(nomeCampo, valor, messagem, classe));
                 return false;
             }
             return true;
-        }
-        return false;
     }
 
-    public static boolean maxNumber(Number number, Number max, String nomeCampo,String messagem, List<ErroCampo> erros) {
-        if (notNull(number,nomeCampo,messagem,erros)) {
+    public static boolean maxNumber(String classe, Number number, Number max, String nomeCampo, String messagem, ListErrors erros) {
             if(number.doubleValue() > max.doubleValue()){
-                erros.add(new ErroCampo(nomeCampo,number, messagem));
+                erros.add(new ErroCampo(nomeCampo,number, messagem, classe));
                 return false;
 
             }
             return true;
-        }
-        return false;
+
     }
 
-    public static boolean minNumber(Number number, Number min, String nomeCampo, String messagem,  List<ErroCampo> erros) {
-        if (notNull(number,nomeCampo,messagem, erros)) {
+    public static boolean minNumber(String classe, Number number, Number min, String nomeCampo, String messagem, ListErrors erros) {
             if(number.doubleValue() < min.doubleValue()){
-                erros.add(new ErroCampo(nomeCampo,number, messagem));
+                erros.add(new ErroCampo(nomeCampo,number, messagem, classe));
                 return false;
             }
             return true;
-        }
-        return false;
+
     }
-    public static boolean positive(Number number, String nomeCampo,String messagem, List<ErroCampo> erros) {
-        if (notNull(number,nomeCampo,messagem,erros)) {
+    public static boolean positive(String classe, Number number, String nomeCampo, String messagem, ListErrors erros) {
             if(number.doubleValue() <= 0){
-                erros.add(new ErroCampo(nomeCampo,number, messagem));
+                erros.add(new ErroCampo(nomeCampo,number, messagem, classe));
                 return false;
 
             }
             return true;
-        }
-        return false;
+
     }
-    public static boolean negative(Number number, String nomeCampo,String messagem, List<ErroCampo> erros) {
-        if (notNull(number,nomeCampo,messagem,erros)) {
+    public static boolean negative(String classe, Number number, String nomeCampo, String messagem, ListErrors erros) {
             if(number.doubleValue() >= 0){
-                erros.add(new ErroCampo(nomeCampo,number, messagem));
+                erros.add(new ErroCampo(nomeCampo,number, messagem, classe));
                 return false;
 
             }
             return true;
-        }
-        return false;
+
     }
+
 
 }

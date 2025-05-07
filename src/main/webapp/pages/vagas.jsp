@@ -23,11 +23,9 @@
 					</div>
 
 					<div class="card-body">
-						<p>
-							<strong>Código da Vaga:</strong> EST-${vaga.id}</p>
-						<p>
-							<strong>Empresa (ID):</strong>
-							${vaga.empresa.id}</p>
+
+							<strong>Empresa:</strong>
+							${vaga.empresa.nome}
 						<p>
 							<strong>Endereço (ID):</strong>
 							${vaga.endereco.id}</p>

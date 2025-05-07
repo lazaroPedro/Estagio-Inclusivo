@@ -4,8 +4,11 @@ import com.ifbaiano.estagioinclusivo.config.DBConfig;
 import com.ifbaiano.estagioinclusivo.dao.DAOFactory;
 import com.ifbaiano.estagioinclusivo.dao.DAOUsuario;
 import  com.ifbaiano.estagioinclusivo.model.Usuario;
+import com.ifbaiano.estagioinclusivo.model.dto.LoginDTO;
 import com.ifbaiano.estagioinclusivo.model.dto.SessionDTO;
 import com.ifbaiano.estagioinclusivo.utils.SenhaUtils;
+import com.ifbaiano.estagioinclusivo.utils.validation.ValidationException;
+import com.ifbaiano.estagioinclusivo.utils.validation.Validator;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -25,7 +28,12 @@ public class LoginUsuario extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String email = req.getParameter("email");
         String senhaDigitada = req.getParameter("senha");
+
+        LoginDTO login = new LoginDTO();
+        login.setEmail(email);
+        login.setSenha(senhaDigitada);
         try(DAOFactory factory = new DAOFactory()) {
+            Validator.validar(login);
 
             DAOUsuario dao = factory.buildDAOUsuario();
             Optional<Usuario> optionalUsuario = dao.findByEmail(email);
@@ -46,16 +54,21 @@ public class LoginUsuario extends HttpServlet {
 
                     HttpSession session = req.getSession();
                     session.setAttribute("usuarioLogado", sessionDTO);
-                    resp.sendRedirect("index.jsp");
+                    resp.sendRedirect(req.getContextPath() +"/home");
                     return;
                 }
             }
-
+            req.setAttribute("erro", "Email ou senha inválidos.");
             resp.sendRedirect("pages/login.jsp?erro=1");
+            /*req.getRequestDispatcher("/pages/login.jsp").forward(req, resp);*/
 
-        } catch (Exception e) {
+        } catch (ValidationException ve) {
+            req.setAttribute("errosValidacao", ve.getErrors());
+            req.getRequestDispatcher("/pages/login.jsp").forward(req, resp);
+        }catch (Exception e){
             e.printStackTrace();
-            resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Erro interno no login: " + e.getMessage());
+            req.setAttribute("erro", "Erro interno no login: " + e.getMessage());
+            req.getRequestDispatcher("/pages/login.jsp").forward(req, resp);
         }
 
     }
@@ -65,4 +78,27 @@ public class LoginUsuario extends HttpServlet {
         req.getRequestDispatcher("/pages/login.jsp").forward(req, resp);
     }
 
+    @Override
+    protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        try(DAOFactory factory = new DAOFactory()) {
+            DAOUsuario dao = factory.buildDAOUsuario();
+            SessionDTO d = (SessionDTO) req.getSession().getAttribute("usuarioLogado");
+            Usuario u = new Usuario();
+            LoginDTO l = new LoginDTO();
+            l.setEmail(req.getParameter("email"));
+            l.setSenha(req.getParameter("senha"));
+            try {
+                Validator.validar(l);
+                u.setSalt(SenhaUtils.gerarSalt());
+                u.setHashSenha(SenhaUtils.gerarHashSenha(l.getSenha(), u.getSalt()));
+            } catch (ValidationException e) {
+                req.setAttribute("errosValidacao", e.getErrors());
+                req.getRequestDispatcher("/pages/perfil.jsp").forward(req, resp);
+            }
+            dao.updateAcesso(u.getSalt(), u.getHashSenha(), l.getEmail(), d.getId());
+            req.setAttribute("alterado", true);
+            req.getRequestDispatcher("/pages/perfil.jsp").forward(req, resp);
+
+        }
+    }
 }

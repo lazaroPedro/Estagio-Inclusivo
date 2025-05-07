@@ -16,7 +16,7 @@
 			<div class="card-header bg-primary text-white">
 				<h4 class="mb-0">Cadastro de Vaga de Estágio</h4>
 			</div>
-			<divclass"card-body"> 
+			<div class="card-body">
 			
 	<!mensagem>			
 			<c:if test="${not empty mensagem}">
@@ -28,7 +28,7 @@
 <!mensagem>
 
 
-			<form action="CadastroVagaServlet" method="post">
+			<form action="${pageContext.request.contextPath}/vaga" method="post">
 				<div class="mb-3">
 					<label for="descricao" class="form-label">Descrição</label>
 					<textarea class="form-control" name="descricao" rows="3" required>${param.descricao}</textarea>
@@ -45,7 +45,7 @@
 				</div>
 
 				<div class="mb-3">
-					<label for="qtd_vagas" class="form-label">Quantidade de Vagas</label> <input type="number" class"form-control" name="qtd_vagas"
+					<label for="qtd_vagas" class="form-label">Quantidade de Vagas</label> <input type="number" class ="form-control" name="qtd_vagas"
 						min="1" value="${param.qtd_vagas}" required>
 				</div>
 

@@ -1,0 +1,266 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: lazaropedro
+  Date: 04/05/2025
+  Time: 23:42
+  To change this template use File | Settings | File Templates.
+--%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<html>
+<head>
+    <title>Perfil</title>
+    <link href="${pageContext.request.contextPath}/webjars/bootstrap/5.3.5/css/bootstrap.min.css" rel="stylesheet">
+    <script src="${pageContext.request.contextPath}/webjars/bootstrap/5.3.5/js/bootstrap.bundle.min.js" ></script>
+<style>
+    html {
+      scroll-padding-top: 20%;
+    }
+  </style>
+</head>
+<body>
+    <nav class="fixed-top navbar navbar-dark bg-dark navbar-expand-lg">
+        <div class="container-xl">
+            <a class="navbar-brand me-5" href="#">Estagio Inclusivo</a>
+            <button class="navbar-toggler" data-bs-toggle="collapse"
+            data-bs-target="#menu-links">
+            <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="menu-links">
+            <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+            <a href="#" class="nav-link">Home</a>
+            </li>
+            <li class="nav-item">
+            <a href="#" class="nav-link ">Vagas</a>
+            </li>
+                            <li class="nav-item">
+            <a href="#" class="nav-link ">Mensagens</a>
+            </li>
+                <li class="nav-item">
+            <a href="#" class="nav-link ">Login</a>
+            </li>
+
+            <!-- Menu suspenso -->
+            <li class="nav-item dropdown">
+            <!-- botão do menu suspenso -->
+            <a class="nav-link dropdown-toggle" href="#"
+            role="button" data-bs-toggle="dropdown">
+           Olá ${sessionScope.usuarioLogado.nome}
+            </a>
+            <!-- links ocultos -->
+            <ul class="dropdown-menu">
+
+            <li>
+            <a class="dropdown-item" href="${pageContext.request.contextPath}/pages/perfil.jsp">
+            Perfil</a>
+
+            </li>
+                            <li>
+            <a class="dropdown-item" href="#">
+            Configurações</a>
+            </li>
+                <li>
+            <a class="dropdown-item" href="#">
+            Sobre o sistema</a>
+            </li>
+                            <li>
+            <a class="dropdown-item" href="#">
+            Suporte</a>
+            </li>
+                            <li>
+            <a class="dropdown-item" href="#">
+            Sair</a>
+            </li>
+            </ul>
+
+            </li>
+            </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="row mt-5 pt-5">
+        <!-- Coluna à esquerda -->
+        <div class="col-4">
+            <nav id="menu-rolagem" class="col-md-3 col-lg-2 d-md-block bg-light sidebar position-fixed vh-100 p-3">
+                <!-- Título -->
+                <a class="navbar-brand" href="#">Configuracões</a>
+
+                <!-- Itens do menu -->
+                <nav class="nav flex-column">
+                    <a class="nav-link active" href="#item-1">Inicio</a>
+                    <a class="nav-link" href="#item-2">Alterar Perfil</a>
+                    <a class="nav-link" href="#item-3">Alterar Dados de Acesso</a>
+                    <a class="nav-link" href="#item-4">Alterar Curso</a>
+                    <a class="nav-link" href="#item-5">Alterar Endereco</a>
+                    <a class="nav-link" href="#item-6">Alterar Deficiencia</a>
+                    <a class="nav-link" href="#item-7">Deletar Conta</a>
+
+
+
+                </nav>
+            </nav>
+        </div>
+
+        <!-- Coluna à direita -->
+        <div class="offset-md-3 offset-lg-2 col-md-9 col-lg-10 ms-auto ps-4">
+            <div data-bs-spy="scroll" data-bs-target="#menu-rolagem" data-bs-offset="0" tabindex="0"
+                 style="position: relative; height: 100vh; overflow: auto;">
+                <h4 id="item-1">Inicio</h4>
+                    <% if (request.getAttribute("alterado") != null) { %>
+                <div class="alert-success d-flex align-items-center" role="alert">
+                                    Alterado com sucesso!
+                </div>
+                    <% } %>
+
+
+                <h5 id="item-2">Alterar Perfil</h5>
+
+                <form action="${pageContext.request.contextPath}/candidato" method="post">
+                        <input type="hidden" name="method" value="put_" />
+                    <div class="mb-3">
+                        <label for="nome" class="form-label">Nome</label>
+                        <input type="text" class="form-control" id="nome" name="nome" >
+                    </div>
+                    <div class="mb-3">
+                        <label for="telefone" class="form-label">Telefone</label>
+                        <input type="text" class="form-control" id="telefone" name="telefone" >
+                    </div>
+                    <div class="mb-3">
+                        <label for="cpf" class="form-label">CPF</label>
+                        <input type="text" name="cpf" class="form-control" id="cpf"  >
+                    </div>
+                    <div class="mb-3">
+                        <label for="genero" class="form-label"  >Gênero</label>
+                            <select name="genero" class="form-select" id="genero">
+                                <option value="">Selecione</option>
+                                <option value="MASCULINO">Masculino</option>
+                                <option value="FEMININO">Feminino</option>
+                                <option value="OUTRO">Outro</option>
+                            </select>
+
+                    </div>
+                    <div class="mb-3">
+                        <label for="data" class="form-label" id="data" name="data" >Data de Nascimento</label>
+                        <input type="date" name="nascimento" class="form-control" id="data" >
+                    </div>
+                    <button type="submit" class="btn btn-success">Atualizar</button>
+                </form>
+
+
+                <h4 id="item-3">Alterar Dados de Acesso</h4>
+                <form action="${pageContext.request.contextPath}/usuario" method="post">
+                    <input type="hidden" name="method" value="put_" />
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email</label>
+                            <input type="text" class="form-control" id="email" name="email" >
+                        </div>
+                        <div class="mb-3">
+                            <label for="senha" class="form-label">Senha</label>
+                            <input type="text" class="form-control" id="senha" name="senha" >
+                        </div>
+                        <button type="submit" class="btn btn-success">Atualizar</button>
+                </form>
+
+
+                <h4 id="item-4">Alterar Curso</h4>
+                <form action="${pageContext.request.contextPath}/curso" method="post">
+                <input type="hidden" name="method" value="put_" />
+
+
+                <div class="mb-3">
+                    <label for="nome" class="form-label">Nome do Curso</label>
+                    <input type="text" name="nome" class="form-control" id="nome">
+                </div>
+                <div class="mb-3">
+                    <label for="instituicao" class="form-label">Instituição</label>
+                    <input type="text" name="instituicao" class="form-control" id="instituicao">
+                </div>
+                <div class="mb-3">
+                    <label for="descricao" class="form-label">Descrição</label>
+                    <textarea name="descricao" class="form-control" id="descricao"></textarea>
+                </div>
+                <div class="mb-3">
+                    <label for="inicio" class="form-label">Data de Início</label>
+                    <input type="date" name="inicio" class="form-control" id="inicio">
+                </div>
+                <div class="mb-3">
+                    <label for="termino" class="form-label">Data de Término</label>
+                    <input type="date" name="termino" class="form-control" id="termino">
+                </div>
+                    <button type="submit" class="btn btn-success">Atualizar</button>
+                </form>
+
+
+
+                <h5 id="item-5">Alterar Endereco</h5>
+                <form action="${pageContext.request.contextPath}/endereco" method="post">
+                <input type="hidden" name="method" value="put_" />
+                    <div class="mb-3">
+                        <label for="rua" class="form-label">Rua</label>
+                        <input type="text" class="form-control" id="rua" name="rua" >
+                    </div>
+                    <div class="mb-3">
+                        <label for="bairro" class="form-label">Bairro</label>
+                        <input type="text" name="bairro" class="form-control" id="bairro" >
+                    </div>
+                    <div class="mb-3">
+                        <label for="municipio" class="form-label">Município</label>
+                        <input type="text" name="municipio" class="form-control" id="municipio" >
+                    </div>
+                    <div class="mb-3">
+                        <label for="estado" class="form-label">Estado</label>
+                        <input type="text" name="estado" class="form-control" id="estado">
+                    </div>
+                    <div class="mb-3">
+                        <label for="cep" class="form-label">CEP</label>
+                        <input type="text" name="cep" class="form-control" id="cep">
+                    </div>
+                    <button type="submit" class="btn btn-success">Atualizar</button>
+                </form>
+
+
+                <h5 id="item-6">Alterar Deficiencia</h5>
+                <form action="${pageContext.request.contextPath}/deficiencia" method="post">
+                    <input type="hidden" name="method" value="put_" />
+
+                    <div class="mb-3">
+                        <label for="nome" class="form-label">Nome da Deficiência</label>
+                        <input type="text" name="nome" class="form-control" id="nome">
+                    </div>
+                    <div class="mb-3">
+                        <label for="descricao" class="form-label">Descrição</label>
+                        <textarea name="descricao" class="form-control" id="descricao"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="tipo" class="form-label">Tipo de Deficiência</label>
+                        <select name="tipo" class="form-select" id="tipo">
+                            <option value="" disabled >Selecione</option>
+                            <option value="FISICA">Física</option>
+                            <option value="VISUAL">Visual</option>
+                            <option value="AUDITIVA">Auditiva</option>
+                            <option value="INTELECTUAL">Intelectual</option>
+                            <option value="MENTAL">Mental</option>
+                            <option value="SENSORIAL">Sensorial</option>
+                            <option value="MULTIPLA">Múltipla</option>
+                            <option value="OUTRA">Outra</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="apoio" class="form-label">Tipo de Apoio Necessário</label>
+                        <textarea name="apoio" class="form-control" id="apoio"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-success">Atualizar</button>
+                </form>
+
+
+                <h4 id="item-7">Deletar Conta</h4>
+                   <form action="${pageContext.request.contextPath}/candidato" method="post">
+                <input type="hidden" name="method" value="delete_" />
+
+                       <button type="submit" class="btn btn-success">Deletar Conta</button>
+</form>
+
+
+</body>
+</html>
