@@ -26,7 +26,7 @@
             <a href="${pageContext.request.contextPath}/home" class="nav-link">Home</a>
             </li>
             <li class="nav-item">
-            <a href="${pageContext.request.contextPath}/home" class="nav-link ">Vagas</a>
+            <a href="${pageContext.request.contextPath}/pages/cadastrovagas.jsp" class="nav-link ">Vagas</a>
             </li>
                             <li class="nav-item">
             <a href="#" class="nav-link ">Mensagens</a>

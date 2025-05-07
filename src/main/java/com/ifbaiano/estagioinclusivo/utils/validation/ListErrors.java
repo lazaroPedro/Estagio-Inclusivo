@@ -26,15 +26,9 @@ public class ListErrors {
     }
 
     public Optional<ErroCampo> findField(String field) {
-
         return erroCampos.stream().filter(erro -> erro.getNomeCampo().equalsIgnoreCase(field)).findFirst();
-
     }
-    public Optional<ErroCampo> findFieldbyClass(String field, String className) {
-        return erroCampos.stream().filter(erro -> erro.getNomeCampo().equalsIgnoreCase(field)
-                && erro.getClasse().equalsIgnoreCase(className)).findFirst();
 
-    }
     public String findMessageByField(String field) {
         Optional<ErroCampo> erro = findField(field);
         String message = "";

@@ -80,7 +80,6 @@ public class Validator {
 
 
         }      if(!errors.isEmpty()){
-            throw new ValidationException(o.getClass().getSimpleName(),errors);
         }
     }
 
@@ -88,7 +87,6 @@ public class Validator {
 
     public static boolean notNull(String classe , Object valor, String nomeCampo, String mensagemErro, ListErrors erroCampos) {
         if (valor == null) {
-            erroCampos.add(new ErroCampo(nomeCampo, "null", mensagemErro, classe));
             return false;
         }
         return true;
@@ -97,7 +95,6 @@ public class Validator {
 
     public static boolean notBlank(String classe, String valor, String nomeCampo, String messagem , ListErrors erros) {
             if(valor.trim().isEmpty()){
-                erros.add(new ErroCampo(nomeCampo, valor, messagem, classe));
                 return false;
             }
             return true;
@@ -105,7 +102,6 @@ public class Validator {
 
     public static boolean maxNumber(String classe, Number number, Number max, String nomeCampo, String messagem, ListErrors erros) {
             if(number.doubleValue() > max.doubleValue()){
-                erros.add(new ErroCampo(nomeCampo,number, messagem, classe));
                 return false;
 
             }
@@ -115,7 +111,6 @@ public class Validator {
 
     public static boolean minNumber(String classe, Number number, Number min, String nomeCampo, String messagem, ListErrors erros) {
             if(number.doubleValue() < min.doubleValue()){
-                erros.add(new ErroCampo(nomeCampo,number, messagem, classe));
                 return false;
             }
             return true;
@@ -123,7 +118,6 @@ public class Validator {
     }
     public static boolean positive(String classe, Number number, String nomeCampo, String messagem, ListErrors erros) {
             if(number.doubleValue() <= 0){
-                erros.add(new ErroCampo(nomeCampo,number, messagem, classe));
                 return false;
 
             }
@@ -132,7 +126,6 @@ public class Validator {
     }
     public static boolean negative(String classe, Number number, String nomeCampo, String messagem, ListErrors erros) {
             if(number.doubleValue() >= 0){
-                erros.add(new ErroCampo(nomeCampo,number, messagem, classe));
                 return false;
 
             }
