@@ -15,18 +15,19 @@ import jakarta.servlet.*;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
 
-@WebServlet("/perfil-candidato")
+@WebServlet("/Perfil-candidato")
 public class PerfilCandidatoServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         HttpSession session = req.getSession(false);
+        
 
-        if (session == null || session.getAttribute("user") == null) {
+       if (session == null || session.getAttribute("user") == null) {
             resp.sendRedirect("pages/login.jsp");
             return;
         }
-
+        
         SessionDTO sessionDTO = (SessionDTO) session.getAttribute("user");
 
         try (DAOFactory daoFactory = new DAOFactory()) {
@@ -46,7 +47,7 @@ public class PerfilCandidatoServlet extends HttpServlet {
             req.setAttribute("candidato", candidatoAtualizado);
             req.setAttribute("vagasInscritas", vagasInscritas);
 
-            req.getRequestDispatcher("/pages/perfil-candidato.jsp").forward(req, resp);
+            req.getRequestDispatcher("/pages/Perfil-candidato.jsp").forward(req, resp);
 
         } catch (Exception e) {
             e.printStackTrace();
