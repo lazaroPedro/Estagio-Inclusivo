@@ -17,7 +17,7 @@ public class TipoDeficiencia {
     private String descricao;
     @NotNull
     private TipoDeficienciaEnum tipo;
-    @NotNull
+    @NotBlank
     private String tipoApoio;
     @NotNull
     private Candidato candidato;

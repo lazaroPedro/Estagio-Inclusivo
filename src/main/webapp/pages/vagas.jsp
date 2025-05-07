@@ -18,18 +18,17 @@
 
 		<div class="card shadow-sm">
 					<div class-"card-header bg-primary text-white">
-						<h3>${vaga.titulo}</h3>
-						
+						<h3>Detalhes da Vaga</h3>
+						>
 					</div>
 
 					<div class="card-body">
-						
+
 							<strong>Empresa:</strong>
-							${vaga.empresa.nome}</p>
+							${vaga.empresa.nome}
 						<p>
 							<strong>Endereço (ID):</strong>
-							${vaga.endereco.rua} - ${vaga.endereco.bairro} - ${vaga.endereco.municipio} - ${vaga.endereco.estado} </p>
-							CEP: ${vaga.endereco.cep}
+							${vaga.endereco.id}</p>
 						<p>
 							<strong>Descrição:</strong>
 							${vaga.descricao}</p>
@@ -45,19 +44,14 @@
 						<p>
 							<strong>Status:</strong>
 							${vaga.status}</p>
-							
-						<p> 
-							<strong>Publicada em:</strong> <fmt:formatDate value="$vaga.dataPublicacao}" pattern="dd/MM/yyyy" /></p>
 					</div>
 				</div>
 
 			</c:when>
 			<c:otherwise>
-				<div class="alert alert-danger">Erro: ${erro}</div>
+				<p class="text-danger">${erro}</p>
 			</c:otherwise>
 		</c:choose>
 	</div>
-	
-    <script src="${pageContext.request.contextPath}/webjars/bootstrap/5.3.5/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

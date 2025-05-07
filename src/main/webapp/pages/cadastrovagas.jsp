@@ -16,19 +16,19 @@
 			<div class="card-header bg-primary text-white">
 				<h4 class="mb-0">Cadastro de Vaga de Estágio</h4>
 			</div>
-			<divclass"card-body">
+			<div class="card-body">
 			
-			
-			 <!mensagem>
-			  <c:if	test="${not empty mensagem}">
+	<!mensagem>			
+			<c:if test="${not empty mensagem}">
 				<div class="alert alert-success" role="alert">${mensagem}</div>
 			</c:if> <c:if test="${not empty mensagem}">
 				<div class="alert alert-danger" role="alert">${erro}</div>
-			</c:if> <!mensagem>
+			</c:if>
+
+<!mensagem>
 
 
-			<form action="${pageContext.request.contextPath}/CadastroVagaServlet"
-				method="post">
+			<form action="${pageContext.request.contextPath}/vaga" method="post">
 				<div class="mb-3">
 					<label for="descricao" class="form-label">Descrição</label>
 					<textarea class="form-control" name="descricao" rows="3" required>${param.descricao}</textarea>
@@ -45,8 +45,7 @@
 				</div>
 
 				<div class="mb-3">
-					<label for="qtd_vagas" class="form-label">Quantidade de
-						Vagas</label> <input type="number" class"form-control" name="qtd_vagas"
+					<label for="qtd_vagas" class="form-label">Quantidade de Vagas</label> <input type="number" class ="form-control" name="qtd_vagas"
 						min="1" value="${param.qtd_vagas}" required>
 				</div>
 
@@ -62,9 +61,8 @@
 				</div>
 
 				<div class="mb-3">
-					<label for="empresa_nome" class="form-label">Nome da
-						Empresa</label> <input type="text" class="form-control"
-						name="empresa_nome" value="${param.empresa_nome}" required>
+					<label for="empresa_nome" class="form-label">Nome da Empresa</label>
+						<input type="text" class="form-control" name="empresa_nome" value="${param.empresa_nome}" required>
 				</div>
 
 				<div class="text-end">

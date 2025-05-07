@@ -3,6 +3,7 @@ import com.ifbaiano.estagioinclusivo.model.enums.TipoUsuario;
 import com.ifbaiano.estagioinclusivo.utils.SenhaUtils;
 import com.ifbaiano.estagioinclusivo.utils.validation.annotations.NotBlank;
 import com.ifbaiano.estagioinclusivo.utils.validation.annotations.NotNull;
+import com.ifbaiano.estagioinclusivo.utils.validation.annotations.Valid;
 
 public class Usuario {
 

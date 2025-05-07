@@ -146,7 +146,7 @@ public class DAOEmpresa implements DAORepository<Empresa, Integer> {
 
     @Override
     public Optional<Empresa> findById(Integer id) {
-        String sql = "SELECT * FROM empresas JOIN usuario ON empresas.id_empresa = usuario.id_usuario WHERE id_empresa = ?";
+        String sql = "SELECT * FROM empresas JOIN usuarios ON empresas.id_empresa = usuarios.id_usuario WHERE id_empresa = ?";
         ResultSet rs = null;
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setInt(1, id);
@@ -158,12 +158,12 @@ public class DAOEmpresa implements DAORepository<Empresa, Integer> {
                 empresa.setId( rs.getInt("id_empresa"));
                 empresa.setNome(rs.getString("nome"));
                 empresa.setEmail(rs.getString("email"));
-                empresa.setHashSenha(rs.getString("hashSenha"));
+                empresa.setHashSenha(rs.getString("hash_senha"));
                 empresa.setSalt(rs.getString("salt"));
                 empresa.setCnpj(rs.getString("cnpj"));
-                empresa.setRazaoSocial(rs.getString("razaoSocial"));
+                empresa.setRazaoSocial(rs.getString("razao_social"));
                 empresa.setEndereco(e);
-                empresa.setPapel(TipoUsuario.valueOf("papel"));
+                empresa.setPapel(TipoUsuario.valueOf(rs.getString("papel")));
                 empresa.setTelefone("telefone");
 
                 return Optional.of(empresa);

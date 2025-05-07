@@ -2,8 +2,10 @@ package com.ifbaiano.estagioinclusivo.model;
 
 import com.ifbaiano.estagioinclusivo.model.enums.TipoUsuario;
 import com.ifbaiano.estagioinclusivo.utils.validation.annotations.NotBlank;
+import com.ifbaiano.estagioinclusivo.utils.validation.annotations.NotNull;
 
 public class Empresa extends Usuario {
+
     @NotBlank
     private String cnpj;
     @NotBlank

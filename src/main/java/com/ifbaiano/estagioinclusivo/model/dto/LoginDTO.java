@@ -1,5 +1,6 @@
 package com.ifbaiano.estagioinclusivo.model.dto;
 
+import com.ifbaiano.estagioinclusivo.utils.validation.annotations.Length;
 import com.ifbaiano.estagioinclusivo.utils.validation.annotations.NotBlank;
 
 public class LoginDTO {
@@ -7,6 +8,7 @@ public class LoginDTO {
     private String email;
 
     @NotBlank(message = "O campo senha não pode ser vazio")
+    @Length(8)
     private String senha;
 
     public String getEmail() { return email; }

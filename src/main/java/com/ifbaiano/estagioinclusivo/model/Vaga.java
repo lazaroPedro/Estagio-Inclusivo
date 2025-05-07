@@ -4,6 +4,7 @@ import com.ifbaiano.estagioinclusivo.model.enums.TipoVaga;
 import com.ifbaiano.estagioinclusivo.utils.validation.annotations.Min;
 import com.ifbaiano.estagioinclusivo.utils.validation.annotations.NotBlank;
 import com.ifbaiano.estagioinclusivo.utils.validation.annotations.NotNull;
+import com.ifbaiano.estagioinclusivo.utils.validation.annotations.Positive;
 
 public class Vaga {
 	private int id;
@@ -12,20 +13,23 @@ public class Vaga {
 	@NotNull
 	private Endereco endereco;
 	@NotBlank
+	private String titulo;
+	@NotBlank
 	private String descricao;
 	@NotBlank
 	private String requisitos;
 	@NotBlank
 	private String beneficios;
-	@Min(1)
+	@Positive
 	private long qtdVagas;
 	@NotNull
 	private TipoVaga status;
 
 
-	public Vaga() {}
+	public Vaga() {
+	}
 
-	public Vaga(int id, Empresa empresa, Endereco endereco, String descricao, String requisitos, String beneficios, long qtdVagas, TipoVaga status) {
+	public Vaga(int id, Empresa empresa, Endereco endereco, String descricao, String requisitos, String beneficios, long qtdVagas, TipoVaga status, String titulo) {
 		this.id = id;
 		this.empresa = empresa;
 		this.endereco = endereco;
@@ -34,41 +38,53 @@ public class Vaga {
 		this.beneficios = beneficios;
 		this.qtdVagas = qtdVagas;
 		this.status = status;
+		this.titulo = titulo;
 	}
 
 	public int getId() {
 		return id;
 	}
+
 	public void setId(int id) {
 		this.id = id;
 	}
+
 	public Empresa getEmpresa() {
 		return empresa;
 	}
+
 	public void setEmpresa(Empresa empresa) {
 		this.empresa = empresa;
 	}
+
 	public Endereco getEndereco() {
 		return endereco;
 	}
+
 	public void setEndereco(Endereco endereco) {
 		this.endereco = endereco;
 	}
+
 	public String getDescricao() {
 		return descricao;
 	}
+
 	public void setDescricao(String descricao) {
 		this.descricao = descricao;
 	}
+
 	public String getRequisitos() {
 		return requisitos;
 	}
+
 	public void setRequisitos(String requisitos) {
 		this.requisitos = requisitos;
 	}
+
 	public String getBeneficios() {
 		return beneficios;
 	}
+
 	public void setBeneficios(String beneficios) {
 		this.beneficios = beneficios;
 	}
@@ -87,5 +103,13 @@ public class Vaga {
 
 	public void setStatus(TipoVaga status) {
 		this.status = status;
+	}
+
+	public String getTitulo() {
+		return titulo;
+	}
+
+	public void setTitulo(String titulo) {
+		this.titulo = titulo;
 	}
 }

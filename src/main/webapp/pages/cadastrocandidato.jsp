@@ -27,7 +27,7 @@
 %>
 
 
-<form action="${pageContext.request.contextPath}/cadastrocandidato" method="post">
+<form action="${pageContext.request.contextPath}/candidato" method="post">
     <h4>Dados gerais</h4>
     <div class="mb-3">
         <label for="nome" class="form-label">Nome</label>
@@ -84,7 +84,7 @@
         <label for="Data" class="form-label" id="data" name="data" >Data de Nascimento</label>
         <input type="date" name="nascimento" class="form-control" required>
     </div>
-    <h4 class="mt-4">Curso (opcional)</h4>
+    <h4 class="mt-4">Curso</h4>
     <div class="mb-3">
         <label for="NomeC" class="form-label">Nome do Curso</label>
         <input type="text" name="curso_nome" class="form-control" id="nomeCurso">
