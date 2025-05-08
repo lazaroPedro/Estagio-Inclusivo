@@ -4,7 +4,6 @@ import com.ifbaiano.estagioinclusivo.model.enums.TipoVaga;
 import com.ifbaiano.estagioinclusivo.utils.validation.annotations.Min;
 import com.ifbaiano.estagioinclusivo.utils.validation.annotations.NotBlank;
 import com.ifbaiano.estagioinclusivo.utils.validation.annotations.NotNull;
-import com.ifbaiano.estagioinclusivo.utils.validation.annotations.Positive;
 
 public class Vaga {
 	private int id;
@@ -20,7 +19,7 @@ public class Vaga {
 	private String requisitos;
 	@NotBlank
 	private String beneficios;
-	@Positive
+	@Min(1)
 	private long qtdVagas;
 	@NotNull
 	private TipoVaga status;

@@ -28,9 +28,9 @@
             <li class="nav-item">
             <a href="${pageContext.request.contextPath}/pages/cadastrovagas.jsp" class="nav-link ">Vagas</a>
             </li>
-                            <li class="nav-item">
+                 <!--           <li class="nav-item">
             <a href="#" class="nav-link ">Mensagens</a>
-            </li>
+            </li> -->
                 <li class="nav-item">
             <a href="${pageContext.request.contextPath}/login" class="nav-link ">Login</a>
             </li>
@@ -46,12 +46,12 @@
             <ul class="dropdown-menu">
 
             <li>
-            <a class="dropdown-item" href="${pageContext.request.contextPath}/pages/perfil.jsp">
+            <a class="dropdown-item" href="${pageContext.request.contextPath}/perfil-candidato">
             Perfil</a>
 
             </li>
                             <li>
-            <a class="dropdown-item" href="#">
+            <a class="dropdown-item" href="${pageContext.request.contextPath}/pages/perfil.jsp">
             Configurações</a>
             </li>
                 <li>

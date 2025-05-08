@@ -29,7 +29,6 @@ public class EmpresaServlet extends HttpServlet {
         }
 
         try (DAOFactory factory = new DAOFactory()) {
-            factory.openTransaction();
 
             try {
                 DAOEndereco daoEndereco = factory.buildDAOEndereco();
@@ -46,7 +45,6 @@ public class EmpresaServlet extends HttpServlet {
                 endereco.setEstado(request.getParameter("estado"));
                 endereco.setCep(cep);
 
-                Validator.validar(endereco);
 
                 Integer idEndereco = daoEndereco.insert(endereco)
                         .orElseThrow(() -> new RuntimeException("Não foi possível cadastrar o endereço"));
@@ -57,7 +55,7 @@ public class EmpresaServlet extends HttpServlet {
                 String hash = SenhaUtils.gerarHashSenha(request.getParameter("password"), salt);
                                                         
                 Empresa empresa = new Empresa();
-                empresa.setNome(request.getParameter("nomeFantasia"));
+                empresa.setNome(request.getParameter("nome"));
                 empresa.setRazaoSocial(request.getParameter("razaoSocial"));
                 empresa.setCnpj(cnpj);
                 empresa.setEmail(request.getParameter("email"));
@@ -67,24 +65,20 @@ public class EmpresaServlet extends HttpServlet {
                 empresa.setEndereco(endereco);
                 empresa.setPapel(TipoUsuario.EMPRESA);
 
-                Validator.validar(empresa);
+                Validator.validate(empresa);
 
                 daoEmpresa.insert(empresa)
                         .orElseThrow(() -> new RuntimeException("Erro ao cadastrar empresa."));
 
-                factory.closeTransaction();
                 response.sendRedirect("pages/login.jsp?sucesso=1");
 
             } catch (ValidationException ve) {
-                factory.rollbackTransaction();
-                request.setAttribute("errosValidacao", ve.getErroCampos());
+
+                request.setAttribute("errosValidacao", ve.getErrors());
                 request.getRequestDispatcher("/pages/cadastroempresa.jsp").forward(request, response);
             } catch (Exception e) {
-                factory.rollbackTransaction();
                 throw new ServletException("Erro ao cadastrar empresa", e);
             }
-        } catch (SQLException e) {
-            throw new RuntimeException("Erro ao acessar banco de dados", e);
-        }
+
     }
-}
+}}

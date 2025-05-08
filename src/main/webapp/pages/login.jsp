@@ -31,7 +31,7 @@
     </form>
 <div class="mt-5">
 
-    <a class="btn btn-primary" href="#" role="button">Cadastrar Empresa</a>
+    <a class="btn btn-primary" href="${pageContext.request.contextPath}/pages/cadastroempresa.jsp" role="button">Cadastrar Empresa</a>
     <a class="btn btn-primary" href="${pageContext.request.contextPath}/pages/cadastrocandidato.jsp" role="button">Cadastrar Candidato</a>
 </div>
 <script src="${pageContext.request.contextPath}/webjars/bootstrap/5.3.5/js/bootstrap.bundle.min.js"></script>
