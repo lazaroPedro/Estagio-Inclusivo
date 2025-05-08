@@ -1,6 +1,6 @@
 <%@ page import="com.ifbaiano.estagioinclusivo.utils.validation.ErroCampo" %>
 <%@ page import="java.util.List" %>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
 <html>
 <head>
     <title>Cadastro de Empresa</title>
@@ -8,6 +8,8 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/webjars/bootstrap/5.3.5/css/bootstrap.min.css">
 </head>
 <body class="container mt-5">
+<%@ include file="/assets/components/header.jsp" %>
+
 <h2 class="mb-4">Cadastro de Empresa</h2>
 
 <%

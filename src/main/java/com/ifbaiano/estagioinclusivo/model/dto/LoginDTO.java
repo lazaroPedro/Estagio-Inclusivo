@@ -6,11 +6,11 @@ import com.ifbaiano.estagioinclusivo.utils.validation.annotations.Pattern;
 
 public class LoginDTO {
     @NotBlank()
-    @Pattern(regex = "^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+$")
+    /*@Pattern(regex = "^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+$")*/
     private String email;
 
     @NotBlank()
-    @Length(8)
+  /*  @Length(8)*/
     private String senha;
 
     public String getEmail() { return email; }

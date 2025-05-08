@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ page language="java" contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ page import="java.util.List" %>
 <%@ page import="com.ifbaiano.estagioinclusivo.model.Empresa" %>
 <%@ page import="com.ifbaiano.estagioinclusivo.model.Vaga" %>
@@ -68,6 +68,8 @@
     </style>
 </head>
 <body>
+<%@ include file="/assets/components/header.jsp" %>
+
     <header class="bg-primary text-white text-center py-4">
         <h1>Bem-vinda, <%= empresa.getNome() %>!</h1>
         <a href="logout" class="btn btn-danger mt-2">Sair</a>

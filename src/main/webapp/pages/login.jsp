@@ -1,4 +1,4 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java"%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
 <html>
 <head>
     <title>Login</title>
@@ -6,6 +6,8 @@
   <link rel="stylesheet" href="${pageContext.request.contextPath}/webjars/bootstrap/5.3.5/css/bootstrap.min.css">
 </head>
 <body class="container mt-5">
+<%@ include file="/assets/components/header.jsp" %>
+
 <%
   String erro = request.getParameter("erro");
   if ("1".equals(erro)) {
