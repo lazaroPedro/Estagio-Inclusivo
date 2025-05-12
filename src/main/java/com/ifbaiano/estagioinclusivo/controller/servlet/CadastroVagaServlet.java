@@ -17,7 +17,6 @@ import jakarta.servlet.annotation.WebServlet;
 
 public class CadastroVagaServlet extends HttpServlet {
 
-	private Connection connection;
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
@@ -25,11 +24,6 @@ public class CadastroVagaServlet extends HttpServlet {
 
 		HttpSession session = request.getSession(false);
 		SessionDTO usuariologado = (session != null) ? (SessionDTO) session.getAttribute("usuarioLogado") : null;
-
-		if (usuariologado == null || usuariologado.getTipoUsuario() == null) {
-			response.sendRedirect("pages/login.jsp");
-			return;
-		}
 
 		try (Connection connection = DBConfig.criarConexao()) {
 			connection.setAutoCommit(false);

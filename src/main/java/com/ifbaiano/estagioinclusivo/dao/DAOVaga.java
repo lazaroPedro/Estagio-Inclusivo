@@ -24,11 +24,12 @@ public class DAOVaga implements DAORepository<Vaga, Integer> {
         try (PreparedStatement stmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             stmt.setInt(1, entity.getEmpresa().getId());
             stmt.setInt(2, entity.getEndereco().getId());
-            stmt.setString(4, entity.getDescricao());
-            stmt.setString(5, entity.getRequisitos());
-            stmt.setString(6, entity.getBeneficios());
-            stmt.setString(7, entity.getStatus().name());
-            stmt.setLong(8, entity.getQtdVagas());
+            stmt.setString(3, entity.getDescricao());
+            stmt.setString(4, entity.getRequisitos());
+            stmt.setString(5, entity.getBeneficios());
+            stmt.setString(6, entity.getStatus().name());
+            stmt.setLong(7, entity.getQtdVagas());
+            stmt.setInt(8, entity.getId());
             stmt.executeUpdate();
             rs = stmt.getGeneratedKeys();
             if (rs.next()) {
@@ -45,7 +46,7 @@ public class DAOVaga implements DAORepository<Vaga, Integer> {
 
     @Override
     public void update(Vaga entity) {
-        String sql = "UPDATE vagas SET fk_empresa = ?, fk_endereco = ?, descricao = ?, requisitos = ?, beneficios = ? status = ? qtd_vagas = ? WHERE id_vaga = ?";
+        String sql = "UPDATE vagas SET fk_empresa = ?, fk_endereco = ?, descricao = ?, requisitos = ?, beneficios = ?, status = ?, qtd_vagas = ? WHERE id_vaga = ?";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setInt(1, entity.getEmpresa().getId());
             stmt.setInt(2, entity.getEndereco().getId());
@@ -132,7 +133,7 @@ public class DAOVaga implements DAORepository<Vaga, Integer> {
                         TipoVaga.valueOf(rs.getString("status"))
                 ));
             }
-
+ 
         } catch (SQLException e) {
             throw new RuntimeException("Erro ao buscar vaga por ID", e);
         } finally {
