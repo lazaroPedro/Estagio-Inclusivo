@@ -28,8 +28,10 @@
 							${vaga.empresa.nome}</p>
 						<p>
 							<strong>Endereço (ID):</strong>
-							${vaga.endereco.rua} - ${vaga.endereco.bairro} - ${vaga.endereco.municipio} - ${vaga.endereco.estado} </p>
-							CEP: ${vaga.endereco.cep}
+							${vaga.endereco.rua} - ${vaga.endereco.bairro} - ${vaga.endereco.municipio} - ${vaga.endereco.estado} 
+							
+							<span class="text-muted" style="font-family: monospace;">CEP: ${vaga.endereco.cep}</span>
+							</p>
 						<p>
 							<strong>Descrição:</strong>
 							${vaga.descricao}</p>
@@ -43,11 +45,10 @@
 							<strong>Quantidade de Vagas:</strong>
 							${vaga.qtdVagas}</p>
 						<p>
-							<strong>Status:</strong>
-							${vaga.status}</p>
+							<strong>Status:</strong><span class="text-success"> Ativa</span></p>
 							
 						<p> 
-							<strong>Publicada em:</strong> <fmt:formatDate value="$vaga.dataPublicacao}" pattern="dd/MM/yyyy" /></p>
+							<strong>Publicada em:</strong> <fmt:formatDate value="${vaga.dataPublicacao}" pattern="dd/MM/yyyy" /></p>
 					</div>
 				</div>
 
