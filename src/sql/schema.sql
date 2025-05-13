@@ -87,3 +87,4 @@ CREATE TABLE candidato_vaga (
     PRIMARY KEY(fk_candidato,fk_vaga)
 );
 
+

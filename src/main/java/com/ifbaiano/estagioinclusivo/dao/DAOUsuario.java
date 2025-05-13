@@ -158,6 +158,19 @@ public class DAOUsuario implements DAORepository<Usuario, Integer> {
         }
         return Optional.empty();
     }
+
+    public void updateAcesso(String salt,String hashsenha, String email, Integer id) {
+        String sql = "UPDATE usuarios SET salt = ?, hash_senha = ?, email = ? WHERE id_usuario = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setString(1, salt);
+            stmt.setString(2, hashsenha);
+            stmt.setString(3, email);
+            stmt.setInt(4, id);
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao atualizar o usuario ", e);
+        }
+    }
     public void fechar(AutoCloseable closeable) {
         try {
             if (closeable != null) {

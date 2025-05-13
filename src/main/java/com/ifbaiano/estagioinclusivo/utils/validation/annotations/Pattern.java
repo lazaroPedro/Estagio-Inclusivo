@@ -6,7 +6,7 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
-public @interface Negative {
-
-    String message() default "O campo {field} deve ser negativo";
+public @interface Pattern {
+    String regex();
+    String message() default "O campo {field} não corresponde a formatação permitida";
 }

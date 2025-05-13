@@ -1,6 +1,6 @@
 <%@ page import="com.ifbaiano.estagioinclusivo.utils.validation.ErroCampo" %>
 <%@ page import="java.util.List" %>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
 <html>
 <head>
     <title>Cadastro de candidato </title>
@@ -8,6 +8,8 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/webjars/bootstrap/5.3.5/css/bootstrap.min.css">
 </head>
 <body class="container mt-5">
+<%@ include file="/assets/components/header.jsp" %>
+
 <h2 class="mb-4">Cadastro de Candidato</h2>
 <%
     List<ErroCampo> erros =
@@ -27,7 +29,7 @@
 %>
 
 
-<form action="${pageContext.request.contextPath}/cadastrocandidato" method="post">
+<form action="${pageContext.request.contextPath}/candidato" method="post">
     <h4>Dados gerais</h4>
     <div class="mb-3">
         <label for="nome" class="form-label">Nome</label>
@@ -84,7 +86,7 @@
         <label for="Data" class="form-label" id="data" name="data" >Data de Nascimento</label>
         <input type="date" name="nascimento" class="form-control" required>
     </div>
-    <h4 class="mt-4">Curso (opcional)</h4>
+    <h4 class="mt-4">Curso</h4>
     <div class="mb-3">
         <label for="NomeC" class="form-label">Nome do Curso</label>
         <input type="text" name="curso_nome" class="form-control" id="nomeCurso">
@@ -143,6 +145,6 @@
     <button type="submit" class="btn btn-success">Cadastrar</button>
 </form>
 <script src="${pageContext.request.contextPath}/webjars/bootstrap/5.3.5/js/bootstrap.bundle.min.js"></script>
-
+<script src="${pageContext.request.contextPath}/js/validacoes.js"></script>
 </body>
 </html>

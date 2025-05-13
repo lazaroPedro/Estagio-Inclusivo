@@ -6,6 +6,7 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
-public @interface Positive {
-    String message() default "O campo {field} deve ser positivo";
+public @interface Length {
+    long value();
+    String message() default "O campo {field} deve ter no mínimo {value} caracteres";
 }

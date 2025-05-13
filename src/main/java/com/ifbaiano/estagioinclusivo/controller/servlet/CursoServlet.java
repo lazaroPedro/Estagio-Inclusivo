@@ -6,6 +6,7 @@ import com.ifbaiano.estagioinclusivo.model.Candidato;
 import com.ifbaiano.estagioinclusivo.model.Curso;
 import com.ifbaiano.estagioinclusivo.utils.validation.ValidationException;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -14,7 +15,7 @@ import java.io.IOException;
 import java.time.LocalDate;
 
 /*Pode receber um idCandidato ou um idCurso*/
-
+@WebServlet("/curso")
 public class CursoServlet extends HttpServlet {
 
     @Override
@@ -53,11 +54,8 @@ public class CursoServlet extends HttpServlet {
         Candidato c = new Candidato();
         c.setId(idCandidato);
         curso.setCandidato(c);
-        try {
             dao.insert(curso);
-        }catch(ValidationException e) {
-            req.setAttribute("erro", e.getErroCampos());
-        }
+
     }
 
     @Override

@@ -1,10 +1,10 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ page language="java" contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ page import="java.util.List" %>
-<%@ page import="com.ifbaiano.estagioinclusivo.model.Candidato" %>
+<%@ page import="com.ifbaiano.estagioinclusivo.model.Empresa" %>
 <%@ page import="com.ifbaiano.estagioinclusivo.model.Vaga" %>
 <%
-    Candidato candidato = (Candidato) request.getAttribute("candidato");
-    List<Vaga> vagasInscritas = (List<Vaga>) request.getAttribute("vagasInscritas");
+    Empresa empresa = (Empresa) request.getAttribute("empresa");
+    List<Vaga> vagasPublicadas = (List<Vaga>) request.getAttribute("vagasPublicadas");
 %>
 
 <!DOCTYPE html>
@@ -12,7 +12,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Perfil do Candidato</title>
+    <title>Perfil da Empresa</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body {
@@ -68,36 +68,37 @@
     </style>
 </head>
 <body>
+<%@ include file="/assets/components/header.jsp" %>
+
     <header class="bg-primary text-white text-center py-4">
-        <h1>Bem-vindo, <%= candidato.getNome() %>!</h1>
+        <h1>Bem-vinda, <%= empresa.getNome() %>!</h1>
         <a href="logout" class="btn btn-danger mt-2">Sair</a>
     </header>
 
     <div class="container mt-5">
         <section class="perfil mb-5">
-            <h2 class="text-primary">Seus Dados</h2>
-              <p><strong>ID:</strong> <%= candidato.getId() %></p>
-            <p><strong>Nome:</strong> <%= candidato.getNome() %></p>
-            <p><strong>Gênero:</strong> <%= candidato.getGenero() %></p>
-            <p><strong>Data de Nascimento:</strong> <%= candidato.getDataNascimento() %></p>
-            <p><strong>Endereço:</strong> <%= candidato.getEndereco() %></p>
-            <p><strong>Email:</strong> <%= candidato.getEmail() %></p>
-            <p><strong>CPF:</strong> <%= candidato.getCpf() %></p>
-            <p><strong>Telefone:</strong> <%= candidato.getTelefone() %></p>
+            <h2 class="text-primary">Dados da Empresa</h2>
+            <p><strong>ID:</strong> <%= empresa.getId() %></p>
+            <p><strong>Nome:</strong> <%= empresa.getNome() %></p>
+            <p><strong>Razão social:</strong> <%= empresa.getRazaoSocial() %></p>
+             <p><strong>Endereço:</strong> <%= empresa.getCnpj() %></p>
+            <p><strong>CNPJ:</strong> <%= empresa.getCnpj() %></p>
+            <p><strong>Email:</strong> <%= empresa.getEmail() %></p>
+            <p><strong>Telefone:</strong> <%= empresa.getTelefone() %></p>
         </section>
 
         <section class="vagas">
-            <h2 class="text-primary">Vagas em que você está inscrito</h2>
+            <h2 class="text-primary">Vagas Publicadas</h2>
 
-            <% if (vagasInscritas == null || vagasInscritas.isEmpty()) { %>
+            <% if (vagasPublicadas == null || vagasPublicadas.isEmpty()) { %>
                 <div class="alert alert-warning" role="alert">
-                    Você ainda não se inscreveu em nenhuma vaga.
+                    Nenhuma vaga foi publicada até o momento.
                 </div>
             <% } else { %>
-                <% for (Vaga vaga : vagasInscritas) { %>
+                <% for (Vaga vaga : vagasPublicadas) { %>
                     <div class="vaga">
-                        <p><strong>Empresa:</strong> <%= vaga.getEmpresa().getNome() %></p>
                         <p><strong>Endereço:</strong> <%= vaga.getEndereco() %></p>
+                        <p><strong>Status:</strong> <%= vaga.getStatus() %></p>
                         <p><strong>Descrição:</strong> <%= vaga.getDescricao() %></p>
                         <p><strong>Benefícios:</strong> <%= vaga.getBeneficios() %></p>
                         <p><strong>Quantidade de Vagas:</strong> <%= vaga.getQtdVagas() %></p>

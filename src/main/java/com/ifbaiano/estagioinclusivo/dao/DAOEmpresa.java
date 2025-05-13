@@ -29,7 +29,7 @@ public class DAOEmpresa implements DAORepository<Empresa, Integer> {
         PreparedStatement stmt = null;
         ResultSet rs = null;
             try {
-                connection.setAutoCommit(false);
+
                 daoUsuario.insert(entity).ifPresent(entity::setId);
                 stmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
                 stmt.setInt(1, entity.getId());
@@ -37,19 +37,11 @@ public class DAOEmpresa implements DAORepository<Empresa, Integer> {
                 stmt.setString(3, entity.getRazaoSocial());
                 stmt.executeUpdate();
                 rs = stmt.getGeneratedKeys();
-                connection.commit();
-                connection.setAutoCommit(true);
                 if (rs.next()) {
                     return Optional.of(rs.getInt(1));
                 }
 
             } catch (SQLException e) {
-                try {
-                    connection.rollback();
-                    connection.setAutoCommit(true);
-                } catch (SQLException ex) {
-                    throw new RuntimeException(ex);
-                }
 
                 throw new RuntimeException("Erro ao inserir empresa.", e);
             } finally {
@@ -65,7 +57,6 @@ public class DAOEmpresa implements DAORepository<Empresa, Integer> {
         String sql = "UPDATE empresas SET cnpj = ?, razaoSocial = ? WHERE id_empresa = ?";
         PreparedStatement stmt = null;
         try {
-            connection.setAutoCommit(false);
             daoUsuario.update(entity);
             stmt = connection.prepareStatement(sql);
             stmt.setString(1, entity.getCnpj());
@@ -73,14 +64,7 @@ public class DAOEmpresa implements DAORepository<Empresa, Integer> {
             stmt.setInt(3, entity.getId());
             stmt.executeUpdate();
             connection.commit();
-            connection.setAutoCommit(true);
         } catch (SQLException e) {
-            try {
-                connection.rollback();
-                connection.setAutoCommit(true);
-            } catch (SQLException ex) {
-                throw new RuntimeException(ex);
-            }
 
             throw new RuntimeException("Erro ao atualizar empresa", e);
         } finally {
@@ -146,7 +130,7 @@ public class DAOEmpresa implements DAORepository<Empresa, Integer> {
 
     @Override
     public Optional<Empresa> findById(Integer id) {
-        String sql = "SELECT * FROM empresas JOIN usuario ON empresas.id_empresa = usuario.id_usuario WHERE id_empresa = ?";
+        String sql = "SELECT * FROM empresas JOIN usuarios ON empresas.id_empresa = usuarios.id_usuario WHERE id_empresa = ?";
         ResultSet rs = null;
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setInt(1, id);
@@ -158,12 +142,12 @@ public class DAOEmpresa implements DAORepository<Empresa, Integer> {
                 empresa.setId( rs.getInt("id_empresa"));
                 empresa.setNome(rs.getString("nome"));
                 empresa.setEmail(rs.getString("email"));
-                empresa.setHashSenha(rs.getString("hashSenha"));
+                empresa.setHashSenha(rs.getString("hash_senha"));
                 empresa.setSalt(rs.getString("salt"));
                 empresa.setCnpj(rs.getString("cnpj"));
-                empresa.setRazaoSocial(rs.getString("razaoSocial"));
+                empresa.setRazaoSocial(rs.getString("razao_social"));
                 empresa.setEndereco(e);
-                empresa.setPapel(TipoUsuario.valueOf("papel"));
+                empresa.setPapel(TipoUsuario.valueOf(rs.getString("papel")));
                 empresa.setTelefone("telefone");
 
                 return Optional.of(empresa);

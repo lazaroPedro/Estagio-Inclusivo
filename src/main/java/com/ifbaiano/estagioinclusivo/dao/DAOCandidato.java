@@ -25,20 +25,18 @@ public class DAOCandidato implements DAORepository<Candidato, Integer> {
         String sql = "INSERT INTO candidatos (id_candidato, genero, nascimento, cpf) VALUES (?, ?, ?, ?)";
         PreparedStatement stmt = null;
         try{
-            Optional<Integer> idUsuario = daoUsuario.insert(entity);
-            if (idUsuario.isEmpty()) {
-                return Optional.empty();
-            }
-            int id = idUsuario.get();
-            entity.setId(id);
+            daoUsuario.insert(entity).ifPresent(entity::setId);
             stmt = connection.prepareStatement(sql);
-            stmt.setInt(1, id);
+            stmt.setInt(1, entity.getId());
             stmt.setString(2, entity.getGenero().name());
             stmt.setDate(3, Date.valueOf(entity.getDataNascimento()));
             stmt.setString(4, entity.getCpf());
             stmt.executeUpdate();
 
-            return Optional.of(id);
+            return Optional.of(entity.getId());
+
+
+
 
         } catch (SQLException e) {
             throw new RuntimeException("Falha ao inserir candidato.",e);
@@ -55,14 +53,13 @@ public class DAOCandidato implements DAORepository<Candidato, Integer> {
 
              connection.setAutoCommit(false);
              daoUsuario.update(entity);
-             String sql = "UPDATE candidatos SET telefone = ?, cpf = ?, genero = ?, nascimento = ? WHERE id_usuario = ?";
+             String sql = "UPDATE candidatos SET cpf = ?, genero = ?, nascimento = ? WHERE id_candidato = ?";
 
             stmt = connection.prepareStatement(sql);
-            stmt.setString(1, entity.getTelefone());
-            stmt.setString(2, entity.getCpf());
-            stmt.setInt(3, entity.getId());
-            stmt.setString(4, entity.getGenero().name());
-            stmt.setDate(5, Date.valueOf(entity.getDataNascimento()));
+            stmt.setString(1, entity.getCpf());
+            stmt.setInt(4, entity.getId());
+            stmt.setString(2, entity.getGenero().name());
+            stmt.setDate(3, Date.valueOf(entity.getDataNascimento()));
             stmt.executeUpdate();
             connection.commit();
             connection.setAutoCommit(true);
@@ -109,7 +106,7 @@ public class DAOCandidato implements DAORepository<Candidato, Integer> {
    @Override
     public List<Candidato> findAll() {
         List<Candidato> candidatos = new ArrayList<>();
-    String sql = "SELECT * FROM candidatos JOIN usuarios ON candidatos.id_candidato = usuarios.id_candidato";
+    String sql = "SELECT * FROM candidatos JOIN usuarios ON candidatos.id_candidato = usuarios.id_usuario";
 
         try (
             PreparedStatement stmt = connection.prepareStatement(sql);
@@ -140,7 +137,7 @@ public class DAOCandidato implements DAORepository<Candidato, Integer> {
 
     @Override
     public Optional<Candidato> findById(Integer id) {
-        String sql = "SELECT * FROM candidatos JOIN usuarios ON candidatos.id_candidato = usuarios.id_candidato WHERE candidatos.id_candidato = ?";
+        String sql = "SELECT * FROM candidatos JOIN usuarios ON candidatos.id_candidato = usuarios.id_usuario WHERE candidatos.id_candidato = ?";
         ResultSet rs = null;
         try(PreparedStatement stmt = connection.prepareStatement(sql)){
             stmt.setInt(1, id);

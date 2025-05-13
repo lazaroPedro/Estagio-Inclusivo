@@ -1,132 +1,90 @@
 package com.ifbaiano.estagioinclusivo.utils.validation;
 
-import com.ifbaiano.estagioinclusivo.model.Candidato;
-import com.ifbaiano.estagioinclusivo.model.Curso;
 import com.ifbaiano.estagioinclusivo.utils.validation.annotations.*;
+import com.ifbaiano.estagioinclusivo.utils.validation.annotations.interfaces.*;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
-import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Validator {
-    public static void validar(Object o) throws ValidationException, IllegalAccessException {
+    private static final Map<Class<?>, AnnotationValidator<?>> mapValidator = new HashMap<>();
+    static {
+    mapValidator.put(NotNull.class, new NotNullValidator());
+    mapValidator.put(NotBlank.class, new NotBlankValidator());
+    mapValidator.put(Max.class, new MaxValidator());
+    mapValidator.put(Min.class, new MinValidator());
+    mapValidator.put(Pattern.class, new PatternValidator());
+    mapValidator.put(Length.class, new LengthValidator());
+
+
+}
+
+
+    private Validator() {}
+
+    public static void validate(Object o) throws ValidationException {
         Class<?> clazz = o.getClass();
-        List<ErroCampo> erroCampos = new ArrayList<>();
+        ListErrors errors = new ListErrors();
         Class<?> current = clazz;
         while (current != null && current != Object.class) {
-            for (Field f : clazz.getDeclaredFields()) {
+            for (Field f : current.getDeclaredFields()) {
                 f.setAccessible(true);
-                Object value =  f.get(o);
-                if(f.isAnnotationPresent(NotNull.class)) {
-                    String message = f.getAnnotation(NotNull.class).message();
-                    message = message.replace("{field}", f.getName());
-                    notNull(value, f.getName(), message, erroCampos);
+                Object value;
+                try {
+                    value = f.get(o);
+                } catch (IllegalAccessException e) {
+                    throw new RuntimeException(e);
                 }
-                if(f.isAnnotationPresent(NotBlank.class)){
-                    String message = f.getAnnotation(NotBlank.class).message();
-                    message = message.replace("{field}", f.getName());
-                    notBlank((String) value, f.getName(), message, erroCampos);
-                }
-                if (f.isAnnotationPresent(Max.class)){
-                    String message = f.getAnnotation(Max.class).message();
-                    message = message.replace("{field}", f.getName());
-                    message = message.replace("{max}",Long.toString(f.getAnnotation(Max.class).value()));
-                    maxNumber((Number) value, f.getAnnotation(Max.class).value(), f.getName(), message, erroCampos);
-                }
-                if (f.isAnnotationPresent(Min.class)){
-                    String message = f.getAnnotation(Min.class).message();
-                    message = message.replace("{field}", f.getName());
-                    message = message.replace("{min}",Long.toString(f.getAnnotation(Min.class).value()));
-                    minNumber((Number) value, f.getAnnotation(Min.class).value(), f.getName(), message, erroCampos);
-                }
-                if(f.isAnnotationPresent(Positive.class)){
-                    String message = f.getAnnotation(Positive.class).message();
-                    message = message.replace("{field}", f.getName());
-
-                    positive((Number) value, f.getName(), message, erroCampos);
-                }
-                if(f.isAnnotationPresent(Negative.class)){
-                    String message = f.getAnnotation(Negative.class).message();
-                    message = message.replace("{field}", f.getName());
-
-                    negative((Number) value,f.getName(), message, erroCampos);
+                Annotation[] annotations = f.getAnnotations();
+                if(Arrays.stream(annotations).noneMatch(a -> a.annotationType().equals(NotNull.class))) {
+                    if (value == null) {
+                        errors.add(new ErroCampo(f.getName(), "null", "O campo " + f.getName() + " não pode ser nulo"));
+                        continue;
+                    }
                 }
 
-            }
-            current = current.getSuperclass();
 
 
-        }      if(!erroCampos.isEmpty()){
-            throw new ValidationException(erroCampos);
-        }
-    }
+                for (Annotation annot : annotations) {
+                    @SuppressWarnings("unchecked")
+                    AnnotationValidator<Annotation> validator = (AnnotationValidator<Annotation>) mapValidator.get(annot.getClass().getInterfaces()[0]);
+                    if (validator != null) {
 
-    public void validarNotNull(List<ErroCampo> erroCampos) throws ValidationException, IllegalAccessException {}
-
-
-    public static boolean notNull(Object valor, String nomeCampo, String mensagemErro, List<ErroCampo> erros) {
-        if (valor == null) {
-            erros.add(new ErroCampo(nomeCampo, "null", mensagemErro));
-            return false;
-        }
-        return true;
-    }
+                        if (!validator.validate(value, annot)){
+                            errors.add(new ErroCampo(f.getName(), value,
+                                    validator.getMessage(f.getName(), annot)));
+                        }
+                    }
+                }
 
 
-    public static boolean notBlank(String valor, String nomeCampo, String messagem , List<ErroCampo> erros) {
-        if(notNull(valor, nomeCampo, messagem, erros)){
-            if(valor.trim().isEmpty()){
-                erros.add(new ErroCampo(nomeCampo, valor, messagem));
-                return false;
-            }
-            return true;
-        }
-        return false;
-    }
-
-    public static boolean maxNumber(Number number, Number max, String nomeCampo,String messagem, List<ErroCampo> erros) {
-        if (notNull(number,nomeCampo,messagem,erros)) {
-            if(number.doubleValue() > max.doubleValue()){
-                erros.add(new ErroCampo(nomeCampo,number, messagem));
-                return false;
 
             }
-            return true;
+        current = current.getSuperclass();
         }
-        return false;
+    if (!errors.isEmpty()) {
+        throw new ValidationException(errors);
     }
-
-    public static boolean minNumber(Number number, Number min, String nomeCampo, String messagem,  List<ErroCampo> erros) {
-        if (notNull(number,nomeCampo,messagem, erros)) {
-            if(number.doubleValue() < min.doubleValue()){
-                erros.add(new ErroCampo(nomeCampo,number, messagem));
-                return false;
-            }
-            return true;
-        }
-        return false;
     }
-    public static boolean positive(Number number, String nomeCampo,String messagem, List<ErroCampo> erros) {
-        if (notNull(number,nomeCampo,messagem,erros)) {
-            if(number.doubleValue() <= 0){
-                erros.add(new ErroCampo(nomeCampo,number, messagem));
-                return false;
+    public static void validate(List<Object> objects) throws ValidationMapException {
+        Map<String, ListErrors> errors = new HashMap<>();
 
+        for (Object o : objects) {
+            try {
+                validate(o);
+            } catch (ValidationException e) {
+                errors.put(o.getClass().getSimpleName(), e.getErrors());
             }
-            return true;
-        }
-        return false;
-    }
-    public static boolean negative(Number number, String nomeCampo,String messagem, List<ErroCampo> erros) {
-        if (notNull(number,nomeCampo,messagem,erros)) {
-            if(number.doubleValue() >= 0){
-                erros.add(new ErroCampo(nomeCampo,number, messagem));
-                return false;
 
-            }
-            return true;
         }
-        return false;
+        if (!errors.isEmpty()) {
+            throw new ValidationMapException(errors);
+        }
+
     }
 
 }

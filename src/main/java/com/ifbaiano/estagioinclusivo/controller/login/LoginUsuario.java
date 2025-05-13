@@ -33,7 +33,7 @@ public class LoginUsuario extends HttpServlet {
         login.setEmail(email);
         login.setSenha(senhaDigitada);
         try(DAOFactory factory = new DAOFactory()) {
-            Validator.validar(login);
+            Validator.validate(login);
 
             DAOUsuario dao = factory.buildDAOUsuario();
             Optional<Usuario> optionalUsuario = dao.findByEmail(email);
@@ -54,7 +54,7 @@ public class LoginUsuario extends HttpServlet {
 
                     HttpSession session = req.getSession();
                     session.setAttribute("usuarioLogado", sessionDTO);
-                    resp.sendRedirect("index.jsp");
+                    resp.sendRedirect(req.getContextPath() +"/home");
                     return;
                 }
             }
@@ -63,7 +63,7 @@ public class LoginUsuario extends HttpServlet {
             /*req.getRequestDispatcher("/pages/login.jsp").forward(req, resp);*/
 
         } catch (ValidationException ve) {
-            req.setAttribute("errosValidacao", ve.getErroCampos());
+            req.setAttribute("errosValidacao", ve.getErrors());
             req.getRequestDispatcher("/pages/login.jsp").forward(req, resp);
         }catch (Exception e){
             e.printStackTrace();
@@ -78,4 +78,27 @@ public class LoginUsuario extends HttpServlet {
         req.getRequestDispatcher("/pages/login.jsp").forward(req, resp);
     }
 
+    @Override
+    protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        try(DAOFactory factory = new DAOFactory()) {
+            DAOUsuario dao = factory.buildDAOUsuario();
+            SessionDTO d = (SessionDTO) req.getSession().getAttribute("usuarioLogado");
+            Usuario u = new Usuario();
+            LoginDTO l = new LoginDTO();
+            l.setEmail(req.getParameter("email"));
+            l.setSenha(req.getParameter("senha"));
+            try {
+                Validator.validate(l);
+                u.setSalt(SenhaUtils.gerarSalt());
+                u.setHashSenha(SenhaUtils.gerarHashSenha(l.getSenha(), u.getSalt()));
+            } catch (ValidationException e) {
+                req.setAttribute("errosValidacao", e.getErrors());
+                req.getRequestDispatcher("/pages/perfil.jsp").forward(req, resp);
+            }
+            dao.updateAcesso(u.getSalt(), u.getHashSenha(), l.getEmail(), d.getId());
+            req.setAttribute("alterado", true);
+            req.getRequestDispatcher("/pages/perfil.jsp").forward(req, resp);
+
+        }
+    }
 }
