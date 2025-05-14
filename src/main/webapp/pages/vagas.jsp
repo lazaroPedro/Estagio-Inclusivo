@@ -20,7 +20,7 @@
 			<c:when test="${not empty vaga}"> 
 
 		<div class="card shadow mb-5">
-					<div class-"card-header bg-primary text-white">
+					<div class="card-header bg-primary text-white">
 						<h4 class="mb-0">Detalhes da Vaga</h4>
 					</div>
 
@@ -36,7 +36,7 @@
 							<span class="text-muted" style="font-family: monospace;">CEP: ${vaga.endereco.cep}</span>
 							</p>
 
-							${vaga.endereco.id}</p>
+							${vaga.endereco.id}
 
 						<p>
 							<strong>Descrição:</strong>
@@ -54,10 +54,7 @@
 
 							<strong>Status:</strong><span class="text-success"> Ativa</span></p>
 							
-						<p> 
-							<strong>Publicada em:</strong> <fmt:formatDate value="${vaga.dataPublicacao}" pattern="dd/MM/yyyy" /></p>
-
-
+						<p>
 					</div>
 				</div>
 

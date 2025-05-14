@@ -43,7 +43,7 @@
             <ul class="dropdown-menu">
 
             <li>
-              <a class="dropdown-item" href="${pageContext.request.contextPath}/perfil-candidato">
+              <a class="dropdown-item" href="${pageContext.request.contextPath}/Perfil-candidato">
                 Perfil</a>
 
             </li>

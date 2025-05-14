@@ -24,13 +24,13 @@ public class PerfilCandidatoServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         HttpSession session = req.getSession(false);
         
-
+/*
        if (session == null || session.getAttribute("user") == null) {
             resp.sendRedirect("pages/login.jsp");
             return;
         }
-        
-        SessionDTO sessionDTO = (SessionDTO) session.getAttribute("user");
+        */
+        SessionDTO sessionDTO = (SessionDTO) session.getAttribute("usuarioLogado");
 
         try (DAOFactory daoFactory = new DAOFactory()) {
             DAOCandidato daoCandidato = daoFactory.buildDAOCandidato();
@@ -55,12 +55,12 @@ public class PerfilCandidatoServlet extends HttpServlet {
             req.setAttribute("candidato", candidatoAtualizado);
             req.setAttribute("vagasInscritas", vagasInscritas);
             req.setAttribute("deficiencias", deficienciasDoCandidato);
-            req.getRequestDispatcher("/pages/Perfil-candidato.jsp").forward(req, resp);
+            req.getRequestDispatcher("/pages/perfilcandidato.jsp").forward(req, resp);
 
         } catch (Exception e) {
             e.printStackTrace();
             req.setAttribute("erro", "Erro ao carregar perfil do candidato.");
-            req.getRequestDispatcher("pages/login.jsp").forward(req, resp);
+     /*       req.getRequestDispatcher("pages/login.jsp").forward(req, resp);*/
         }
     }
 }
