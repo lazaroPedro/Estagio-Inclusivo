@@ -1,12 +1,13 @@
 <%@ page language="java" contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ page import="java.util.List" %>
 <%@ page import="com.ifbaiano.estagioinclusivo.model.Candidato" %>
-<%@ page import="com.ifbaiano.estagioinclusivo.model.Vaga" %>
+<%@ page import="com.ifbaiano.estagioinclusivo.model.Curso" %>
 <%@ page import="com.ifbaiano.estagioinclusivo.model.TipoDeficiencia" %>
+
 <%
     Candidato candidato = (Candidato) request.getAttribute("candidato");
-    List<Vaga> vagasInscritas = (List<Vaga>) request.getAttribute("vagasInscritas");
     List<TipoDeficiencia> deficiencias = (List<TipoDeficiencia>) request.getAttribute("deficiencias");
+    List<Curso> cursos= (List<Curso>) request.getAttribute("cursos");
 %>
 
 <!DOCTYPE html>
@@ -25,14 +26,14 @@
     <div class="card mb-4">
         <div class="card-body">
             <h1 class="card-title text-primary">Bem-vindo, <%= candidato.getNome() %>!</h1>
-            <a href="logout" class="btn btn-danger mt-3">Sair</a>
+            <a href="index.jsp" class="btn btn-danger mt-3">Sair</a>
+            
         </div>
     </div>
 
     <div class="card mb-4">
         <div class="card-body">
             <h2 class="text-primary">Seus Dados</h2>
-              <p><strong>ID:</strong> <%= candidato.getId() %></p>
             <p><strong>Nome:</strong> <%= candidato.getNome() %></p>
             <p><strong>Gênero:</strong> <%= candidato.getGenero() %></p>
             <p><strong>Data de Nascimento:</strong> <%= candidato.getDataNascimento() %></p>
@@ -65,28 +66,23 @@
 
     <div class="card mb-4">
         <div class="card-body">
-            <h2 class="text-primary">Vagas em que você está inscrito</h2>
+            <h2 class="text-primary"> Curso(s)em que você está inscrito</h2>
 
-            <% if (vagasInscritas == null || vagasInscritas.isEmpty()) { %>
+            <% if (cursos == null || cursos.isEmpty()) { %>
                 <div class="alert alert-danger mt-3">
-                    Você ainda não se inscreveu em nenhuma vaga.
+                    Você ainda não inscreveu nenhum curso.
                 </div>
             <% } else { %>
-                <% for (Vaga vaga : vagasInscritas) { %>
+                <% for (Curso curso : cursos) { %>
                     <div class="card mb-3">
                         <div class="row g-0">
                             <div class="col-md-4 card-body">
-                        <p><strong>Empresa:</strong> <%= vaga.getEmpresa().getNome() %></p>
-                        <p><strong>Endereço:</strong> <%= vaga.getEndereco() %></p>
+                        <p><strong>Instituição:</strong> <%= curso.getInstituicao() %></p>
+                        <p><strong>Nome do curso:</strong> <%= curso.getNomeCurso() %></p>
+                        <p><strong>Descrição:</strong> <%= curso.getDescricao() %></p>
+                        <p><strong>Data de ínicio:</strong> <%= curso.getDataInicio() %></p>
+                         <p><strong>Data de fim:</strong> <%= curso.getDataFim() %></p>
                          </div>
-                            <div class="col-md-4 card-body">
-                        <p><strong>Descrição:</strong> <%= vaga.getDescricao() %></p>
-                        <p><strong>Benefícios:</strong> <%= vaga.getBeneficios() %></p>
-                         </div>
-                            <div class="col-md-4 card-body">
-                        <p><strong>Quantidade de Vagas:</strong> <%= vaga.getQtdVagas() %></p>
-                        <p><strong>Localização:</strong> <%= vaga.getEndereco().getMunicipio() + " - " + vaga.getEndereco().getEstado() %></p>
-                </div>
                         </div>
                     </div>
                <% } %> 
