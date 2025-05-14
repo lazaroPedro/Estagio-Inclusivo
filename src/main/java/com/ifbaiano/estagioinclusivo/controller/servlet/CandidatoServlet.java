@@ -39,12 +39,9 @@ import java.util.Optional;
  * /home/candidato/delete/id/
  */
 
-@WebServlet("/candidato/*")
+@WebServlet("/candidato")
 public class CandidatoServlet extends HttpServlet {
-    @Override
-    protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        super.service(req, resp);
-    }
+
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String h = request.getParameter("method");
