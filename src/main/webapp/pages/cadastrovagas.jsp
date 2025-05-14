@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>Cadastro de Vaga</title>
 <link
 	href="${pageContext.request.contextPath}/webjars/bootstrap/5.3.5/css/bootstrap.min.css"
 	rel="stylesheet">
@@ -20,6 +20,14 @@
 			</div>
 			<div class="card-body">
 			
+<<<<<<< HEAD
+			//mensagem
+			  <c:if	test="${not empty mensagem}">
+				<div class="alert alert-success" role="alert">${mensagem}</div>
+			</c:if> <c:if test="${not empty mensagem}">
+				<div class="alert alert-danger" role="alert">${erro}</div>
+			</c:if> //mensagem
+=======
 	<!mensagem>			
 			<c:if test="${not empty mensagem}">
 				<div class="alert alert-success" role="alert">${mensagem}</div>
@@ -28,6 +36,7 @@
 			</c:if>
 
 <!mensagem>
+>>>>>>> 8612f13cad86dc85da5f5bc5258235e33f2117cb
 
 
 			<form action="${pageContext.request.contextPath}/vaga" method="post">
@@ -47,6 +56,13 @@
 				</div>
 
 				<div class="mb-3">
+<<<<<<< HEAD
+					<label for="qtd_vagas" class="form-label">Quantidade de Vagas</label> 
+						<input type="number" class"form-control" name="qtd_vagas"
+						min="1" value="${param.qtd_vagas}" required>
+				</div>
+
+=======
 					<label for="qtd_vagas" class="form-label">Quantidade de Vagas</label> <input type="number" class ="form-control" name="qtd_vagas"
 						min="1" value="${param.qtd_vagas}" required>
 				</div>
@@ -67,6 +83,7 @@
 						<input type="text" class="form-control" name="empresa_nome" value="${param.empresa_nome}" required>
 				</div>
 
+>>>>>>> 8612f13cad86dc85da5f5bc5258235e33f2117cb
 				<div class="text-end">
 					<button type="submit" class="btn btn-success">Cadastrar</button>
 				</div>

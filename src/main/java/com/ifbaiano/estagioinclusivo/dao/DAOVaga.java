@@ -29,7 +29,11 @@ public class DAOVaga implements DAORepository<Vaga, Integer> {
             stmt.setString(5, entity.getBeneficios());
             stmt.setString(6, entity.getStatus().name());
             stmt.setLong(7, entity.getQtdVagas());
+<<<<<<< HEAD
+            stmt.setInt(8, entity.getId());
+=======
             stmt.setString(8, entity.getTitulo());
+>>>>>>> 8612f13cad86dc85da5f5bc5258235e33f2117cb
             stmt.executeUpdate();
             rs = stmt.getGeneratedKeys();
             if (rs.next()) {
@@ -46,7 +50,11 @@ public class DAOVaga implements DAORepository<Vaga, Integer> {
 
     @Override
     public void update(Vaga entity) {
+<<<<<<< HEAD
+        String sql = "UPDATE vagas SET fk_empresa = ?, fk_endereco = ?, descricao = ?, requisitos = ?, beneficios = ?, status = ?, qtd_vagas = ? WHERE id_vaga = ?";
+=======
         String sql = "UPDATE vagas SET fk_empresa = ?, fk_endereco = ?, descricao = ?, requisitos = ?, beneficios = ?, status = ?, qtd_vagas = ?, titulo = ? WHERE id_vaga = ?";
+>>>>>>> 8612f13cad86dc85da5f5bc5258235e33f2117cb
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setInt(1, entity.getEmpresa().getId());
             stmt.setInt(2, entity.getEndereco().getId());
@@ -136,7 +144,7 @@ public class DAOVaga implements DAORepository<Vaga, Integer> {
                         rs.getString("titulo")
                 ));
             }
-
+ 
         } catch (SQLException e) {
             throw new RuntimeException("Erro ao buscar vaga por ID", e);
         } finally {
