@@ -8,5 +8,5 @@ import java.lang.annotation.Target;
 @Target(ElementType.FIELD)
 public @interface Pattern {
     String regex();
-    String message() default "O campo {field} não correspode a formatação permitida";
+    String message() default "O campo {field} não corresponde a formatação permitida";
 }

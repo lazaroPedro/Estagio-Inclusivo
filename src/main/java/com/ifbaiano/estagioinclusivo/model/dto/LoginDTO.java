@@ -2,13 +2,15 @@ package com.ifbaiano.estagioinclusivo.model.dto;
 
 import com.ifbaiano.estagioinclusivo.utils.validation.annotations.Length;
 import com.ifbaiano.estagioinclusivo.utils.validation.annotations.NotBlank;
+import com.ifbaiano.estagioinclusivo.utils.validation.annotations.Pattern;
 
 public class LoginDTO {
-    @NotBlank(message = "O campo email não pode ser vazio")
+    @NotBlank()
+    /*@Pattern(regex = "^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+$")*/
     private String email;
 
-    @NotBlank(message = "O campo senha não pode ser vazio")
-    @Length(8)
+    @NotBlank()
+  /*  @Length(8)*/
     private String senha;
 
     public String getEmail() { return email; }

@@ -19,6 +19,7 @@ import java.lang.reflect.Field;
 
 
 import java.io.IOException;
+import java.net.http.HttpRequest;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -29,9 +30,11 @@ public class CandidatoServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String h = request.getParameter("method");
+        if (h != null) {
+                if(h.equalsIgnoreCase("put_")) {
+            doPut(request, response);}
 
-        if (request.getParameter("method").equalsIgnoreCase("put_")) {
-            doPut(request, response);
         } else{
 
 
@@ -64,7 +67,7 @@ public class CandidatoServlet extends HttpServlet {
         endereco.setEstado(request.getParameter("estado"));
         endereco.setCep(cep);
 
-        Validator.validar(endereco);
+        Validator.validate(endereco);
 
         Integer idEndereco = daoEndereco.insert(endereco).orElseThrow(()->new RuntimeException("Não foi possivel cadastrar o endereço"));
 
@@ -84,7 +87,7 @@ public class CandidatoServlet extends HttpServlet {
         candidato.setCpf(cpf);
         candidato.setGenero(Genero.valueOf(request.getParameter("genero")));
         candidato.setDataNascimento(LocalDate.parse(request.getParameter("nascimento")));
-                Validator.validar(candidato);
+                Validator.validate(candidato);
 
                 Integer idCandidato = daoCandidato.insert(candidato).orElseThrow(() -> new RuntimeException("Erro ao inserir candidato."));
                 candidato.setId(idCandidato);
@@ -96,7 +99,7 @@ public class CandidatoServlet extends HttpServlet {
                 tipoDeficiencia.setDescricao(request.getParameter("def_descricao"));
                 tipoDeficiencia.setTipoApoio(request.getParameter("def_apoio"));
 
-                Validator.validar(tipoDeficiencia);
+                Validator.validate(tipoDeficiencia);
 
                 daoTipoDeficiencia.insert(tipoDeficiencia).orElseThrow(() -> new RuntimeException("Erro ao cadastrar deficiência"));
 
@@ -110,7 +113,7 @@ public class CandidatoServlet extends HttpServlet {
                     curso.setDataFim(LocalDate.parse(request.getParameter("curso_fim")));
                     curso.setCandidato(candidato);
 
-                    Validator.validar(curso);
+                    Validator.validate(curso);
 
                     daoCurso.insert(curso);
                 }
@@ -175,7 +178,7 @@ public class CandidatoServlet extends HttpServlet {
 
 
                 try {
-                    Validator.validar(candidato);
+                    Validator.validate(candidato);
                 } catch (ValidationException e) {
                     req.setAttribute("errosValidacao", e.getErrors());
                 }

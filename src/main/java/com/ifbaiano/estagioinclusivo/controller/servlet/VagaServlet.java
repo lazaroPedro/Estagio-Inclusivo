@@ -95,7 +95,7 @@ public class VagaServlet extends HttpServlet {
 				status = TipoVaga.valueOf(statusParam.toUpperCase());
 			} catch (IllegalArgumentException e) {
 				request.setAttribute("erro", "Status inválido.");
-				request.getRequestDispatcher("CadastroVagas.jsp").forward(request, response);
+				request.getRequestDispatcher("cadastrovagas.jsp").forward(request, response);
 				return;
 			}
 			Vaga vaga = new Vaga();
@@ -109,12 +109,12 @@ public class VagaServlet extends HttpServlet {
 			vagaDAO.insert(vaga);
 
 			connection.commit();
-			response.sendRedirect("CadastroVagas.jsp?sucesso=1");
+			response.sendRedirect("cadastrovagas.jsp?sucesso=1");
 
 		} catch (Exception e) {
 			e.printStackTrace();
 			request.setAttribute("erro", "Erro ao cadastraar vaga: " + e.getMessage());
-			request.getRequestDispatcher("CadastroVagas.jsp").forward(request, response);
+			request.getRequestDispatcher("cadastrovagas.jsp").forward(request, response);
 
 		}
 	}

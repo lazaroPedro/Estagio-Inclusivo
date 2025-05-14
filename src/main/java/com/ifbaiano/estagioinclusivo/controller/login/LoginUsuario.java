@@ -33,7 +33,7 @@ public class LoginUsuario extends HttpServlet {
         login.setEmail(email);
         login.setSenha(senhaDigitada);
         try(DAOFactory factory = new DAOFactory()) {
-            Validator.validar(login);
+            Validator.validate(login);
 
             DAOUsuario dao = factory.buildDAOUsuario();
             Optional<Usuario> optionalUsuario = dao.findByEmail(email);
@@ -88,7 +88,7 @@ public class LoginUsuario extends HttpServlet {
             l.setEmail(req.getParameter("email"));
             l.setSenha(req.getParameter("senha"));
             try {
-                Validator.validar(l);
+                Validator.validate(l);
                 u.setSalt(SenhaUtils.gerarSalt());
                 u.setHashSenha(SenhaUtils.gerarHashSenha(l.getSenha(), u.getSalt()));
             } catch (ValidationException e) {

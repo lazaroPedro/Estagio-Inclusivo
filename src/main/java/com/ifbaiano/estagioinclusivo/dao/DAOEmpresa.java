@@ -29,7 +29,7 @@ public class DAOEmpresa implements DAORepository<Empresa, Integer> {
         PreparedStatement stmt = null;
         ResultSet rs = null;
             try {
-                connection.setAutoCommit(false);
+
                 daoUsuario.insert(entity).ifPresent(entity::setId);
                 stmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
                 stmt.setInt(1, entity.getId());
@@ -37,19 +37,11 @@ public class DAOEmpresa implements DAORepository<Empresa, Integer> {
                 stmt.setString(3, entity.getRazaoSocial());
                 stmt.executeUpdate();
                 rs = stmt.getGeneratedKeys();
-                connection.commit();
-                connection.setAutoCommit(true);
                 if (rs.next()) {
                     return Optional.of(rs.getInt(1));
                 }
 
             } catch (SQLException e) {
-                try {
-                    connection.rollback();
-                    connection.setAutoCommit(true);
-                } catch (SQLException ex) {
-                    throw new RuntimeException(ex);
-                }
 
                 throw new RuntimeException("Erro ao inserir empresa.", e);
             } finally {
@@ -65,7 +57,6 @@ public class DAOEmpresa implements DAORepository<Empresa, Integer> {
         String sql = "UPDATE empresas SET cnpj = ?, razaoSocial = ? WHERE id_empresa = ?";
         PreparedStatement stmt = null;
         try {
-            connection.setAutoCommit(false);
             daoUsuario.update(entity);
             stmt = connection.prepareStatement(sql);
             stmt.setString(1, entity.getCnpj());
@@ -73,14 +64,7 @@ public class DAOEmpresa implements DAORepository<Empresa, Integer> {
             stmt.setInt(3, entity.getId());
             stmt.executeUpdate();
             connection.commit();
-            connection.setAutoCommit(true);
         } catch (SQLException e) {
-            try {
-                connection.rollback();
-                connection.setAutoCommit(true);
-            } catch (SQLException ex) {
-                throw new RuntimeException(ex);
-            }
 
             throw new RuntimeException("Erro ao atualizar empresa", e);
         } finally {
