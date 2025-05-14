@@ -1,6 +1,7 @@
 package com.ifbaiano.estagioinclusivo.utils.validation;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class ListErrors {
     private List<ErroCampo> erroCampos;
@@ -25,18 +26,20 @@ public class ListErrors {
         return erroCampos.isEmpty();
     }
 
-    public Optional<ErroCampo> findField(String field) {
-        return erroCampos.stream().filter(erro -> erro.getNomeCampo().equalsIgnoreCase(field)).findFirst();
+    public List<ErroCampo> findField(String field) {
+        return erroCampos.stream().filter(erro -> erro.getNomeCampo().equalsIgnoreCase(field)).collect(Collectors.toList());
     }
 
-    public String findMessageByField(String field) {
-        Optional<ErroCampo> erro = findField(field);
-        String message = "";
-        if(erro.isPresent()){
-            message = erro.get().getNomeCampo();
+    public String findMessage(String field) {
+        List<ErroCampo> erro = findField(field);
+        StringBuilder message = new StringBuilder();
+        if(!erro.isEmpty()){
+            erro.forEach(erroCampo -> {
+                message.append(erroCampo.getNomeCampo()).append("\n");
+            });
 
         }
-        return message;
+        return message.toString();
     }
 
 }

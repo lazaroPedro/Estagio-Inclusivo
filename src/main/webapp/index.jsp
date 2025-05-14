@@ -1,11 +1,6 @@
 <%@ page import="com.ifbaiano.estagioinclusivo.model.Vaga" %>
-<%@ page import="java.util.List" %><%--
-  Created by IntelliJ IDEA.
-  User: lazaropedro
-  Date: 28/04/2025
-  Time: 22:43
-  To change this template use File | Settings | File Templates.
---%>
+<%@ page import="java.util.List" %>
+
 <%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" language="java" isELIgnored="false" %>
 <!DOCTYPE html>
 <html lang="pt-br">

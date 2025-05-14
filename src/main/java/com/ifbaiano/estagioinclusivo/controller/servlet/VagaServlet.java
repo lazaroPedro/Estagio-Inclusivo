@@ -24,15 +24,17 @@ public class VagaServlet extends HttpServlet {
 		Vaga vaga = null;
 		String erro = null;
 
-		HttpSession session = request.getSession(false);
-		SessionDTO usuariologado = null;
+
+		/*
 		if (session != null) {
-			usuariologado = (SessionDTO) session.getAttribute("usuarioLogado");
+					HttpSession session = request.getSession(false);
+		SessionDTO usuariologado = null;
+		usuariologado = (SessionDTO) session.getAttribute("usuarioLogado");
 		}
 
 		if (usuariologado == null) {
 			erro = "Usuário não está logado.";
-		} else {
+		} else {   */
 			if (idParam != null) {
 				try {
 					int id = Integer.parseInt(idParam);
@@ -50,7 +52,7 @@ public class VagaServlet extends HttpServlet {
 			} else {
 				erro = "ID da vaga não informado.";
 			}
-		}
+
 
 		request.setAttribute("erro", erro);
 		request.setAttribute("vaga", vaga);

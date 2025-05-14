@@ -162,6 +162,39 @@ public class DAOEmpresa implements DAORepository<Empresa, Integer> {
         return Optional.empty();
     }
 
+    public Empresa buildEmpresa(ResultSet rs) throws SQLException {
+        Empresa empresa = new Empresa();
+                Endereco e = new Endereco();
+                e.setId(rs.getInt("fk_endereco"));
+                empresa.setId( rs.getInt("id_empresa"));
+                empresa.setNome(rs.getString("nome"));
+                empresa.setEmail(rs.getString("email"));
+                empresa.setHashSenha(rs.getString("hash_senha"));
+                empresa.setSalt(rs.getString("salt"));
+                empresa.setCnpj(rs.getString("cnpj"));
+                empresa.setRazaoSocial(rs.getString("razao_social"));
+                empresa.setEndereco(e);
+                empresa.setPapel(TipoUsuario.valueOf(rs.getString("papel")));
+                empresa.setTelefone("telefone");
+
+                return empresa;
+
+    }
+    public List<Empresa> findByNomeContaining(String nome) {
+        List<Empresa> empresas = new ArrayList<>();
+        String sql = "SELECT * FROM empresas JOIN usuarios ON empresas.id_empresa = usuarios.id_usuario WHERE usuarios.nome LIKE ? OR empresas.razao_social LIKE ?";
+        try(PreparedStatement stmt = connection.prepareStatement(sql)){
+            stmt.setString(1, "%"+nome+"%");
+            stmt.setString(2, "%"+nome+"%");
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                empresas.add(buildEmpresa(rs));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return empresas;
+    }
     @Override
     public void fechar(AutoCloseable closeable) {
         try {

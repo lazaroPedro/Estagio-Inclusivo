@@ -5,6 +5,7 @@ import com.ifbaiano.estagioinclusivo.dao.DAOFactory;
 import com.ifbaiano.estagioinclusivo.dao.DAOVaga;
 import com.ifbaiano.estagioinclusivo.model.Empresa;
 import com.ifbaiano.estagioinclusivo.model.Vaga;
+import com.ifbaiano.estagioinclusivo.model.enums.TipoVaga;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -14,6 +15,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @WebServlet("/home") /* /home/*  */
 public class HomeServlet extends HttpServlet {
@@ -30,11 +32,14 @@ public class HomeServlet extends HttpServlet {
         try (DAOFactory daoFactory = new DAOFactory()) {
             DAOVaga vDao = daoFactory.buildDAOVaga();
             DAOEmpresa eDao = daoFactory.buildDAOEmpresa();
-            List<Vaga> vList = vDao.findAll();
-            for (Vaga v : vList) {
-                Optional<Empresa> e = eDao.findById(v.getEmpresa().getId());
-            e.ifPresent(v::setEmpresa);
-            }
+            List<Vaga> vList = vDao.findAll().stream()
+                    .filter(vaga -> vaga.getStatus() == TipoVaga.ATIVA)
+                    .map(vaga -> {
+                        Optional<Empresa> e = eDao.findById(vaga.getEmpresa().getId());
+                        e.ifPresent(vaga::setEmpresa);
+                        return vaga;
+                    }).collect(Collectors.toList());
+
             req.setAttribute("lista_vagas", vList);
             req.getRequestDispatcher("/index.jsp").forward(req, resp);
         }

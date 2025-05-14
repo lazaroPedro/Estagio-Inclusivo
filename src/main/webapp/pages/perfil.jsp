@@ -79,6 +79,7 @@
                                 <option value="MASCULINO">Masculino</option>
                                 <option value="FEMININO">Feminino</option>
                                 <option value="OUTRO">Outro</option>
+                                <option value="NAO_INFORMAR">Não desejo informar</option>
                             </select>
 
                     </div>
@@ -106,6 +107,40 @@
 
 
                 <h4 id="item-4">Alterar Curso</h4>
+                <c:choose>
+                    <c:when test="${cursos == null}">
+                        <a href="#">Adcionar Cursos</a>
+                    </c:when>
+                    <c:otherwise>
+                        <c:forEach var="curso" items="${cursos}">
+                            <a class="text-decoration-none text-reset" href="#">
+                                <div class="card mb-3 ">
+                                    <div class="row g-0">
+                                        <div class="col-4 card-body">
+                                            <p class="card-text ">${curso.instituicao}</p>
+
+                                        </div>
+                                        <div class="col-4">
+
+                                            <div class="card-body">
+                                                <h5 class="card-title"> ${curso.nomeCurso} </h5>
+                                                <p class="card-text ">${curso.descricao}</p>
+                                            </div>
+                                        </div>
+                                        <div class="col-4">
+                                            <div class="card-body">
+                                                <p class="card-text ">${curso.dataInicio}</p>
+                                                <p class="card-text ">${curso.dataFim}</p>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </c:forEach>
+                    </c:otherwise>
+                </c:choose>
+
                 <form action="${pageContext.request.contextPath}/curso" method="post">
                 <input type="hidden" name="method" value="put_" />
 
