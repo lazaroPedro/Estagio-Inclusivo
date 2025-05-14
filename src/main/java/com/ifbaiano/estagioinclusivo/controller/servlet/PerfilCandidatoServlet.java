@@ -6,8 +6,10 @@ import java.util.Optional;
 
 import com.ifbaiano.estagioinclusivo.dao.DAOCandidato;
 import com.ifbaiano.estagioinclusivo.dao.DAOFactory;
+import com.ifbaiano.estagioinclusivo.dao.DAOTipoDeficiencia;
 import com.ifbaiano.estagioinclusivo.dao.DAOVaga;
 import com.ifbaiano.estagioinclusivo.model.Candidato;
+import com.ifbaiano.estagioinclusivo.model.TipoDeficiencia;
 import com.ifbaiano.estagioinclusivo.model.Vaga;
 import com.ifbaiano.estagioinclusivo.model.dto.SessionDTO;
 
@@ -33,6 +35,7 @@ public class PerfilCandidatoServlet extends HttpServlet {
         try (DAOFactory daoFactory = new DAOFactory()) {
             DAOCandidato daoCandidato = daoFactory.buildDAOCandidato();
             DAOVaga daoVaga = daoFactory.buildDAOVaga();
+            DAOTipoDeficiencia daoTipoDeficiencia = daoFactory.buildDAOTipoDeficiencia();
 
             Optional<Candidato> candidatoOpt = daoCandidato.findById(sessionDTO.getId());
             if (!candidatoOpt.isPresent()) {
@@ -44,9 +47,14 @@ public class PerfilCandidatoServlet extends HttpServlet {
             Candidato candidatoAtualizado = candidatoOpt.get();
             List<Vaga> vagasInscritas = daoVaga.findByIdCandidato(sessionDTO.getId());
 
+            List<TipoDeficiencia> todasDeficiencias = daoTipoDeficiencia.findAll();
+            List<TipoDeficiencia> deficienciasDoCandidato = todasDeficiencias.stream()
+                .filter(d -> d.getCandidato().getId() == sessionDTO.getId())
+                .toList();
+            
             req.setAttribute("candidato", candidatoAtualizado);
             req.setAttribute("vagasInscritas", vagasInscritas);
-
+            req.setAttribute("deficiencias", deficienciasDoCandidato);
             req.getRequestDispatcher("/pages/Perfil-candidato.jsp").forward(req, resp);
 
         } catch (Exception e) {

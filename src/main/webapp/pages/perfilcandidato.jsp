@@ -2,9 +2,11 @@
 <%@ page import="java.util.List" %>
 <%@ page import="com.ifbaiano.estagioinclusivo.model.Candidato" %>
 <%@ page import="com.ifbaiano.estagioinclusivo.model.Vaga" %>
+<%@ page import="com.ifbaiano.estagioinclusivo.model.TipoDeficiencia" %>
 <%
     Candidato candidato = (Candidato) request.getAttribute("candidato");
     List<Vaga> vagasInscritas = (List<Vaga>) request.getAttribute("vagasInscritas");
+    List<TipoDeficiencia> deficiencias = (List<TipoDeficiencia>) request.getAttribute("deficiencias");
 %>
 
 <!DOCTYPE html>
@@ -13,70 +15,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Perfil do Candidato</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 40px;
-            background-color: #f8f9fa;
-        }
-
-        h1, h2 {
-            color: #2c3e50;
-        }
-
-        .perfil, .vagas {
-            background-color: #ffffff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            margin-bottom: 30px;
-        }
-
-        .perfil p, .vagas p {
-            font-size: 1.1rem;
-            margin-bottom: 10px;
-        }
-
-        .perfil p strong, .vagas p strong {
-            color: #34495e;
-        }
-
-        .vaga {
-            border-bottom: 1px solid #bdc3c7;
-            padding: 10px 0;
-        }
-
-        .btn-logout {
-            background-color: #e74c3c;
-            color: white;
-            padding: 10px 15px;
-            text-decoration: none;
-            border-radius: 5px;
-            font-size: 1rem;
-        }
-
-        .btn-logout:hover {
-            background-color: #c0392b;
-        }
-
-        .alert-warning {
-            background-color: #f39c12;
-            color: white;
-            font-weight: bold;
-        }
-    </style>
+    <link href="${pageContext.request.contextPath}/webjars/bootstrap/5.3.5/css/bootstrap.min.css" rel="stylesheet">
+       
 </head>
 <body>
 <%@ include file="/assets/components/header.jsp" %>
 
-    <header class="bg-primary text-white text-center py-4">
-        <h1>Bem-vindo, <%= candidato.getNome() %>!</h1>
-        <a href="logout" class="btn btn-danger mt-2">Sair</a>
-    </header>
+   <div class="container-xl mt-5 pt-5">
+    <div class="card mb-4">
+        <div class="card-body">
+            <h1 class="card-title text-primary">Bem-vindo, <%= candidato.getNome() %>!</h1>
+            <a href="logout" class="btn btn-danger mt-3">Sair</a>
+        </div>
+    </div>
 
-    <div class="container mt-5">
-        <section class="perfil mb-5">
+    <div class="card mb-4">
+        <div class="card-body">
             <h2 class="text-primary">Seus Dados</h2>
               <p><strong>ID:</strong> <%= candidato.getId() %></p>
             <p><strong>Nome:</strong> <%= candidato.getNome() %></p>
@@ -86,28 +40,61 @@
             <p><strong>Email:</strong> <%= candidato.getEmail() %></p>
             <p><strong>CPF:</strong> <%= candidato.getCpf() %></p>
             <p><strong>Telefone:</strong> <%= candidato.getTelefone() %></p>
-        </section>
+         </div>
+    </div>
+     <div class="card mb-4">
+        <div class="card-body">
+            <h2 class="text-primary">Deficiências</h2>
 
-        <section class="vagas">
+            <% if (deficiencias == null || deficiencias.isEmpty()) { %>
+                <div class="alert alert-danger mt-3">
+                    Nenhuma deficiência registrada para este candidato.
+                </div>
+            <% } else { %>
+                <% for (TipoDeficiencia deficiencia : deficiencias) { %>
+                    <div class="alert alert-info mt-3">
+                        <p><strong>Deficiência:</strong> <%= deficiencia.getNome() %></p>
+                        <p><strong>Tipo:</strong> <%= deficiencia.getTipo() %></p>
+                        <p><strong>Descrição:</strong> <%= deficiencia.getDescricao() %></p>
+                        <p><strong>Tipo de Apoio:</strong> <%= deficiencia.getTipoApoio() %></p>
+                    </div>
+                <% } %>
+            <% } %>
+        </div>
+    </div>
+
+    <div class="card mb-4">
+        <div class="card-body">
             <h2 class="text-primary">Vagas em que você está inscrito</h2>
 
             <% if (vagasInscritas == null || vagasInscritas.isEmpty()) { %>
-                <div class="alert alert-warning" role="alert">
+                <div class="alert alert-danger mt-3">
                     Você ainda não se inscreveu em nenhuma vaga.
                 </div>
             <% } else { %>
                 <% for (Vaga vaga : vagasInscritas) { %>
-                    <div class="vaga">
+                    <div class="card mb-3">
+                        <div class="row g-0">
+                            <div class="col-md-4 card-body">
                         <p><strong>Empresa:</strong> <%= vaga.getEmpresa().getNome() %></p>
                         <p><strong>Endereço:</strong> <%= vaga.getEndereco() %></p>
+                         </div>
+                            <div class="col-md-4 card-body">
                         <p><strong>Descrição:</strong> <%= vaga.getDescricao() %></p>
                         <p><strong>Benefícios:</strong> <%= vaga.getBeneficios() %></p>
+                         </div>
+                            <div class="col-md-4 card-body">
                         <p><strong>Quantidade de Vagas:</strong> <%= vaga.getQtdVagas() %></p>
                         <p><strong>Localização:</strong> <%= vaga.getEndereco().getMunicipio() + " - " + vaga.getEndereco().getEstado() %></p>
+                </div>
+                        </div>
                     </div>
-                <% } %>
-            <% } %>
-        </section>
+               <% } %> 
+            <% } %> 
+        </div>
     </div>
+</div>
+
+<script src="${pageContext.request.contextPath}/webjars/bootstrap/5.3.5/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
