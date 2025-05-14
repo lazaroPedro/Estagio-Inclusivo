@@ -137,7 +137,7 @@ public class DAOCurso implements DAORepository<Curso, Integer> {
         return Optional.empty();
     }
 
-    public List<Curso> findByFkCandidato(Integer idCandidato) {
+    public List<Curso> findAllByCandidato(Integer idCandidato) {
 
         String sql = "SELECT * FROM cursos WHERE fk_candidato = ?";
         ResultSet rs = null;
@@ -169,6 +169,7 @@ public class DAOCurso implements DAORepository<Curso, Integer> {
 
 
     }
+
     @Override
     public void fechar(AutoCloseable closeable) {
         try {

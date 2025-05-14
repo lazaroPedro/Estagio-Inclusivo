@@ -10,6 +10,7 @@ import com.ifbaiano.estagioinclusivo.model.enums.TipoUsuario;
 import com.ifbaiano.estagioinclusivo.utils.SenhaUtils;
 import com.ifbaiano.estagioinclusivo.utils.validation.ValidationException;
 import com.ifbaiano.estagioinclusivo.utils.validation.Validator;
+import jakarta.servlet.ServletConfig;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -23,12 +24,28 @@ import java.net.http.HttpRequest;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
+/**
+ *
+ *
+ *
+ * /home/* restringe login
+ * /home/candidato/ getall
+ * /home/candidato/id/[perfil]
+ * /home/candidato/vaga
+ * /home/candidato/insert
+ * /home/candidato/update/id/
+ * /home/candidato/delete/id/
+ */
 
-@WebServlet("/candidato")
+@WebServlet("/candidato/*")
 public class CandidatoServlet extends HttpServlet {
-
     @Override
+    protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        super.service(req, resp);
+    }
+
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String h = request.getParameter("method");
         if (h != null) {

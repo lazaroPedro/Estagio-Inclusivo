@@ -168,6 +168,7 @@ public class DAOCandidato implements DAORepository<Candidato, Integer> {
         }
         return Optional.empty();
     }
+
     @Override
     public void fechar(AutoCloseable closeable) {
         try {

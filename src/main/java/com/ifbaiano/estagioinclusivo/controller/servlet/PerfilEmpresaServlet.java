@@ -51,7 +51,7 @@ public class PerfilEmpresaServlet extends HttpServlet {
         } catch (Exception e) {
             e.printStackTrace();
             req.setAttribute("erro", "Erro ao carregar perfil da empresa.");
-            req.getRequestDispatcher("pages/login.jsp").forward(req, resp);
+        /*    req.getRequestDispatcher("pages/login.jsp").forward(req, resp);*/
         }
     }
 }

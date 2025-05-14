@@ -90,27 +90,7 @@ public class DAOVaga implements DAORepository<Vaga, Integer> {
         try (PreparedStatement stmt = connection.prepareStatement(sql);
              ResultSet rs = stmt.executeQuery()) {
             while (rs.next()) {
-                Empresa empresa = new Empresa();
-                empresa.setId(rs.getInt("fk_empresa"));
-
-                Endereco endereco = new Endereco();
-                endereco.setId(rs.getInt("fk_endereco"));
-
-
-
-                Vaga vaga = new Vaga(
-                        rs.getInt("id_vaga"),
-                        empresa,
-                        endereco,
-                        rs.getString("descricao"),
-                        rs.getString("requisitos"),
-                        rs.getString("beneficios"),
-                        rs.getLong("qtd_vagas"),
-                        TipoVaga.valueOf(rs.getString("status")),
-                        rs.getString("titulo")
-
-                );
-                vagas.add(vaga);
+            vagas.add(buildVaga(rs));
             }
         } catch (SQLException e) {
             throw new RuntimeException("Erro ao listar vagas", e);
@@ -126,23 +106,8 @@ public class DAOVaga implements DAORepository<Vaga, Integer> {
             stmt.setInt(1, id);
             rs = stmt.executeQuery();
             if (rs.next()) {
-                Empresa empresa = new Empresa();
-                empresa.setId(rs.getInt("fk_empresa"));
 
-                Endereco endereco = new Endereco();
-                endereco.setId(rs.getInt("fk_endereco"));
-
-                return Optional.of(new Vaga(
-                        rs.getInt("id_vaga"),
-                        empresa,
-                        endereco,
-                        rs.getString("descricao"),
-                        rs.getString("requisitos"),
-                        rs.getString("beneficios"),
-                        rs.getLong("qtd_vagas"),
-                        TipoVaga.valueOf(rs.getString("status")),
-                        rs.getString("titulo")
-                ));
+                return Optional.of(buildVaga(rs));
             }
  
         } catch (SQLException e) {
@@ -160,61 +125,24 @@ public class DAOVaga implements DAORepository<Vaga, Integer> {
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setInt(1, candidatoId);
             ResultSet rs = stmt.executeQuery();
-            
             while (rs.next()) {
-                Empresa empresa = new Empresa();
-                empresa.setId(rs.getInt("fk_empresa"));
-
-                Endereco endereco = new Endereco();
-                endereco.setId(rs.getInt("fk_endereco"));
-
-                Vaga vaga = new Vaga(
-                    rs.getInt("id_vaga"),
-                    empresa,
-                    endereco,
-                    rs.getString("descricao"),
-                    rs.getString("requisitos"),
-                    rs.getString("beneficios"),
-                    rs.getLong("qtd_vagas"),
-
-                    TipoVaga.valueOf(rs.getString("status")),
-                            rs.getString("titulo")
-
-                );
-                vagas.add(vaga);
+                vagas.add(buildVaga(rs));
             }
-        } catch (SQLException e) {
-            throw new RuntimeException("Erro ao buscar vagas do candidato", e);
+            } catch(SQLException e){
+                throw new RuntimeException("Erro ao buscar vagas do candidato", e);
+            }
+            return vagas;
         }
-        return vagas;
-    }
-    
-    public List<Vaga> findByIdEmpresa(int empresaId) {
+
+        public List<Vaga> findByIdEmpresa(int empresaId) {
         List<Vaga> vagas = new ArrayList<>();
         String sql = "SELECT * FROM vagas WHERE fk_empresa = ?";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setInt(1, empresaId);
             ResultSet rs = stmt.executeQuery();
-
             while (rs.next()) {
-                Empresa empresa = new Empresa();
-                empresa.setId(rs.getInt("fk_empresa"));
+                vagas.add(buildVaga(rs));
 
-                Endereco endereco = new Endereco();
-                endereco.setId(rs.getInt("fk_endereco"));
-
-                Vaga vaga = new Vaga(
-                    rs.getInt("id_vaga"),
-                    empresa,
-                    endereco,
-                    rs.getString("descricao"),
-                    rs.getString("requisitos"),
-                    rs.getString("beneficios"),
-                    rs.getLong("qtd_vagas"),
-                    TipoVaga.valueOf(rs.getString("status")),
-                        rs.getString("titulo")
-                );
-                vagas.add(vaga);
             }
         } catch (SQLException e) {
             throw new RuntimeException("Erro ao buscar vagas por empresa", e);
@@ -222,6 +150,43 @@ public class DAOVaga implements DAORepository<Vaga, Integer> {
         return vagas;
     }
 
+
+    private Vaga buildVaga(ResultSet rs) throws SQLException {
+
+            Empresa empresa = new Empresa();
+            empresa.setId(rs.getInt("fk_empresa"));
+
+            Endereco endereco = new Endereco();
+            endereco.setId(rs.getInt("fk_endereco"));
+
+            return new Vaga(
+                rs.getInt("id_vaga"),
+                empresa,
+                endereco,
+                rs.getString("descricao"),
+                rs.getString("requisitos"),
+                rs.getString("beneficios"),
+                rs.getLong("qtd_vagas"),
+                TipoVaga.valueOf(rs.getString("status")),
+                    rs.getString("titulo"));
+
+    }
+
+    public List<Vaga> findByTituloContaining(String titulo) {
+        List<Vaga> vagas = new ArrayList<>();
+        String sql = "SELECT * FROM vagas WHERE titulo LIKE ? ORDER BY qtd_vagas DESC";
+        try(PreparedStatement pp = connection.prepareStatement(sql)){
+            pp.setString(1, "%"+titulo+"%");
+
+            ResultSet rs = pp.executeQuery();
+            while (rs.next()) {
+                vagas.add(buildVaga(rs));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return vagas;
+    }
 
 
 
