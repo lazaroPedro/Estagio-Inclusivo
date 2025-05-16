@@ -18,7 +18,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 /**/
-@WebServlet("/curso")
+@WebServlet("/home/curso")
 public class CursoServlet extends HttpServlet {
 
     @Override

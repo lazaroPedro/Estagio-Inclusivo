@@ -26,20 +26,9 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
-/**
- *
- *
- *
- * /home/* restringe login
- * /home/candidato/ getall
- * /home/candidato/id/[perfil]
- * /home/candidato/vaga
- * /home/candidato/insert
- * /home/candidato/update/id/
- * /home/candidato/delete/id/
- */
 
-@WebServlet("/candidato")
+
+@WebServlet("/candidato/insert")
 public class CandidatoServlet extends HttpServlet {
 
 

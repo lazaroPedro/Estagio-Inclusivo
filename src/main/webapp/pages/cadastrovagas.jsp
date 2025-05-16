@@ -22,7 +22,7 @@
 
 
 
-				<form action="${pageContext.request.contextPath}/vaga" method="post">
+				<form action="${pageContext.request.contextPath}/vaga/insert" method="post">
 					<div class="mb-3">
 						<label for="descricao" class="form-label">Descrição</label>
 						<textarea class="form-control" name="descricao" rows="3" required>${param.descricao}</textarea>

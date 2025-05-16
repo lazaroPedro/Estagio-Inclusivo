@@ -45,7 +45,7 @@ public class DAOCandidatoVaga {
 
 
     public Optional<CandidatoVaga> findById(int idCandidato, int idVaga) {
-        String sql = "SELECT FROM candidato_vaga WHERE id_candidato = ? AND fk_vaga = ?";
+        String sql = "SELECT FROM candidato_vaga WHERE fk_candidato = ? AND fk_vaga = ?";
         ResultSet rs = null;
         try (PreparedStatement pp = conexao.prepareStatement(sql)){
             pp.setInt(1, idCandidato);
@@ -60,7 +60,7 @@ public class DAOCandidatoVaga {
                 v.setId(rs.getInt("fk_vaga"));
                 cv.setVaga(v);
                 cv.setCandidato(c);
-                cv.setData(rs.getTimestamp("data_criacao").toLocalDateTime());
+                cv.setData(rs.getTimestamp("data_cadastro").toLocalDateTime());
                 return Optional.of(cv);
 
             }
@@ -88,7 +88,7 @@ public class DAOCandidatoVaga {
                 c.setId(rs.getInt("fk_candidato"));
                 cv.setVaga(v);
                 cv.setCandidato(c);
-                cv.setData(rs.getTimestamp("data_criacao").toLocalDateTime());
+                cv.setData(rs.getTimestamp("data_cadastro").toLocalDateTime());
                 lista.add(cv);
 
             }
@@ -101,7 +101,7 @@ public class DAOCandidatoVaga {
         }
     }
         public List<CandidatoVaga> findByCandidato(int idCandidato) {
-        String sql = "SELECT FROM candidato_vaga WHERE id_candidato = ?";
+        String sql = "SELECT * FROM candidato_vaga WHERE fk_candidato = ?";
         ResultSet rs = null;
         try (PreparedStatement pp = conexao.prepareStatement(sql)){
             pp.setInt(1, idCandidato);
@@ -115,7 +115,7 @@ public class DAOCandidatoVaga {
                 v.setId(rs.getInt("fk_vaga"));
                 cv.setVaga(v);
                 cv.setCandidato(c);
-                cv.setData(rs.getTimestamp("data_criacao").toLocalDateTime());
+                cv.setData(rs.getTimestamp("data_cadastro").toLocalDateTime());
                 lista.add(cv);
 
             }
@@ -128,6 +128,9 @@ public class DAOCandidatoVaga {
         }
 
     }
+
+
+
 
 
         public void fechar(AutoCloseable closeable) {

@@ -14,7 +14,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
 
 
-@WebServlet("/vaga")
+@WebServlet("/vaga/insert")
 public class VagaServlet extends HttpServlet {
 	
 
@@ -24,17 +24,6 @@ public class VagaServlet extends HttpServlet {
 		Vaga vaga = null;
 		String erro = null;
 
-
-		/*
-		if (session != null) {
-					HttpSession session = request.getSession(false);
-		SessionDTO usuariologado = null;
-		usuariologado = (SessionDTO) session.getAttribute("usuarioLogado");
-		}
-
-		if (usuariologado == null) {
-			erro = "Usuário não está logado.";
-		} else {   */
 			if (idParam != null) {
 				try {
 					int id = Integer.parseInt(idParam);
@@ -64,14 +53,7 @@ public class VagaServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		request.setCharacterEncoding("UTF-8");
-		Connection conexao = DBConfig.criarConexao();
-		HttpSession session = request.getSession(false);
-		SessionDTO usuariologado = (session != null) ? (SessionDTO) session.getAttribute("usuarioLogado") : null;
 
-		if (usuariologado == null || usuariologado.getTipoUsuario() == null) {
-			response.sendRedirect("pages/login.jsp");
-			return;
-		}
 
 		try (Connection connection = DBConfig.criarConexao()) {
 			connection.setAutoCommit(false);
@@ -104,7 +86,7 @@ public class VagaServlet extends HttpServlet {
 			vaga.setDescricao(descricao);
 			vaga.setRequisitos(requisitos);
 			vaga.setBeneficios(beneficios);
-			vaga.setQtdVagas(Integer.parseInt(request.getParameter("qtd_vagas")));
+			vaga.setQtdVagas(Long.valueOf(request.getParameter("qtd_vagas")));
 			vaga.setStatus(status);
 
 			DAOVaga vagaDAO = new DAOVaga(connection);

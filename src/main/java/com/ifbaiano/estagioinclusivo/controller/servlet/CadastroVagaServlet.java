@@ -13,17 +13,12 @@ import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.WebServlet;
 
-@WebServlet("/CadastroVagaServlet")
-
+@WebServlet("/home/vaga/insert")
 public class CadastroVagaServlet extends HttpServlet {
 
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		request.setCharacterEncoding("UTF-8");
-
-		HttpSession session = request.getSession(false);
-		SessionDTO usuariologado = (session != null) ? (SessionDTO) session.getAttribute("usuarioLogado") : null;
 
 		try (Connection connection = DBConfig.criarConexao()) {
 			connection.setAutoCommit(false);
@@ -56,7 +51,7 @@ public class CadastroVagaServlet extends HttpServlet {
 			vaga.setDescricao(descricao);
 			vaga.setRequisitos(requisitos);
 			vaga.setBeneficios(beneficios);
-			vaga.setQtdVagas(Integer.parseInt(request.getParameter("qtd_vagas")));
+			vaga.setQtdVagas(Long.valueOf((request.getParameter("qtd_vagas"))));
 			vaga.setStatus(status);
 
 			DAOVaga vagaDAO = new DAOVaga(connection);

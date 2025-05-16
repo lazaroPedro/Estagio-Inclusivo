@@ -28,7 +28,7 @@
         } else {
             for (Vaga u : lista) {
                 %>
-                <a class="text-decoration-none text-reset" href="${pageContext.request.contextPath}/vaga?id=<%=u.getId()%>">
+                <a class="text-decoration-none text-reset" href="${pageContext.request.contextPath}/vaga/insert?id=<%=u.getId()%>">
                 <div class="card mb-3 ">
                     <div class="row g-0">
                         <div class="col-4 card-body">

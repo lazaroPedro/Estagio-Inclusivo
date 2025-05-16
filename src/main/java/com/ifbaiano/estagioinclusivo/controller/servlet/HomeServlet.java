@@ -16,18 +16,22 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
-@WebServlet("/home") /* /home/*  */
+/**
+ *
+ *
+ *
+ * /home/* restringe login
+ * /home/candidato/all
+ * /home/candidato/id
+ * /home/candidato/vaga
+ * /home/candidato/insert
+ * /home/candidato/update
+ * /home/candidato/delete
+ */
+@WebServlet("/") /* /home/*  */
 public class HomeServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-       /* if (req.getSession().getAttribute ("user") == null) {
-            resp.sendRedirect(req.getContextPath() + "/pages/login.jsp");
-        }else {
-
-            req.getRequestDispatcher("/index.jsp").forward(req, resp);
-        }
-*/
 
         try (DAOFactory daoFactory = new DAOFactory()) {
             DAOVaga vDao = daoFactory.buildDAOVaga();

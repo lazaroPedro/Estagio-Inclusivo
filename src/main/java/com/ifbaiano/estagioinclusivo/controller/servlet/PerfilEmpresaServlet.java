@@ -15,7 +15,7 @@ import jakarta.servlet.*;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
 
-@WebServlet("/perfil-empresa")
+@WebServlet("/home/empresa/id")
 public class PerfilEmpresaServlet extends HttpServlet {
 
     @Override
@@ -49,9 +49,7 @@ public class PerfilEmpresaServlet extends HttpServlet {
             req.getRequestDispatcher("/pages/perfil-empresa.jsp").forward(req, resp);
 
         } catch (Exception e) {
-            e.printStackTrace();
             req.setAttribute("erro", "Erro ao carregar perfil da empresa.");
-        /*    req.getRequestDispatcher("pages/login.jsp").forward(req, resp);*/
         }
     }
 }
