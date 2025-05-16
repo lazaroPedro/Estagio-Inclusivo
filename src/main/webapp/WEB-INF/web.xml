@@ -6,6 +6,6 @@
          version="6.0">
   <display-name>Estagio Inclusivo</display-name>
   <welcome-file-list>
-    <welcome-file>home</welcome-file>
+    <welcome-file>/</welcome-file>
 </welcome-file-list>
 </web-app>

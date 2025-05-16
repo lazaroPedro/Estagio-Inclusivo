@@ -30,7 +30,7 @@
 %>
 
 
-<form action="${pageContext.request.contextPath}/candidato" method="post">
+<form action="${pageContext.request.contextPath}/candidato/insert" method="post">
     <h4>Dados gerais</h4>
     <div class="mb-3">
         <label for="nome" class="form-label">Nome</label>

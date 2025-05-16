@@ -1,6 +1,8 @@
 package com.ifbaiano.estagioinclusivo.model;
 
+import com.ifbaiano.estagioinclusivo.utils.validation.annotations.Length;
 import com.ifbaiano.estagioinclusivo.utils.validation.annotations.NotBlank;
+import com.ifbaiano.estagioinclusivo.utils.validation.annotations.Pattern;
 
 public class Endereco {
 	private int id;
@@ -13,6 +15,8 @@ public class Endereco {
 	@NotBlank
 	private String estado;
 	@NotBlank
+	@Pattern(regex = "([0-9]{5}[-]?[0-9]{3})")
+	@Length(8)
 	private String cep;
 
 	public Endereco() {}

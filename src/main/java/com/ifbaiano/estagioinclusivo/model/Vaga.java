@@ -20,7 +20,7 @@ public class Vaga {
 	@NotBlank
 	private String beneficios;
 	@Min(1)
-	private long qtdVagas;
+	private Long qtdVagas;
 	@NotNull
 	private TipoVaga status;
 
@@ -28,7 +28,7 @@ public class Vaga {
 	public Vaga() {
 	}
 
-	public Vaga(int id, Empresa empresa, Endereco endereco, String descricao, String requisitos, String beneficios, long qtdVagas, TipoVaga status, String titulo) {
+	public Vaga(int id, Empresa empresa, Endereco endereco, String descricao, String requisitos, String beneficios, Long qtdVagas, TipoVaga status, String titulo) {
 		this.id = id;
 		this.empresa = empresa;
 		this.endereco = endereco;
@@ -88,11 +88,11 @@ public class Vaga {
 		this.beneficios = beneficios;
 	}
 
-	public long getQtdVagas() {
+	public Long getQtdVagas() {
 		return qtdVagas;
 	}
 
-	public void setQtdVagas(long qtdVagas) {
+	public void setQtdVagas(Long qtdVagas) {
 		this.qtdVagas = qtdVagas;
 	}
 

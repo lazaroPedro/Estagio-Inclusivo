@@ -1,12 +1,16 @@
 package com.ifbaiano.estagioinclusivo.model;
 
 import com.ifbaiano.estagioinclusivo.model.enums.TipoUsuario;
+import com.ifbaiano.estagioinclusivo.utils.validation.annotations.Length;
 import com.ifbaiano.estagioinclusivo.utils.validation.annotations.NotBlank;
 import com.ifbaiano.estagioinclusivo.utils.validation.annotations.NotNull;
+import com.ifbaiano.estagioinclusivo.utils.validation.annotations.Pattern;
 
 public class Empresa extends Usuario {
 
     @NotBlank
+    @Pattern(regex = "([0-9]{2}[\\.]?[0-9]{3}[\\.]?[0-9]{3}[\\/]?[0-9]{4}[-]?[0-9]{2})")
+    @Length(14)
     private String cnpj;
     @NotBlank
     private String razaoSocial;

@@ -1,5 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" language="java" isELIgnored="false" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<%@ page import="com.ifbaiano.estagioinclusivo.model.enums.TipoUsuario" %>
 
 
 <nav class="fixed-top navbar navbar-dark bg-dark navbar-expand-lg">
@@ -20,14 +21,9 @@
             <ul class="navbar-nav ms-auto">
 
             <li class="nav-item">
-                <a href="${pageContext.request.contextPath}/home" class="nav-link">Home</a>
+                <a href="${pageContext.request.contextPath}/" class="nav-link">Home</a>
             </li>
-        <li class="nav-item">
-          <a href="${pageContext.request.contextPath}/pages/cadastrovagas.jsp" class="nav-link ">Vagas</a>
-        </li>
-        <li class="nav-item">
-   <a href="#" class="nav-link ">Mensagens</a>
-   </li>
+
         <c:choose>
         <c:when test="${sessionScope.usuarioLogado == null}">
 
@@ -36,6 +32,12 @@
         </li>
         </c:when>
           <c:otherwise>
+              <li class="nav-item">
+              <a href="${pageContext.request.contextPath}/home/vaga/all" class="nav-link ">Vagas</a>
+          </li>
+              <li class="nav-item">
+                  <a href="#" class="nav-link ">Mensagens</a>
+              </li>
         <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
               Olá ${sessionScope.usuarioLogado.nome}
@@ -43,8 +45,14 @@
             <ul class="dropdown-menu">
 
             <li>
-              <a class="dropdown-item" href="${pageContext.request.contextPath}/Perfil-candidato">
-                Perfil</a>
+                <c:if test="${sessionScope.usuarioLogado.tipoUsuario == TipoUsuario.CANDIDATO}">
+                    <a class="dropdown-item" href="${pageContext.request.contextPath}/home/candidato/id">
+                        Perfil</a>
+                </c:if>
+                <c:if test="${sessionScope.usuarioLogado.tipoUsuario == TipoUsuario.EMPRESA}">
+                    <a class="dropdown-item" href="${pageContext.request.contextPath}/home/empresa/id">
+                        Perfil</a>
+                </c:if>
 
             </li>
             <li>
@@ -60,7 +68,7 @@
                 Suporte</a>
             </li>
             <li>
-              <a class="dropdown-item" href="#">
+              <a class="dropdown-item" href="${pageContext.request.contextPath}/home/logout">
                 Sair</a>
             </li>
           </ul>

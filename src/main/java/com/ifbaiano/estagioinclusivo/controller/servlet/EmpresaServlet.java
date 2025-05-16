@@ -17,7 +17,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.SQLException;
 
-@WebServlet("/cadastroempresa")
+@WebServlet("/empresa/insert")
 public class EmpresaServlet extends HttpServlet {
 
     @Override
