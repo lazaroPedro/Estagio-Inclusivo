@@ -4,14 +4,23 @@ import java.io.IOException;
 import java.sql.Connection;
 
 import com.ifbaiano.estagioinclusivo.config.DBConfig;
+import com.ifbaiano.estagioinclusivo.dao.DAOEmpresa;
+import com.ifbaiano.estagioinclusivo.dao.DAOEndereco;
+import com.ifbaiano.estagioinclusivo.dao.DAOUsuario;
 import com.ifbaiano.estagioinclusivo.dao.DAOVaga;
+import com.ifbaiano.estagioinclusivo.model.Empresa;
+import com.ifbaiano.estagioinclusivo.model.Endereco;
+import com.ifbaiano.estagioinclusivo.model.Usuario;
 import com.ifbaiano.estagioinclusivo.model.Vaga;
 import com.ifbaiano.estagioinclusivo.model.dto.SessionDTO;
 import com.ifbaiano.estagioinclusivo.model.enums.TipoVaga;
 
-import jakarta.servlet.*;
-import jakarta.servlet.http.*;
+import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
 @WebServlet("/CadastroVagaServlet")
 
@@ -28,40 +37,56 @@ public class CadastroVagaServlet extends HttpServlet {
 		try (Connection connection = DBConfig.criarConexao()) {
 			connection.setAutoCommit(false);
 
+			
 			String descricao = request.getParameter("descricao");
 			String requisitos = request.getParameter("requisitos");
 			String beneficios = request.getParameter("beneficios");
-			int qtdVagas = Integer.parseInt(request.getParameter("qtd_vagas"));
-			String statusParam = request.getParameter("status");
-			String empresaNome = request.getParameter("empresa_nome");
+			long qtdVagas = Integer.parseInt(request.getParameter("qtd_vagas"));
 
-			if (descricao == null || descricao.trim().isEmpty() || requisitos == null || requisitos.trim().isEmpty()
-					|| beneficios == null || beneficios.trim().isEmpty() || statusParam == null
-					|| statusParam.trim().isEmpty() || empresaNome == null || empresaNome.trim().isEmpty()) {
+			String rua = request.getParameter("rua");
+			String bairro = request.getParameter("bairro");			
+			String municipio = request.getParameter("municipio");
+			String estado = request.getParameter("estado");
+			String cep = request.getParameter("cep");
+		
+		
+			
+			Endereco endereco = new Endereco();
+			endereco.setRua(rua);
+			endereco.setBairro(bairro);
+			endereco.setMunicipio(municipio);
+			endereco.setEstado(estado);
+			endereco.setCep(cep);
+		
+			
+			DAOEndereco daoEndereco = new DAOEndereco(connection);
+			Integer idEndereco = daoEndereco.insert(endereco).orElseThrow(() -> new RuntimeException("Erro ao salvar endereço"));
+			endereco.setId(idEndereco);
+			
+			DAOEmpresa daoEmpresa = new DAOEmpresa(connection);
+			int idEmpresa = usuariologado.getId();
+			Empresa empresa = daoEmpresa.findById(idEmpresa).orElseThrow(() -> new RuntimeException("Empresa não encontrada"));
 
-				request.setAttribute("erro", "todos os campos são obrigatórios.");
-				request.getRequestDispatcher("CadastroVagas.jsp").forward(request, response);
-				return;
+			String[] deficienciasSelecionadas = request.getParameterValues("tiposDeficiencia");
+			String deficienciasPermitidas = "";
+			if(deficienciasSelecionadas != null) {
+				deficienciasPermitidas = String.join(",", deficienciasSelecionadas);
 			}
-
-			TipoVaga status;
-			try {
-				status = TipoVaga.valueOf(statusParam.toUpperCase());
-			} catch (IllegalArgumentException e) {
-				request.setAttribute("erro", "Status inválido.");
-				request.getRequestDispatcher("CadastroVagas.jsp").forward(request, response);
-				return;
-			}
+			
+			
 			Vaga vaga = new Vaga();
 			vaga.setDescricao(descricao);
 			vaga.setRequisitos(requisitos);
 			vaga.setBeneficios(beneficios);
-			vaga.setQtdVagas(Integer.parseInt(request.getParameter("qtd_vagas")));
-			vaga.setStatus(status);
-
+			vaga.setQtdVagas(qtdVagas);
+			vaga.setStatus(TipoVaga.ATIVA);
+			vaga.setEmpresa(empresa);
+			vaga.setEndereco(endereco);
+			
 			DAOVaga vagaDAO = new DAOVaga(connection);
 			vagaDAO.insert(vaga);
-
+			
+			
 			connection.commit();
 			response.sendRedirect("CadastroVagas.jsp?sucesso=1");
 
@@ -73,6 +98,8 @@ public class CadastroVagaServlet extends HttpServlet {
 		}
 
 	}
+	
+	
 
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)

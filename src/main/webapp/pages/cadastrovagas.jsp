@@ -22,7 +22,9 @@
 
 
 
-				<form action="${pageContext.request.contextPath}/vaga" method="post">
+				<form
+					action="${pageContext.request.contextPath}/CadastroVagaServlet"
+					method="post">
 					<div class="mb-3">
 						<label for="descricao" class="form-label">Descrição</label>
 						<textarea class="form-control" name="descricao" rows="3" required>${param.descricao}</textarea>
@@ -38,26 +40,91 @@
 						<textarea class="form-control" name="beneficios" rows="2" required>${param.beneficios}</textarea>
 					</div>
 
-					<div class="mb-3">
+					<div class="form-group">
+						<label>Quantidade de Vagas</label> <input type="number"
+							name="qtd_vagas" class="form-control" min="1" required>
+					</div>
 
-						<label for="qtd_vagas" class="form-label">Quantidade de
-							Vagas</label> <input type="number" class"form-control" name="qtd_vagas"
-							min="1" value="${param.qtd_vagas}" required>
+					<hr>
+
+					<h5>Local do Estágio</h5>
+					<div class="form-row">
+						<div class="form-group col-md-6">
+							<label>CEP</label> <input type="text" name="cep"
+								class="form-control" required>
+						</div>
+						<div class="form-group col-md-6">
+							<label>Rua</label> <input type="text" name="rua"
+								class="form-control" required>
+						</div>
+
+
+
+
+						<div class="form-group col-md-6">
+							<label>Bairro</label> <input type="text" name="bairro"
+								class="form-control" required>
+						</div>
+
+						<div class="form-group col-md-6">
+							<label>Municício</label> <input type="text" name="municipio"
+								class="form-control" required>
+						</div>
+
+
+
+
+						<div class="form-group col-md-6">
+							<label>Estado</label> <input type="text" name="estado"
+								class="form-control" required>
+						</div>
 					</div>
 
 
+					<hr>
 
-			<div class="text-end">
-                        <button type="submit" class="btn btn-secondary">Cadastrar</button>
+					<h5>Tipos de Deficiência Aceitas</h5>
 
-				</button>
+					<div class="form-check">
+						<input class="form-check-input" type="checkbox"
+							name="tiposDeficiencia" value="Auditiva"> <label
+							class="form-check-label">Auditiva</label>
+					</div>
+
+					<div class="form-check">
+						<input class="form-check-input" type="checkbox"
+							name="tiposDeficiencia" value="visual"> <label
+							class="form-check-label">Visual</label>
+					</div>
+
+					<div class="form-check">
+						<input class="form-check-input" type="checkbox"
+							name="tiposDeficiencia" value="Fisica"> <label
+							class="form-check-label">Física</label>
+					</div>
+
+					<div class="form-check">
+						<input class="form-check-input" type="checkbox"
+							name="tiposDeficiencia" value="Intelectual"> <label
+							class="form-check-label">Intelectual</label>
+					</div>
+
+					<div class="form-check">
+						<input class="form-check-input" type="checkbox"
+							name="tiposDeficiencia" value="outro"> <label
+							class="form-check-label">Outro</label>
+					</div>
+					<br>
+
+					<div class="text-end">
+						<button type="submit" class="btn btn-secondary">Cadastrar</button>
+
+						</button>
+					</div>
+
+				</form>
 			</div>
 
-			</form>
 		</div>
-
-	</div>
-
-
 </body>
 </html>
