@@ -21,7 +21,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
 
-@WebServlet("/vaga/insert")
+@WebServlet("/vaga")
 public class VagaServlet extends HttpServlet {
 
 	@Override
@@ -29,7 +29,6 @@ public class VagaServlet extends HttpServlet {
 			throws ServletException, IOException {
 		String idParam = request.getParameter("id");
 
-<<<<<<< HEAD
 		if (idParam == null || idParam.isEmpty()) {
 			response.sendRedirect("index.jsp");
 			return;
@@ -38,57 +37,52 @@ public class VagaServlet extends HttpServlet {
 		try (DAOFactory daoFactory = new DAOFactory()) {
 			DAOVaga vagaDao = daoFactory.buildDAOVaga();
 			DAOEmpresa empresaDao = daoFactory.buildDAOEmpresa();
-=======
 			if (idParam != null) {
 				try {
 					int id = Integer.parseInt(idParam);
->>>>>>> 92763d5d6306b28fa330ce7cd61a23c6b1b215b7
 
-			int idVaga;
+					int idVaga;
 
-			try {
-				idVaga = Integer.parseInt(idParam);
-			} catch (NumberFormatException e) {
-				request.setAttribute("erro", "ID da vaga inválido.");
-				request.getRequestDispatcher("/index.jsp").forward(request, response);
-				return;
+					try {
+						idVaga = Integer.parseInt(idParam);
+					} catch (NumberFormatException e) {
+						request.setAttribute("erro", "ID da vaga inválido.");
+						request.getRequestDispatcher("/index.jsp").forward(request, response);
+						return;
+					}
+					Optional<Vaga> vagaOpt = vagaDao.findById(idVaga);
+
+					if (vagaOpt.isPresent()) {
+						Vaga vaga = vagaOpt.get();
+
+						Optional<Empresa> empresaOpt = empresaDao.findById(vaga.getEmpresa().getId());
+						empresaOpt.ifPresent(vaga::setEmpresa);
+
+						request.setAttribute("vaga", vaga);
+						request.getRequestDispatcher("/pages/vagas.jsp").forward(request, response);
+					} else {
+						request.setAttribute("erro", "Vaga não encontrada");
+						request.getRequestDispatcher("/index.jsp").forward(request, response);
+
+					}
+
+				} catch (Exception e) {
+					e.printStackTrace();
+					request.setAttribute("erro", "Erro a carregar os dados da vaga");
+					request.getRequestDispatcher("/index.jsp").forward(request, response);
+				}
 			}
-			Optional<Vaga> vagaOpt = vagaDao.findById(idVaga);
 
-			if (vagaOpt.isPresent()) {
-				Vaga vaga = vagaOpt.get();
-
-				Optional<Empresa> empresaOpt = empresaDao.findById(vaga.getEmpresa().getId());
-				empresaOpt.ifPresent(vaga::setEmpresa);
-
-				request.setAttribute("vaga", vaga);
-				request.getRequestDispatcher("/page/Vaga.jsp").forward(request, response);
-			} else {
-				request.setAttribute("erro", "Vaga não encontrada");
-				request.getRequestDispatcher("/index.jsp").forward(request, response);
-
-			}
-
-		} catch (Exception e) {
-			e.printStackTrace();
-			request.setAttribute("erro", "Erro a carregar os dados da vaga");
-			request.getRequestDispatcher("/index.jsp").forward(request, response);
 		}
 	}
-
-
 	@Override
-
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		
 		request.setCharacterEncoding("UTF-8");
-<<<<<<< HEAD
 		Connection conexao = (Connection) DBConfig.criarConexao();
 		HttpSession session = request.getSession(false);
 		SessionDTO usuariologado = (session != null) ? (SessionDTO) session.getAttribute("usuarioLogado") : null;
-=======
->>>>>>> 92763d5d6306b28fa330ce7cd61a23c6b1b215b7
 
 
 		try (Connection connection = DBConfig.criarConexao()) {
@@ -124,15 +118,11 @@ public class VagaServlet extends HttpServlet {
 			vaga.setDescricao(descricao);
 			vaga.setRequisitos(requisitos);
 			vaga.setBeneficios(beneficios);
-<<<<<<< HEAD
-			vaga.setQtdVagas(Integer.parseInt(request.getParameter("qtd_vagas")));
+			vaga.setQtdVagas(Long.valueOf((request.getParameter("qtd_vagas"))));
 			vaga.setStatus(TipoVaga.ATIVA);
 			
-=======
 			vaga.setQtdVagas(Long.valueOf(request.getParameter("qtd_vagas")));
-			vaga.setStatus(status);
 
->>>>>>> 92763d5d6306b28fa330ce7cd61a23c6b1b215b7
 			DAOVaga vagaDAO = new DAOVaga(connection);
 			vagaDAO.insert(vaga);
 

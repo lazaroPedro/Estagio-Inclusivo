@@ -37,7 +37,7 @@ public class CadastroVagaServlet extends HttpServlet {
 			String requisitos = request.getParameter("requisitos");
 			String beneficios = request.getParameter("beneficios");
 			long qtdVagas = Integer.parseInt(request.getParameter("qtd_vagas"));
-
+			SessionDTO user = (SessionDTO) request.getSession().getAttribute("usuarioLogado");
 			String rua = request.getParameter("rua");
 			String bairro = request.getParameter("bairro");			
 			String municipio = request.getParameter("municipio");
@@ -59,8 +59,8 @@ public class CadastroVagaServlet extends HttpServlet {
 			endereco.setId(idEndereco);
 			
 			DAOEmpresa daoEmpresa = new DAOEmpresa(connection);
-			int idEmpresa = usuariologado.getId();
-			Empresa empresa = daoEmpresa.findById(idEmpresa).orElseThrow(() -> new RuntimeException("Empresa não encontrada"));
+
+			Empresa empresa = daoEmpresa.findById(user.getId()).orElseThrow(() -> new RuntimeException("Empresa não encontrada"));
 
 			String[] deficienciasSelecionadas = request.getParameterValues("tiposDeficiencia");
 			String deficienciasPermitidas = "";
@@ -73,17 +73,13 @@ public class CadastroVagaServlet extends HttpServlet {
 			vaga.setDescricao(descricao);
 			vaga.setRequisitos(requisitos);
 			vaga.setBeneficios(beneficios);
-<<<<<<< HEAD
 			vaga.setQtdVagas(qtdVagas);
 			vaga.setStatus(TipoVaga.ATIVA);
 			vaga.setEmpresa(empresa);
 			vaga.setEndereco(endereco);
 			
-=======
 			vaga.setQtdVagas(Long.valueOf((request.getParameter("qtd_vagas"))));
-			vaga.setStatus(status);
 
->>>>>>> 92763d5d6306b28fa330ce7cd61a23c6b1b215b7
 			DAOVaga vagaDAO = new DAOVaga(connection);
 			vagaDAO.insert(vaga);
 			
@@ -94,7 +90,7 @@ public class CadastroVagaServlet extends HttpServlet {
 		} catch (Exception e) {
 			e.printStackTrace();
 			request.setAttribute("erro", "Erro ao cadastraar vaga: " + e.getMessage());
-			request.getRequestDispatcher("CadastroVagas.jsp").forward(request, response);
+			request.getRequestDispatcher("/pages/cadastrovagas.jsp").forward(request, response);
 
 		}
 
@@ -105,7 +101,7 @@ public class CadastroVagaServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		request.getRequestDispatcher("/pages/CadastroVagas.jsp").forward(request, response);
+		request.getRequestDispatcher("/pages/cadastrovagas.jsp").forward(request, response);
 	}
 
 }

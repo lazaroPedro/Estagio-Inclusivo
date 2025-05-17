@@ -22,13 +22,10 @@
 
 
 
-<<<<<<< HEAD
 				<form
-					action="${pageContext.request.contextPath}/CadastroVagaServlet"
+					action="${pageContext.request.contextPath}/vaga/insert"
 					method="post">
-=======
 				<form action="${pageContext.request.contextPath}/vaga/insert" method="post">
->>>>>>> 92763d5d6306b28fa330ce7cd61a23c6b1b215b7
 					<div class="mb-3">
 						<label for="descricao" class="form-label">Descrição</label>
 						<textarea class="form-control" name="descricao" rows="3" required>${param.descricao}</textarea>
@@ -127,7 +124,9 @@
 					</div>
 
 				</form>
+				</form>
 			</div>
+		</div>
 
 		</div>
 </body>

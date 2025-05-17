@@ -22,7 +22,7 @@
        <c:when test="${vagas != null  && !vagas.isEmpty()}">
             <c:forEach var="vaga" items="${vagas}">
 
-                <a class="text-decoration-none text-reset" href="${pageContext.request.contextPath}/vaga/insert?id=${vaga.id}">
+                <a class="text-decoration-none text-reset" href="${pageContext.request.contextPath}/vaga?id=${vaga.id}">
                     <div class="card mb-3 ">
                         <div class="row g-0">
                             <div class="col-4 card-body">
