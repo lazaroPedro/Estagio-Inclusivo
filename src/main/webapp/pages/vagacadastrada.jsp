@@ -1,4 +1,3 @@
-<%@ page import="com.ifbaiano.estagioinclusivo.model.enums.TipoUsuario" %>
 <%@ page import="java.util.List" %>
 
 <%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" language="java" isELIgnored="false" %>
@@ -12,8 +11,15 @@
     <%@ include file="/assets/components/header.jsp" %>
 
     <div class="container-xl mt-5 pt-5">
+        <c:if test="${usuarioLogado.tipoUsuario == TipoUsuario.CANDIDATO}">
+            <h3 class="modal-title">Vagas em que se candidatou:</h3>
+        </c:if>
+        <c:if test="${usuarioLogado.tipoUsuario == TipoUsuario.EMPRESA}">
+            <h3 class="modal-title">Vagas cadastradas:</h3>
+
+        </c:if>
         <c:choose>
-       <c:when test="${vagas != null }">
+       <c:when test="${vagas != null  && !vagas.isEmpty()}">
             <c:forEach var="vaga" items="${vagas}">
 
                 <a class="text-decoration-none text-reset" href="${pageContext.request.contextPath}/vaga/insert?id=${vaga.id}">
@@ -42,9 +48,10 @@
                     </div>
                 </a>
 
-                <a class="btn btn-primary" href="${pageContext.request.contextPath}/" role="button">Buscar Vagas</a>
 
             </c:forEach>
+           <a class="btn btn-primary" href="${pageContext.request.contextPath}/" role="button">Buscar Vagas</a>
+
        </c:when>
             <c:when test="${usuarioLogado.tipoUsuario == TipoUsuario.CANDIDATO}">
                 <div class="card mb-3 ">

@@ -20,7 +20,7 @@
              <div class="card mb-3 ">
                  <div class="row g-0">
                      <div class="card-body text-bg-danger">
-                        <h5 class="card-title">NÃO TEMOS VAGAS PRA VOCÊ!</h5>
+                        <h5 class="card-title ">NÃO TEMOS VAGAS PRA VOCÊ!</h5>
                      </div>
                  </div>
              </div>

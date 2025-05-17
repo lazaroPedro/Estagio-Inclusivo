@@ -11,6 +11,8 @@
 <link
 	href="${pageContext.request.contextPath}/webjars/bootstrap/5.3.5/css/bootstrap.min.css"
 	rel="stylesheet">
+	<script src="${pageContext.request.contextPath}/webjars/bootstrap/5.3.5/js/bootstrap.bundle.min.js" ></script>
+
 </head>
 
 <body class="bd-light">
