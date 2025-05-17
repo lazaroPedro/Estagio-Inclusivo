@@ -47,11 +47,8 @@ public class CandidatoServlet extends HttpServlet {
         try (DAOFactory factory = new DAOFactory()) {
             factory.openTransaction();
             try {
-
                 DAOEndereco daoEndereco = factory.buildDAOEndereco();
                 DAOCandidato daoCandidato = factory.buildDAOCandidato();
-                DAOCurso daoCurso = factory.buildDAOCurso();
-                DAOTipoDeficiencia daoTipoDeficiencia = factory.buildDAOTipoDeficiencia();
 
         String cep = request.getParameter("cep").replaceAll("[^\\d]", "");
         String telefone = request.getParameter("telefone").replaceAll("[^\\d]", "");
@@ -85,38 +82,13 @@ public class CandidatoServlet extends HttpServlet {
         candidato.setCpf(cpf);
         candidato.setGenero(Genero.valueOf(request.getParameter("genero")));
         candidato.setDataNascimento(LocalDate.parse(request.getParameter("nascimento")));
-                Validator.validate(candidato);
+        Validator.validate(candidato);
 
-                Integer idCandidato = daoCandidato.insert(candidato).orElseThrow(() -> new RuntimeException("Erro ao inserir candidato."));
-                candidato.setId(idCandidato);
+        Integer idCandidato = daoCandidato.insert(candidato).orElseThrow(() -> new RuntimeException("Erro ao inserir candidato."));
+        candidato.setId(idCandidato);
 
-                TipoDeficiencia tipoDeficiencia = new TipoDeficiencia();
-                tipoDeficiencia.setNome(request.getParameter("def_nome"));
-                tipoDeficiencia.setCandidato(candidato);
-                tipoDeficiencia.setTipo(TipoDeficienciaEnum.valueOf(request.getParameter("def_tipo")));
-                tipoDeficiencia.setDescricao(request.getParameter("def_descricao"));
-                tipoDeficiencia.setTipoApoio(request.getParameter("def_apoio"));
-
-                Validator.validate(tipoDeficiencia);
-
-                daoTipoDeficiencia.insert(tipoDeficiencia).orElseThrow(() -> new RuntimeException("Erro ao cadastrar deficiência"));
-
-                String nomeCurso = request.getParameter("curso_nome");
-                if (nomeCurso != null && !nomeCurso.trim().isEmpty()) {
-                    Curso curso = new Curso();
-                    curso.setNomeCurso(nomeCurso);
-                    curso.setInstituicao(request.getParameter("curso_instituicao"));
-                    curso.setDescricao(request.getParameter("curso_descricao"));
-                    curso.setDataInicio(LocalDate.parse(request.getParameter("curso_inicio")));
-                    curso.setDataFim(LocalDate.parse(request.getParameter("curso_fim")));
-                    curso.setCandidato(candidato);
-
-                    Validator.validate(curso);
-
-                    daoCurso.insert(curso);
-                }
-                factory.closeTransaction();
-                response.sendRedirect("pages/login.jsp?sucesso=1");
+        factory.closeTransaction();
+        response.sendRedirect("pages/login.jsp?sucesso=1");
             } catch (ValidationException ve) {
                 try {
                     factory.rollbackTransaction();
