@@ -27,15 +27,11 @@ public class PerfilCandidatoServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         
-<<<<<<< HEAD
 
-  
-      
-        
+    	 HttpSession session = req.getSession();
         SessionDTO sessionDTO = (SessionDTO) session.getAttribute("usuarioLogado");
-=======
-        SessionDTO sessionDTO = (SessionDTO) req.getSession().getAttribute("usuarioLogado");
->>>>>>> 147743c2da470fa04d6fee81aa07648faaf03f82
+
+
 
         try (DAOFactory daoFactory = new DAOFactory()) {
             DAOCandidato daoCandidato = daoFactory.buildDAOCandidato();
@@ -72,12 +68,8 @@ public class PerfilCandidatoServlet extends HttpServlet {
         } catch (Exception e) {
             e.printStackTrace();
             req.setAttribute("erro", "Erro ao carregar perfil do candidato.");
-<<<<<<< HEAD
- 
-=======
->>>>>>> 147743c2da470fa04d6fee81aa07648faaf03f82
-        }
+
         
     }
     }
-
+}
