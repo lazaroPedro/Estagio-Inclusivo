@@ -6,11 +6,13 @@ import java.util.Optional;
 
 import com.ifbaiano.estagioinclusivo.dao.DAOCandidato;
 import com.ifbaiano.estagioinclusivo.dao.DAOCurso;
+import com.ifbaiano.estagioinclusivo.dao.DAOEndereco;
 import com.ifbaiano.estagioinclusivo.dao.DAOFactory;
 import com.ifbaiano.estagioinclusivo.dao.DAOTipoDeficiencia;
 import com.ifbaiano.estagioinclusivo.dao.DAOVaga;
 import com.ifbaiano.estagioinclusivo.model.Candidato;
 import com.ifbaiano.estagioinclusivo.model.Curso;
+import com.ifbaiano.estagioinclusivo.model.Endereco;
 import com.ifbaiano.estagioinclusivo.model.TipoDeficiencia;
 import com.ifbaiano.estagioinclusivo.model.Vaga;
 import com.ifbaiano.estagioinclusivo.model.dto.SessionDTO;
@@ -27,11 +29,7 @@ public class PerfilCandidatoServlet extends HttpServlet {
         HttpSession session = req.getSession(false);
         
 
-   /*    if (session == null || session.getAttribute("user") == null) {
-            resp.sendRedirect("pages/login.jsp");
-            return;
-        }
-   */
+  
       
         
         SessionDTO sessionDTO = (SessionDTO) session.getAttribute("usuarioLogado");
@@ -56,6 +54,14 @@ public class PerfilCandidatoServlet extends HttpServlet {
                 .filter(d -> d.getCandidato().getId() == sessionDTO.getId())
                 .toList();
             
+            DAOEndereco daoEndereco = daoFactory.buildDAOEndereco();
+
+            int idEndereco = candidatoAtualizado.getEndereco().getId();
+
+            Optional<Endereco> enderecoOpt = daoEndereco.findById(idEndereco);
+
+            enderecoOpt.ifPresent(candidatoAtualizado::setEndereco);
+
             req.setAttribute("candidato", candidatoAtualizado);
             req.setAttribute("cursos", cursosInscritos);
             req.setAttribute("deficiencias", deficienciasDoCandidato);
@@ -64,7 +70,7 @@ public class PerfilCandidatoServlet extends HttpServlet {
         } catch (Exception e) {
             e.printStackTrace();
             req.setAttribute("erro", "Erro ao carregar perfil do candidato.");
-            /* req.getRequestDispatcher("pages/login.jsp").forward(req, resp);*/
+ 
         }
         
     }

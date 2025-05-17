@@ -90,8 +90,9 @@ public class DAOTipoDeficiencia implements DAORepository<TipoDeficiencia, Intege
                 Candidato c = new Candidato();
                 c.setId(rs.getInt("fk_candidato"));
                 tipoDeficiencia.setCandidato(c);
+                lista.add(tipoDeficiencia);
             }
-            pp.execute();
+
 
 
         }catch (SQLException e){

@@ -3,11 +3,30 @@
 <%@ page import="com.ifbaiano.estagioinclusivo.model.Candidato" %>
 <%@ page import="com.ifbaiano.estagioinclusivo.model.Curso" %>
 <%@ page import="com.ifbaiano.estagioinclusivo.model.TipoDeficiencia" %>
+<%@ page import="java.time.format.DateTimeFormatter" %>
+<%@ page import="java.time.LocalDate" %>
+
 
 <%
     Candidato candidato = (Candidato) request.getAttribute("candidato");
     List<TipoDeficiencia> deficiencias = (List<TipoDeficiencia>) request.getAttribute("deficiencias");
     List<Curso> cursos= (List<Curso>) request.getAttribute("cursos");
+
+    LocalDate dataNascimento = candidato.getDataNascimento();
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+    String dataFormatada = dataNascimento.format(formatter);
+    String cpf = candidato.getCpf();
+    String cpfFormatado = cpf.replaceAll("(\\d{3})(\\d{3})(\\d{3})(\\d{2})", "$1.$2.$3-$4");
+
+    String telefone = candidato.getTelefone();
+    String telefoneFormatado = "";
+    if (telefone.length() == 11) {
+        telefoneFormatado = telefone.replaceAll("(\\d{2})(\\d{5})(\\d{4})", "($1) $2-$3");
+    } else if (telefone.length() == 10) {
+        telefoneFormatado = telefone.replaceAll("(\\d{2})(\\d{4})(\\d{4})", "($1) $2-$3");
+    } else {
+        telefoneFormatado = telefone;
+    }
 %>
 
 <!DOCTYPE html>
@@ -25,8 +44,7 @@
    <div class="container-xl mt-5 pt-5">
     <div class="card mb-4">
         <div class="card-body">
-            <h1 class="card-title text-primary">Bem-vindo, <%= candidato.getNome() %>!</h1>
-            <a href="index.jsp" class="btn btn-danger mt-3">Sair</a>
+            <h1 class="card-title text-primary">Informações do Candidato: <%= candidato.getNome() %>.</h1>
             
         </div>
     </div>
@@ -36,11 +54,11 @@
             <h2 class="text-primary">Seus Dados</h2>
             <p><strong>Nome:</strong> <%= candidato.getNome() %></p>
             <p><strong>Gênero:</strong> <%= candidato.getGenero() %></p>
-            <p><strong>Data de Nascimento:</strong> <%= candidato.getDataNascimento() %></p>
-            <p><strong>Endereço:</strong> <%= candidato.getEndereco() %></p>
+            <p><strong>Data de Nascimento:</strong> <%= dataFormatada %></p>
+          <p><strong>Cidade:</strong> <%=  candidato.getEndereco().getMunicipio() %></p>
             <p><strong>Email:</strong> <%= candidato.getEmail() %></p>
-            <p><strong>CPF:</strong> <%= candidato.getCpf() %></p>
-            <p><strong>Telefone:</strong> <%= candidato.getTelefone() %></p>
+            <p><strong>CPF:</strong> <%= cpfFormatado %></p>
+            <p><strong>Telefone:</strong> <%= telefoneFormatado %></p>
          </div>
     </div>
      <div class="card mb-4">
@@ -75,16 +93,24 @@
             <% } else { %>
                 <% for (Curso curso : cursos) { %>
                     <div class="card mb-3">
-                        <div class="row g-0">
-                            <div class="col-md-4 card-body">
+                       <div class="card-body">
+        <div class="row">
+            <div class="col-md-6">
                         <p><strong>Instituição:</strong> <%= curso.getInstituicao() %></p>
                         <p><strong>Nome do curso:</strong> <%= curso.getNomeCurso() %></p>
                         <p><strong>Descrição:</strong> <%= curso.getDescricao() %></p>
-                        <p><strong>Data de ínicio:</strong> <%= curso.getDataInicio() %></p>
-                         <p><strong>Data de fim:</strong> <%= curso.getDataFim() %></p>
+
+                        <%
+                        DateTimeFormatter formatterCurso = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+                        String inicioFormatado = curso.getDataInicio().format(formatterCurso);
+                        String fimFormatado = curso.getDataFim().format(formatterCurso);
+                    %>
+                    <p><strong>Data de início:</strong> <%= inicioFormatado %></p>
+                    <p><strong>Data de fim:</strong> <%= fimFormatado %></p>
                          </div>
                         </div>
                     </div>
+                    
                <% } %> 
             <% } %> 
         </div>
