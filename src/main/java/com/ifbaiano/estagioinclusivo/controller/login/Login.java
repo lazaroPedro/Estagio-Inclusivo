@@ -23,7 +23,7 @@ import java.util.Optional;
 
 
 @WebServlet("/login")
-public class LoginUsuario extends HttpServlet {
+public class Login extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String email = req.getParameter("email");
@@ -78,27 +78,6 @@ public class LoginUsuario extends HttpServlet {
         req.getRequestDispatcher("/pages/login.jsp").forward(req, resp);
     }
 
-    @Override
-    protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        try(DAOFactory factory = new DAOFactory()) {
-            DAOUsuario dao = factory.buildDAOUsuario();
-            SessionDTO d = (SessionDTO) req.getSession().getAttribute("usuarioLogado");
-            Usuario u = new Usuario();
-            LoginDTO l = new LoginDTO();
-            l.setEmail(req.getParameter("email"));
-            l.setSenha(req.getParameter("senha"));
-            try {
-                Validator.validate(l);
-                u.setSalt(SenhaUtils.gerarSalt());
-                u.setHashSenha(SenhaUtils.gerarHashSenha(l.getSenha(), u.getSalt()));
-            } catch (ValidationException e) {
-                req.setAttribute("errosValidacao", e.getErrors());
-                req.getRequestDispatcher("/pages/perfil.jsp").forward(req, resp);
-            }
-            dao.updateAcesso(u.getSalt(), u.getHashSenha(), l.getEmail(), d.getId());
-            req.setAttribute("alterado", true);
-            req.getRequestDispatcher("/pages/perfil.jsp").forward(req, resp);
 
-        }
-    }
+
 }

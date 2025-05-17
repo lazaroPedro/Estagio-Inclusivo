@@ -49,7 +49,7 @@
             <div data-bs-spy="scroll" data-bs-target="#menu-rolagem" data-bs-offset="0" tabindex="0"
                  style="position: relative; height: 100vh; overflow: auto;">
                 <h4 id="item-1">Inicio</h4>
-                    <% if (request.getAttribute("alterado") != null) { %>
+                    <% if (request.getAttribute("sucesso") != null) { %>
                 <div class="alert-success d-flex align-items-center" role="alert">
                                     Alterado com sucesso!
                 </div>
@@ -58,8 +58,7 @@
 
                 <h5 id="item-2">Alterar Perfil</h5>
 
-                <form action="${pageContext.request.contextPath}/candidato" method="post">
-                        <input type="hidden" name="method" value="put_" />
+                <form action="${pageContext.request.contextPath}/home/candidato/put" method="post">
                     <div class="mb-3">
                         <label for="nome" class="form-label">Nome</label>
                         <input type="text" class="form-control" id="nome" name="nome" >
@@ -92,7 +91,7 @@
 
 
                 <h4 id="item-3">Alterar Dados de Acesso</h4>
-                <form action="${pageContext.request.contextPath}/usuario" method="post">
+                <form action="${pageContext.request.contextPath}/home/usuario/put" method="post">
                     <input type="hidden" name="method" value="put_" />
                         <div class="mb-3">
                             <label for="email" class="form-label">Email</label>
@@ -141,7 +140,7 @@
                     </c:otherwise>
                 </c:choose>
 
-                <form action="${pageContext.request.contextPath}/curso" method="post">
+                <form action="${pageContext.request.contextPath}/home/curso/put" method="post">
                 <input type="hidden" name="method" value="put_" />
 
 
@@ -171,7 +170,7 @@
 
 
                 <h5 id="item-5">Alterar Endereco</h5>
-                <form action="${pageContext.request.contextPath}/endereco" method="post">
+                <form action="${pageContext.request.contextPath}/home/endereco/put" method="post">
                 <input type="hidden" name="method" value="put_" />
                     <div class="mb-3">
                         <label for="rua" class="form-label">Rua</label>
@@ -198,7 +197,7 @@
 
 
                 <h5 id="item-6">Alterar Deficiencia</h5>
-                <form action="${pageContext.request.contextPath}/deficiencia" method="post">
+                <form action="${pageContext.request.contextPath}/home/deficiencia/put" method="post">
                     <input type="hidden" name="method" value="put_" />
 
                     <div class="mb-3">
@@ -232,10 +231,8 @@
 
 
                 <h4 id="item-7">Deletar Conta</h4>
-                   <form action="${pageContext.request.contextPath}/candidato" method="post">
-                <input type="hidden" name="method" value="delete_" />
+                <a class="btn btn-danger" href="${pageContext.request.contextPath}/home/candidato/delete" role="button">Deletar Conta</a>
 
-                       <button type="submit" class="btn btn-success">Deletar Conta</button>
 </form>
 
 

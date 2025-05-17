@@ -26,30 +26,14 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
-/**
- *
- *
- *
- * /home/* restringe login
- * /home/candidato/ getall
- * /home/candidato/id/[perfil]
- * /home/candidato/vaga
- * /home/candidato/insert
- * /home/candidato/update/id/
- * /home/candidato/delete/id/
- */
 
-@WebServlet("/candidato")
+
+@WebServlet("/candidato/insert")
 public class CandidatoServlet extends HttpServlet {
 
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String h = request.getParameter("method");
-        if (h != null) {
-                if(h.equalsIgnoreCase("put_")) {
-            doPut(request, response);}
 
-        } else{
 
 
 
@@ -152,59 +136,9 @@ public class CandidatoServlet extends HttpServlet {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-    }}
-    @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        try(DAOFactory daoFactory = new DAOFactory()){
-            DAOCandidato dV = daoFactory.buildDAOCandidato();
-            SessionDTO d = (SessionDTO) req.getSession().getAttribute("user");
-            dV.findById(d.getId()).ifPresent(candidato -> {
-                DAOEndereco dE  = daoFactory.buildDAOEndereco();
-                dE.findById(candidato.getEndereco().getId()).ifPresent(candidato::setEndereco);
-                req.setAttribute("candidato", candidato);
-            });
-
-    }
     }
 
-    @Override
-    protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        try (DAOFactory daoFactory = new DAOFactory()) {
-            DAOCandidato dV = daoFactory.buildDAOCandidato();
-            SessionDTO d = (SessionDTO) req.getSession().getAttribute("usuarioLogado");
-            Candidato candidato = new Candidato();
 
-            candidato.setPapel(TipoUsuario.CANDIDATO);
-
-
-            dV.findById(d.getId()).ifPresent(candid -> {
-                candidato.setId(candid.getId());
-                candidato.setSalt(candid.getSalt());
-                candidato.setHashSenha(candid.getHashSenha());
-                candidato.setEndereco(candid.getEndereco());
-                candidato.setEmail(candid.getEmail());
-
-                Optional.ofNullable(req.getParameter("nome")).ifPresentOrElse(candidato::setNome, () -> candidato.setNome(candid.getNome()));
-                Optional.ofNullable(req.getParameter("cpf")).ifPresentOrElse(candidato::setCpf, () -> candidato.setCpf(candid.getCpf()));
-                Optional.ofNullable(req.getParameter("genero")).ifPresentOrElse(can -> candidato.setGenero(Genero.valueOf(can)), () -> candidato.setGenero(candid.getGenero()));
-                Optional.ofNullable(req.getParameter("nascimento")).ifPresentOrElse(can -> candidato.setDataNascimento(LocalDate.parse(can)), () -> candidato.setDataNascimento(candid.getDataNascimento()));
-                Optional.ofNullable(req.getParameter("telefone")).ifPresentOrElse(candidato::setTelefone, () -> candidato.setTelefone(candid.getTelefone()));
-
-
-                try {
-                    Validator.validate(candidato);
-                } catch (ValidationException e) {
-                    req.setAttribute("errosValidacao", e.getErrors());
-                }
-                dV.update(candidato);
-                req.setAttribute("alterado", true);
-
-
-            });
-            req.getRequestDispatcher("/pages/perfil.jsp").forward(req, resp);
-
-        }
-    }
 }
 
 

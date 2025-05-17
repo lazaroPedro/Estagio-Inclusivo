@@ -15,19 +15,14 @@ import jakarta.servlet.*;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
 
-@WebServlet("/perfil-empresa")
+@WebServlet("/home/empresa/id")
 public class PerfilEmpresaServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        HttpSession session = req.getSession(false);
 
-        if (session == null || session.getAttribute("user") == null) {
-            resp.sendRedirect("pages/login.jsp");
-            return;
-        }
 
-        SessionDTO sessionDTO = (SessionDTO) session.getAttribute("user");
+        SessionDTO sessionDTO = (SessionDTO) req.getSession().getAttribute("usuarioLogado");
 
         try (DAOFactory daoFactory = new DAOFactory()) {
             DAOEmpresa daoEmpresa = daoFactory.buildDAOEmpresa();
@@ -36,7 +31,6 @@ public class PerfilEmpresaServlet extends HttpServlet {
             Optional<Empresa> empresaOpt = daoEmpresa.findById(sessionDTO.getId());
             if (!empresaOpt.isPresent()) {
                 req.setAttribute("erro", "Empresa não encontrada.");
-                req.getRequestDispatcher("pages/login.jsp").forward(req, resp);
                 return;
             }
 
@@ -46,12 +40,10 @@ public class PerfilEmpresaServlet extends HttpServlet {
             req.setAttribute("empresa", empresa);
             req.setAttribute("vagasPublicadas", vagasPublicadas);
 
-            req.getRequestDispatcher("/pages/perfil-empresa.jsp").forward(req, resp);
+            req.getRequestDispatcher("/pages/perfilempresa.jsp").forward(req, resp);
 
         } catch (Exception e) {
-            e.printStackTrace();
             req.setAttribute("erro", "Erro ao carregar perfil da empresa.");
-        /*    req.getRequestDispatcher("pages/login.jsp").forward(req, resp);*/
         }
     }
 }

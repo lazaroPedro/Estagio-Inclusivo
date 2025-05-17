@@ -1,77 +1,89 @@
 package com.ifbaiano.estagioinclusivo.controller.servlet;
 
 import java.io.IOException;
-import java.sql.Connection;
+import java.util.Optional;
 
 import com.ifbaiano.estagioinclusivo.config.DBConfig;
+import com.ifbaiano.estagioinclusivo.dao.DAOEmpresa;
 import com.ifbaiano.estagioinclusivo.dao.DAOFactory;
 import com.ifbaiano.estagioinclusivo.dao.DAOVaga;
+import com.ifbaiano.estagioinclusivo.model.Empresa;
 import com.ifbaiano.estagioinclusivo.model.Vaga;
 import com.ifbaiano.estagioinclusivo.model.dto.SessionDTO;
 import com.ifbaiano.estagioinclusivo.model.enums.TipoVaga;
-import jakarta.servlet.*;
+import java.sql.Connection; 
+
+import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.*;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
 
 @WebServlet("/vaga")
 public class VagaServlet extends HttpServlet {
-	
 
+	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		String idParam = request.getParameter("id");
-		Vaga vaga = null;
-		String erro = null;
 
-
-		/*
-		if (session != null) {
-					HttpSession session = request.getSession(false);
-		SessionDTO usuariologado = null;
-		usuariologado = (SessionDTO) session.getAttribute("usuarioLogado");
+		if (idParam == null || idParam.isEmpty()) {
+			response.sendRedirect("index.jsp");
+			return;
 		}
 
-		if (usuariologado == null) {
-			erro = "Usuário não está logado.";
-		} else {   */
+		try (DAOFactory daoFactory = new DAOFactory()) {
+			DAOVaga vagaDao = daoFactory.buildDAOVaga();
+			DAOEmpresa empresaDao = daoFactory.buildDAOEmpresa();
 			if (idParam != null) {
 				try {
 					int id = Integer.parseInt(idParam);
 
-					try (DAOFactory daoFactory = new DAOFactory()) {
-						vaga = daoFactory.buildDAOVaga().findById(id).orElse(null);
+					int idVaga;
+
+					try {
+						idVaga = Integer.parseInt(idParam);
+					} catch (NumberFormatException e) {
+						request.setAttribute("erro", "ID da vaga inválido.");
+						request.getRequestDispatcher("/index.jsp").forward(request, response);
+						return;
+					}
+					Optional<Vaga> vagaOpt = vagaDao.findById(idVaga);
+
+					if (vagaOpt.isPresent()) {
+						Vaga vaga = vagaOpt.get();
+
+						Optional<Empresa> empresaOpt = empresaDao.findById(vaga.getEmpresa().getId());
+						empresaOpt.ifPresent(vaga::setEmpresa);
+
+						request.setAttribute("vaga", vaga);
+						request.getRequestDispatcher("/pages/vagas.jsp").forward(request, response);
+					} else {
+						request.setAttribute("erro", "Vaga não encontrada");
+						request.getRequestDispatcher("/index.jsp").forward(request, response);
+
 					}
 
-					if (vaga == null) {
-						erro = "Vaga não encontrada.";
-					}
 				} catch (Exception e) {
-					erro = "Erro ao carregar vaga: " + e.getMessage();
+					e.printStackTrace();
+					request.setAttribute("erro", "Erro a carregar os dados da vaga");
+					request.getRequestDispatcher("/index.jsp").forward(request, response);
 				}
-			} else {
-				erro = "ID da vaga não informado.";
 			}
 
-
-		request.setAttribute("erro", erro);
-		request.setAttribute("vaga", vaga);
-		request.getRequestDispatcher("/pages/vagas.jsp").forward(request, response);
-
-		
-		
+		}
 	}
+	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		
 		request.setCharacterEncoding("UTF-8");
-		Connection conexao = DBConfig.criarConexao();
+		Connection conexao = (Connection) DBConfig.criarConexao();
 		HttpSession session = request.getSession(false);
 		SessionDTO usuariologado = (session != null) ? (SessionDTO) session.getAttribute("usuarioLogado") : null;
 
-		if (usuariologado == null || usuariologado.getTipoUsuario() == null) {
-			response.sendRedirect("pages/login.jsp");
-			return;
-		}
 
 		try (Connection connection = DBConfig.criarConexao()) {
 			connection.setAutoCommit(false);
@@ -79,33 +91,37 @@ public class VagaServlet extends HttpServlet {
 			String descricao = request.getParameter("descricao");
 			String requisitos = request.getParameter("requisitos");
 			String beneficios = request.getParameter("beneficios");
-			int qtdVagas = Integer.parseInt(request.getParameter("qtd_vagas"));
-			String statusParam = request.getParameter("status");
 			String empresaNome = request.getParameter("empresa_nome");
+			
+			String qtdVagasStr = request.getParameter("qtd_vagas");
+			int qtdVagas;
+			
+			try {
+				qtdVagas = Integer.parseInt(qtdVagasStr);
+			} catch (NumberFormatException e) {
+				request.setAttribute("erro", "Quantidade de vagas inválida.");
+				request.getRequestDispatcher("cadastrovagas.jsp").forward(request, response);				return;
+			}
 
-			if (descricao == null || descricao.trim().isEmpty() || requisitos == null || requisitos.trim().isEmpty()
-					|| beneficios == null || beneficios.trim().isEmpty() || statusParam == null
-					|| statusParam.trim().isEmpty() || empresaNome == null || empresaNome.trim().isEmpty()) {
+			if (descricao == null || descricao.trim().isEmpty() 
+					|| requisitos == null || requisitos.trim().isEmpty()
+					|| beneficios == null || beneficios.trim().isEmpty() 
+					|| empresaNome == null || empresaNome.trim().isEmpty()) {
 
 				request.setAttribute("erro", "todos os campos são obrigatórios.");
 				request.getRequestDispatcher("cadastrovagas.jsp").forward(request, response);
 				return;
 			}
 
-			TipoVaga status;
-			try {
-				status = TipoVaga.valueOf(statusParam.toUpperCase());
-			} catch (IllegalArgumentException e) {
-				request.setAttribute("erro", "Status inválido.");
-				request.getRequestDispatcher("cadastrovagas.jsp").forward(request, response);
-				return;
-			}
+		
 			Vaga vaga = new Vaga();
 			vaga.setDescricao(descricao);
 			vaga.setRequisitos(requisitos);
 			vaga.setBeneficios(beneficios);
-			vaga.setQtdVagas(Integer.parseInt(request.getParameter("qtd_vagas")));
-			vaga.setStatus(status);
+			vaga.setQtdVagas(Long.valueOf((request.getParameter("qtd_vagas"))));
+			vaga.setStatus(TipoVaga.ATIVA);
+			
+			vaga.setQtdVagas(Long.valueOf(request.getParameter("qtd_vagas")));
 
 			DAOVaga vagaDAO = new DAOVaga(connection);
 			vagaDAO.insert(vaga);

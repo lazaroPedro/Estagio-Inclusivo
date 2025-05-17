@@ -134,6 +134,35 @@ public class DAOTipoDeficiencia implements DAORepository<TipoDeficiencia, Intege
         }
         return Optional.empty();
     }
+
+    public List<TipoDeficiencia> findAllByCandidato(int id) {
+        String sql = "SELECT * FROM deficiencias where fk_candidato = ?";
+        List<TipoDeficiencia> lista = new ArrayList<>();
+        ResultSet rs = null;
+        try (PreparedStatement pp = conexao.prepareStatement(sql)){
+            pp.setInt(1, id);
+            rs = pp.executeQuery();
+            while (rs.next()) {
+                TipoDeficiencia tipoDeficiencia = new TipoDeficiencia();
+                tipoDeficiencia.setId(rs.getInt("id_deficiencia"));
+                tipoDeficiencia.setNome(rs.getString("nome"));
+                tipoDeficiencia.setDescricao(rs.getString("descricao"));
+                tipoDeficiencia.setTipoApoio(rs.getString("tipo_apoio"));
+                tipoDeficiencia.setTipo(TipoDeficienciaEnum.valueOf(rs.getString("tipo_deficiencia")));
+                Candidato c = new Candidato();
+                c.setId(rs.getInt("fk_candidato"));
+                tipoDeficiencia.setCandidato(c);
+            }
+            pp.execute();
+
+
+        }catch (SQLException e){
+            throw new RuntimeException("Erro ao listar deficiencia", e);
+        } finally {
+            fechar(rs);
+        }
+        return lista;
+    }
     @Override
     public void fechar(AutoCloseable closeable) {
         try {

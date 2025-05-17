@@ -29,7 +29,7 @@
     }
 %>
 
-<form action="${pageContext.request.contextPath}/cadastroempresa" method="post">
+<form action="${pageContext.request.contextPath}/empresa/insert" method="post">
     <h4>Dados da Empresa</h4>
     <div class="mb-3">
         <label for="nome" class="form-label">Nome Fantasia</label>

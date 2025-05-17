@@ -21,18 +21,21 @@ import jakarta.servlet.*;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
 
-@WebServlet("/Perfil-candidato")
+@WebServlet("/home/candidato/id")
 public class PerfilCandidatoServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        HttpSession session = req.getSession(false);
         
+<<<<<<< HEAD
 
   
       
         
         SessionDTO sessionDTO = (SessionDTO) session.getAttribute("usuarioLogado");
+=======
+        SessionDTO sessionDTO = (SessionDTO) req.getSession().getAttribute("usuarioLogado");
+>>>>>>> 147743c2da470fa04d6fee81aa07648faaf03f82
 
         try (DAOFactory daoFactory = new DAOFactory()) {
             DAOCandidato daoCandidato = daoFactory.buildDAOCandidato();
@@ -42,7 +45,6 @@ public class PerfilCandidatoServlet extends HttpServlet {
             Optional<Candidato> candidatoOpt = daoCandidato.findById(sessionDTO.getId());
             if (!candidatoOpt.isPresent()) {
                 req.setAttribute("erro", "Candidato não encontrado.");
-                req.getRequestDispatcher("pages/login.jsp").forward(req, resp);
                 return;
             }
 
@@ -70,7 +72,10 @@ public class PerfilCandidatoServlet extends HttpServlet {
         } catch (Exception e) {
             e.printStackTrace();
             req.setAttribute("erro", "Erro ao carregar perfil do candidato.");
+<<<<<<< HEAD
  
+=======
+>>>>>>> 147743c2da470fa04d6fee81aa07648faaf03f82
         }
         
     }

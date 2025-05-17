@@ -29,7 +29,7 @@ public class PesquisaServlet extends HttpServlet {
 
             String search = request.getParameter("pesquisa");
             if (search == null || search.isEmpty()) {
-                response.sendRedirect(request.getContextPath() +"/home");
+                response.sendRedirect(request.getContextPath() +"/");
 
             }else {
             List<Vaga> lV = dV.findByTituloContaining(search).stream()
