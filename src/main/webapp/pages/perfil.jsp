@@ -173,11 +173,11 @@
                 </div>
                 <div class="mb-3">
                     <label for="inicio" class="form-label">Data de Início</label>
-                    <input type="date" name="inicio" class="form-control" id="inicio" value="${curso.dataInicio}">
+                    <input type="date" name="dataInicio" class="form-control" id="inicio" value="${curso.dataInicio}">
                 </div>
                 <div class="mb-3">
                     <label for="termino" class="form-label">Data de Término</label>
-                    <input type="date" name="termino" class="form-control" id="termino" value="${curso.dataFim}">
+                    <input type="date" name="dataFim" class="form-control" id="termino" value="${curso.dataFim}">
                 </div>
                     <button type="submit" class="btn btn-success">Atualizar</button>
                 </form>
@@ -209,11 +209,11 @@
                 </div>
                 <div class="mb-3">
                     <label for="inicio" class="form-label">Data de Início</label>
-                    <input type="date" name="inicio" class="form-control" id="inicio" >
+                    <input type="date" name="dataInicio" class="form-control" id="inicio" >
                 </div>
                 <div class="mb-3">
                     <label for="termino" class="form-label">Data de Término</label>
-                    <input type="date" name="termino" class="form-control" id="termino" >
+                    <input type="date" name="dataFim" class="form-control" id="termino" >
                 </div>
                     <button type="submit" class="btn btn-success">Adcionar</button>
                 </form>
@@ -301,7 +301,7 @@
                     </div>
                     <div class="mb-3">
                         <label for="apoio" class="form-label">Tipo de Apoio Necessário</label>
-                        <textarea name="apoio" class="form-control" id="apoio">${def.tipoApoio}</textarea>
+                        <textarea name="tipoApoio" class="form-control" id="apoio">${def.tipoApoio}</textarea>
                     </div>
                     <button type="submit" class="btn btn-success">Atualizar</button>
                 </form>
@@ -338,7 +338,7 @@
                     </div>
                     <div class="mb-3">
                         <label for="apoio" class="form-label">Tipo de Apoio Necessário</label>
-                        <textarea name="apoio" class="form-control" id="apoio"></textarea>
+                        <textarea name="tipoApoio" class="form-control" id="apoio"></textarea>
                     </div>
                     <button type="submit" class="btn btn-success">Adcionar</button>
                 </form>

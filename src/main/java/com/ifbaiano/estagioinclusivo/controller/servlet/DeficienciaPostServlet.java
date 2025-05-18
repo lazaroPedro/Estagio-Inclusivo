@@ -31,7 +31,7 @@ public class DeficienciaPostServlet extends HttpServlet {
             deficiencia.setTipoApoio(req.getParameter("tipoApoio"));
             deficiencia.setCandidato(new Candidato());
             deficiencia.getCandidato().setId(user.getId());
-            deficiencia.setTipo(TipoDeficienciaEnum.valueOf(req.getParameter("tipoDeficiencia")));
+            deficiencia.setTipo(TipoDeficienciaEnum.valueOf(req.getParameter("tipo")));
 
             try {
                 Validator.validate(deficiencia);
