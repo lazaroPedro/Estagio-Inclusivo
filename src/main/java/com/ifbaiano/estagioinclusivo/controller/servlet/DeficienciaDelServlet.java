@@ -20,7 +20,7 @@ public class DeficienciaDelServlet extends HttpServlet {
             DAOTipoDeficiencia dC = daoFactory.buildDAOTipoDeficiencia();
             dC.delete(Integer.parseInt(req.getParameter("id")));
             req.setAttribute("sucesso", true);
-            req.getRequestDispatcher("/pages/perfil.jsp").forward(req, resp);
+            req.getRequestDispatcher("/home/candidato/full").forward(req, resp);
 
         }
 

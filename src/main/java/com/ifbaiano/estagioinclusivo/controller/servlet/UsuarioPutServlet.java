@@ -5,6 +5,7 @@ import com.ifbaiano.estagioinclusivo.dao.DAOUsuario;
 import com.ifbaiano.estagioinclusivo.model.Usuario;
 import com.ifbaiano.estagioinclusivo.model.dto.LoginDTO;
 import com.ifbaiano.estagioinclusivo.model.dto.SessionDTO;
+import com.ifbaiano.estagioinclusivo.model.enums.TipoUsuario;
 import com.ifbaiano.estagioinclusivo.utils.SenhaUtils;
 import com.ifbaiano.estagioinclusivo.utils.validation.ValidationException;
 import com.ifbaiano.estagioinclusivo.utils.validation.Validator;
@@ -45,14 +46,21 @@ public class UsuarioPutServlet extends HttpServlet {
             Optional<Usuario> u = dU.findById(user.getId());
             if (!SenhaUtils.verificarSenha(antigaSenha, u.get().getSalt(), u.get().getHashSenha())) {
                 req.setAttribute("erro", "Senha digitada esta incorreta");
-                req.getRequestDispatcher("/pages/perfil.jsp").forward(req, resp);
+                req.getRequestDispatcher("/home/candidato/full").forward(req, resp);
+                return;
             }
             u.get().setEmail(login.getEmail());
             u.get().setSalt(SenhaUtils.gerarSalt());
             u.get().setHashSenha(SenhaUtils.gerarHashSenha(novaSenha, u.get().getSalt()));
             dU.update(u.get());
             req.setAttribute("sucesso", true);
-            req.getRequestDispatcher("/pages/perfil.jsp").forward(req, resp);
+
+            if (user.getTipoUsuario() == TipoUsuario.CANDIDATO) {
+                req.getRequestDispatcher("/home/candidato/full").forward(req, resp);
+            } else {
+                req.getRequestDispatcher("/pages/perfil.jsp").forward(req, resp);
+            }
+
         }
 
 

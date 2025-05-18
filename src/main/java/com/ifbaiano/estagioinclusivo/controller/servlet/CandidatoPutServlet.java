@@ -58,7 +58,7 @@ public class CandidatoPutServlet extends HttpServlet {
 
 
             });
-            req.getRequestDispatcher("/pages/perfil.jsp").forward(req, resp);
+            req.getRequestDispatcher("/home/candidato/full").forward(req, resp);
 
         }
 

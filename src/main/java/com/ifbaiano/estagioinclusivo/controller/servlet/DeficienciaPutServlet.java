@@ -40,7 +40,7 @@ public class DeficienciaPutServlet extends HttpServlet {
             } catch (ValidationException e) {
                 req.setAttribute("erros", e.getErrors());
             }
-            req.getRequestDispatcher("/pages/perfil.jsp").forward(req, resp);
+            req.getRequestDispatcher("/home/candidato/full").forward(req, resp);
 
         }
 

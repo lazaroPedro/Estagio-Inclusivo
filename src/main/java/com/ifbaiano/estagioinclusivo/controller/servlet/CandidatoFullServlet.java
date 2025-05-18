@@ -24,7 +24,7 @@ import java.util.List;
 import java.util.Optional;
 
 @WebServlet("/home/candidato/full")
-public class ConfiguracoesServlet extends HttpServlet {
+public class CandidatoFullServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         SessionDTO user = (SessionDTO) request.getSession().getAttribute("usuarioLogado");
 
@@ -36,14 +36,17 @@ public class ConfiguracoesServlet extends HttpServlet {
             List<Curso> lC = dCurso.findAllByCandidato(user.getId());
             List<TipoDeficiencia> lT = dDef.findAllByCandidato(user.getId());
             Optional<Candidato> c = dCand.findById(user.getId());
+
             c.ifPresent(cand ->{
                 cand.setSalt(null);
                 cand.setHashSenha(null);
                  dEnd.findById(cand.getEndereco().getId()).ifPresent(cand :: setEndereco);
+                 request.setAttribute("candidato", cand);
              });
             request.setAttribute("cursos", lC);
             request.setAttribute("deficiencias", lT);
-            request.setAttribute("candidato", c);
+
+
             request.getRequestDispatcher("/pages/perfil.jsp").forward(request, response);
 
         }

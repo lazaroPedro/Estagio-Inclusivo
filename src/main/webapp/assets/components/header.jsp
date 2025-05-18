@@ -56,7 +56,7 @@
 
             </li>
             <li>
-              <a class="dropdown-item" href="${pageContext.request.contextPath}/pages/perfil.jsp">
+              <a class="dropdown-item" href="${pageContext.request.contextPath}/home/candidato/full">
                 Configurações</a>
             </li>
             <li>

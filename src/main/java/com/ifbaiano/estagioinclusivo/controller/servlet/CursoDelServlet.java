@@ -26,7 +26,7 @@ public class CursoDelServlet extends HttpServlet {
             DAOCurso dC = daoFactory.buildDAOCurso();
             dC.delete(Integer.parseInt(req.getParameter("id")));
             req.setAttribute("sucesso", true);
-            req.getRequestDispatcher("/pages/perfil.jsp").forward(req, resp);
+            req.getRequestDispatcher("/home/candidato/full").forward(req, resp);
 
         }
 
