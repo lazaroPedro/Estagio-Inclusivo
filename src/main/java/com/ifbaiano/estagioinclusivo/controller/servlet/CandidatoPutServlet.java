@@ -42,10 +42,10 @@ public class CandidatoPutServlet extends HttpServlet {
                 candidato.setEmail(candid.getEmail());
 
                 Optional.ofNullable(req.getParameter("nome")).ifPresentOrElse(candidato::setNome, () -> candidato.setNome(candid.getNome()));
-                Optional.ofNullable(req.getParameter("cpf")).ifPresentOrElse(candidato::setCpf, () -> candidato.setCpf(candid.getCpf()));
+                Optional.of(req.getParameter("cpf").replaceAll("\\D", "")).ifPresentOrElse(candidato::setCpf, () -> candidato.setCpf(candid.getCpf()));
                 Optional.ofNullable(req.getParameter("genero")).ifPresentOrElse(can -> candidato.setGenero(Genero.valueOf(can)), () -> candidato.setGenero(candid.getGenero()));
                 Optional.ofNullable(req.getParameter("nascimento")).ifPresentOrElse(can -> candidato.setDataNascimento(LocalDate.parse(can)), () -> candidato.setDataNascimento(candid.getDataNascimento()));
-                Optional.ofNullable(req.getParameter("telefone")).ifPresentOrElse(candidato::setTelefone, () -> candidato.setTelefone(candid.getTelefone()));
+                Optional.of(req.getParameter("telefone").replaceAll("\\D", "")).ifPresentOrElse(candidato::setTelefone, () -> candidato.setTelefone(candid.getTelefone()));
 
 
                 try {

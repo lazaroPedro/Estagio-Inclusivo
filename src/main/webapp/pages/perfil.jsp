@@ -1,3 +1,4 @@
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%--
   Created by IntelliJ IDEA.
   User: lazaropedro
@@ -8,7 +9,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
 <%@ page import="com.ifbaiano.estagioinclusivo.model.enums.Genero" %>
 <%@ page import="com.ifbaiano.estagioinclusivo.model.enums.TipoDeficienciaEnum" %>
-
+<%@ page import="java.time.format.DateTimeFormatter" %>
 
 <!DOCTYPE html>
 <html>
@@ -26,6 +27,22 @@
             const form = document.getElementById(formId);
             form.style.display = form.style.display === 'none' ? 'block' : 'none';
         }
+        function formatDate(form){
+            const [year, month, day] = form.split("-");
+            return `${day}/${month}/${year}`;
+        }
+
+        function formatarCPF(cpf) {
+            return cpf.slice(0,3) + "." + cpf.slice(3,6) + "." + cpf.slice(6,9) + "-" + cpf.slice(9);
+        }
+
+        function formatarTelefone(tel) {
+            return "(" + tel.slice(0,2) + ") " + tel.slice(2,7) + "-" + tel.slice(7);
+        }
+        document.addEventListener("DOMContentLoaded", function() {
+            const myModal = new bootstrap.Modal(document.getElementById('successModal'));
+            myModal.show();
+        });
     </script>
 </head>
 <body>
@@ -61,21 +78,83 @@
                  style="position: relative; height: 100vh; overflow: auto;">
                 <h4 id="item-1">Inicio</h4>
                     <% if (request.getAttribute("sucesso") != null) { %>
-                <div class="alert-success d-flex align-items-center" role="alert">
-                                    Alterado com sucesso!
-                </div>
-                    <% } %>
+                        <div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" >
+                          <div class="modal-dialog">
+                            <div class="modal-content">
+                              <div class="modal-header">
+                                <h5 class="modal-title" id="successModalLabel">Sucesso</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                              </div>
+                              <div class="modal-body">
+                                Alterado com sucesso!
+                              </div>
+                              <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                    <% } else if (request.getAttribute("erros") != null){%>
+                <div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
+                          <div class="modal-dialog">
+                            <div class="modal-content">
+                              <div class="modal-header">
+                                <h5 class="modal-title" id="successModalLabel">Erros nos campos</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                              </div>
+                              <div class="modal-body">
+                                ${erros.getMessage()}
+                              </div>
+                              <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
 
+
+                <% } else if (request.getAttribute("erro") != null){%>
+                <div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="successModalLabel">Erros nos campos</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                ${erro}
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <%}
+
+
+
+                %>
 
                 <h5 id="item-2">Alterar Perfil</h5>
                 <div class="card mb-4" id="card-template">
                     <div class="card-body">
                         <p class="card-text">Nome: ${candidato.nome}</p>
-                        <p class="card-text">Telefone: ${candidato.telefone}</p>
-                        <p class="card-text">CPF: ${candidato.cpf} </p>
-                        <p class="card-text">Genero: ${candidato.genero.name()} </p>
-                        <p class="card-text">Data de Nascimento: ${candidato.dataNascimento.toString()}</p>
+                        <p class="card-text">
+                            Telefone: ${candidato.telefone}
 
+                        </p>                        <p class="card-text">
+                            CPF:
+                            ${candidato.cpf}
+
+                        </p>                        <p class="card-text">Genero: ${candidato.genero.name()} </p>
+                        <p class="card-text">
+                            Data de Nascimento:
+                            ${candidato.dataNascimento.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))}
+
+                        </p>
                         <div class="d-flex justify-content-between">
                             <button class="btn btn-primary" onclick="toggleForm('form-template')">Editar</button>
                         </div>
@@ -149,14 +228,16 @@
                         <p class="card-text">Nome: ${curso.nomeCurso}</p>
                         <p class="card-text">Instituição: ${curso.instituicao}</p>
                         <p class="card-text">Descricao: ${curso.descricao} </p>
-                        <p class="card-text">Data Inicio: ${curso.dataInicio} </p>
-                        <p class="card-text">Data Fim: ${curso.dataFim}</p>
+                        <p class="card-text">Data Inicio: ${curso.dataInicio.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))} </p>
+                        <p class="card-text">Data Fim: ${curso.dataFim.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))}</p>
 
                         <div class="d-flex justify-content-between">
                             <button class="btn btn-primary" onclick="toggleForm('form-template-c#${curso.id}')" >Editar</button>
-                            <a class="btn btn-danger" href="${pageContext.request.contextPath}/home/curso/delete?id=${curso.id}">Excluir</a>
+                            <form action="${pageContext.request.contextPath}/home/curso/delete/id?id=${curso.id}" method="post">
+                                <button class="btn btn-danger" >Excluir</button>
+                            </form>
                         </div>
-                <form action="${pageContext.request.contextPath}/home/curso/put?id=${curso.id}" method="post" id="form-template-c#${curso.id}" style="display: none;" class="mt-3">
+                <form action="${pageContext.request.contextPath}/home/curso/put/id?id=${curso.id}" method="post" id="form-template-c#${curso.id}" style="display: none;" class="mt-3">
 
 
                 <div class="mb-3">
@@ -271,12 +352,15 @@
 
                     <div class="d-flex justify-content-between">
                     <button class="btn btn-primary" onclick="toggleForm('form-template-d#${def.id}')">Editar</button>
-                    <a class="btn btn-danger" href="${pageContext.request.contextPath}/home/deficiencia/delete?id=${def.id}">Excluir</a>
+                        <form action="${pageContext.request.contextPath}/home/deficiencia/delete/id?id=${def.id}" method="post">
+                            <button class="btn btn-danger" >Excluir</button>
+                        </form>
+
 
                     </div>
 
 
-                <form action="${pageContext.request.contextPath}/home/deficiencia/put?id=${def.id}" method="post" id="form-template-d#${def.id}" style="display: none;" class="mt-3">
+                <form action="${pageContext.request.contextPath}/home/deficiencia/put/id?id=${def.id}" method="post" id="form-template-d#${def.id}" style="display: none;" class="mt-3">
 
                     <div class="mb-3">
                         <label for="nome" class="form-label">Nome da Deficiência</label>

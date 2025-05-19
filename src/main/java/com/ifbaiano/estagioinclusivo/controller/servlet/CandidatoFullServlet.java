@@ -20,6 +20,7 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 
@@ -41,6 +42,21 @@ public class CandidatoFullServlet extends HttpServlet {
                 cand.setSalt(null);
                 cand.setHashSenha(null);
                  dEnd.findById(cand.getEndereco().getId()).ifPresent(cand :: setEndereco);
+                 cand.getEndereco().setCep(cand.getEndereco().getCep().substring(0, 5) + "-" + cand.getEndereco().getCep().substring(5));
+
+                cand.setCpf(
+                        cand.getCpf().substring(0, 3) + "." +
+                                cand.getCpf().substring(3, 6) + "." +
+                                cand.getCpf().substring(6, 9) + "-" +
+                                cand.getCpf().substring(9, 11)
+                );
+                if (cand.getTelefone() != null && cand.getTelefone().length() == 11) {
+                    cand.setTelefone(
+                            "(" + cand.getTelefone().substring(0, 2) + ") " +
+                                    cand.getTelefone().substring(2, 7) + "-" +
+                                    cand.getTelefone().substring(7, 11)
+                    );
+                }
                  request.setAttribute("candidato", cand);
              });
             request.setAttribute("cursos", lC);

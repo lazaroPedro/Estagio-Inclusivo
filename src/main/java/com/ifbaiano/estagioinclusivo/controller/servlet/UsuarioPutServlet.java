@@ -42,6 +42,8 @@ public class UsuarioPutServlet extends HttpServlet {
 
             } catch (ValidationException e) {
                 req.setAttribute("erros", e.getErrors());
+                req.getRequestDispatcher("/home/candidato/full").forward(req, resp);
+                return;
             }
             Optional<Usuario> u = dU.findById(user.getId());
             if (!SenhaUtils.verificarSenha(antigaSenha, u.get().getSalt(), u.get().getHashSenha())) {

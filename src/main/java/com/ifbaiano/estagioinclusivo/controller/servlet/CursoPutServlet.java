@@ -17,7 +17,7 @@ import java.io.IOException;
 import java.time.LocalDate;
 
 /**/
-@WebServlet("/home/curso/put")
+@WebServlet("/home/curso/put/id")
 public class CursoPutServlet extends HttpServlet {
 
 
