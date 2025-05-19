@@ -3,6 +3,18 @@
 
 <%@ page import="java.util.List" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
+<%
+    String erro2 = (String) request.getAttribute("erro");
+    if (erro2 != null) {
+%>
+<div class="alert alert-danger">
+    <strong>Erro:</strong> <%= erro2 %>
+</div>
+<%
+    }
+%>
+
+<!DOCTYPE html>
 <html>
 <head>
     <title>Cadastro de candidato </title>
@@ -97,6 +109,6 @@
     <button type="submit" class="btn btn-success">Cadastrar</button>
 </form>
 <script src="${pageContext.request.contextPath}/webjars/bootstrap/5.3.5/js/bootstrap.bundle.min.js"></script>
-<script src="${pageContext.request.contextPath}/js/validacoes.js"></script>
+<script src="${pageContext.request.contextPath}/js/validacoes.js" type="text/javascript"></script>
 </body>
 </html>

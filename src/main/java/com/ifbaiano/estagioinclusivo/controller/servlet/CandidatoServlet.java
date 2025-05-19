@@ -53,6 +53,19 @@ public class CandidatoServlet extends HttpServlet {
         String cep = request.getParameter("cep").replaceAll("[^\\d]", "");
         String telefone = request.getParameter("telefone").replaceAll("[^\\d]", "");
         String cpf = request.getParameter("cpf").replaceAll("[^\\d]", "");
+        String email = request.getParameter("email");
+
+        if (daoCandidato.emailJaExiste(email)) {
+            request.setAttribute("erro", "O e-mail já está cadastrado.");
+            request.getRequestDispatcher("/pages/cadastrocandidato.jsp").forward(request, response);
+            return;
+        }
+
+        if (daoCandidato.cpfJaExiste(cpf)) {
+            request.setAttribute("erro", "O CPF já está cadastrado.");
+            request.getRequestDispatcher("/pages/cadastrocandidato.jsp").forward(request, response);
+            return;
+        }
 
 
         Endereco endereco = new Endereco();
@@ -73,7 +86,7 @@ public class CandidatoServlet extends HttpServlet {
 
         Candidato candidato = new Candidato();
         candidato.setNome(request.getParameter("nome"));
-        candidato.setEmail(request.getParameter("email"));
+        candidato.setEmail(email);
         candidato.setHashSenha(hash);
         candidato.setSalt(salt);
         candidato.setEndereco(endereco);
