@@ -36,6 +36,7 @@ public class DAOFactory implements AutoCloseable {
     public DAOCandidatoVaga buildDAOCandidatoVaga() {
         return new DAOCandidatoVaga(connection);
     }
+    public DAOCurriculo buildDAOCurriculo(){return new DAOCurriculo(connection);}
     public void openTransaction() throws SQLException {
         connection.setAutoCommit(false);
     }

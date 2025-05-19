@@ -35,8 +35,6 @@ public class CandidatoServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
 
-
-
         if (request.getParameter("aceitaTermos") == null) {
             request.setAttribute("erro", "É necessário aceitar os termos de uso.");
             request.getRequestDispatcher("/pages/cadastrocandidato.jsp").forward(request, response);

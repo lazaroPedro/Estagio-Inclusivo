@@ -5,16 +5,36 @@
                              https://jakarta.ee/xml/ns/jakartaee/web-app_6_0.xsd"
          version="6.0">
   <display-name>Estagio Inclusivo</display-name>
+
   <welcome-file-list>
     <welcome-file>/</welcome-file>
-</welcome-file-list>
+  </welcome-file-list>
+
   <mime-mapping>
     <extension>js</extension>
     <mime-type>application/javascript</mime-type>
   </mime-mapping>
+
+  <mime-mapping>
+    <extension>pdf</extension>
+    <mime-type>application/pdf</mime-type>
+  </mime-mapping>
+
   <servlet-mapping>
     <servlet-name>default</servlet-name>
     <url-pattern>/js/*</url-pattern>
+    <url-pattern>/css/*</url-pattern>
+    <url-pattern>/fonts/*</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>CadastroCurriculoServlet</servlet-name>
+    <servlet-class>com.ifbaiano.estagioinclusivo.controller.servlet.CadastroCurriculoServlet</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>CadastroCurriculoServlet</servlet-name>
+    <url-pattern>/curriculo/*</url-pattern>
   </servlet-mapping>
 
 </web-app>
