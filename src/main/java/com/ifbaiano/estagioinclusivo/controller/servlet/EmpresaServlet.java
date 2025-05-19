@@ -1,7 +1,9 @@
 package com.ifbaiano.estagioinclusivo.controller.servlet;
+
 import com.ifbaiano.estagioinclusivo.dao.DAOEndereco;
 import com.ifbaiano.estagioinclusivo.dao.DAOEmpresa;
 import com.ifbaiano.estagioinclusivo.dao.DAOFactory;
+import com.ifbaiano.estagioinclusivo.dao.DAOUsuario; 
 import com.ifbaiano.estagioinclusivo.model.Empresa;
 import com.ifbaiano.estagioinclusivo.model.Endereco;
 import com.ifbaiano.estagioinclusivo.model.enums.TipoUsuario;
@@ -15,7 +17,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
-import java.sql.SQLException;
 
 @WebServlet("/empresa/insert")
 public class EmpresaServlet extends HttpServlet {
@@ -29,10 +30,10 @@ public class EmpresaServlet extends HttpServlet {
         }
 
         try (DAOFactory factory = new DAOFactory()) {
-
             try {
                 DAOEndereco daoEndereco = factory.buildDAOEndereco();
                 DAOEmpresa daoEmpresa = factory.buildDAOEmpresa();
+                DAOUsuario daoUsuario = factory.buildDAOUsuario();
 
                 String cep = request.getParameter("cep").replaceAll("[^\\d]", "");
                 String telefone = request.getParameter("telefone").replaceAll("[^\\d]", "");
@@ -45,20 +46,28 @@ public class EmpresaServlet extends HttpServlet {
                 endereco.setEstado(request.getParameter("estado"));
                 endereco.setCep(cep);
 
-
                 Integer idEndereco = daoEndereco.insert(endereco)
                         .orElseThrow(() -> new RuntimeException("Não foi possível cadastrar o endereço"));
 
                 endereco.setId(idEndereco);
 
+                String email = request.getParameter("email");
+
+       
+                if (daoUsuario.findByEmail(email).isPresent()) {
+                    request.setAttribute("erro", "Este e-mail já está cadastrado.");
+                    request.getRequestDispatcher("/pages/cadastroempresa.jsp").forward(request, response);
+                    return;
+                }
+
                 String salt = SenhaUtils.gerarSalt();
                 String hash = SenhaUtils.gerarHashSenha(request.getParameter("password"), salt);
-                                                        
+
                 Empresa empresa = new Empresa();
                 empresa.setNome(request.getParameter("nome"));
                 empresa.setRazaoSocial(request.getParameter("razaoSocial"));
                 empresa.setCnpj(cnpj);
-                empresa.setEmail(request.getParameter("email"));
+                empresa.setEmail(email);
                 empresa.setHashSenha(hash);
                 empresa.setSalt(salt);
                 empresa.setTelefone(telefone);
@@ -73,12 +82,11 @@ public class EmpresaServlet extends HttpServlet {
                 response.sendRedirect("pages/login.jsp?sucesso=1");
 
             } catch (ValidationException ve) {
-
                 request.setAttribute("errosValidacao", ve.getErrors());
                 request.getRequestDispatcher("/pages/cadastroempresa.jsp").forward(request, response);
             } catch (Exception e) {
                 throw new ServletException("Erro ao cadastrar empresa", e);
             }
-
+        }
     }
-}}
+}
