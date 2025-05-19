@@ -76,10 +76,9 @@ public class EmpresaServlet extends HttpServlet {
 
                 Validator.validate(empresa);
 
-                daoEmpresa.insert(empresa)
-                        .orElseThrow(() -> new RuntimeException("Erro ao cadastrar empresa."));
+                daoEmpresa.insert(empresa);
 
-                response.sendRedirect("pages/login.jsp?sucesso=1");
+                response.sendRedirect(request.getContextPath() +"/index");
 
             } catch (ValidationException ve) {
                 request.setAttribute("errosValidacao", ve.getErrors());
