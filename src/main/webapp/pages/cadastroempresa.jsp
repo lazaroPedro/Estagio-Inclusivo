@@ -13,6 +13,15 @@
 <h2 class="mb-4">Cadastro de Empresa</h2>
 
 <%
+    String erroEmail = (String) request.getAttribute("erro");
+    if (erroEmail != null && !erroEmail.isEmpty()) {
+%>
+    <div class="alert alert-danger">
+        <%= erroEmail %>
+    </div>
+<%
+    }
+
     List<ErroCampo> erros =
             (List<com.ifbaiano.estagioinclusivo.utils.validation.ErroCampo>) request.getAttribute("errosValidacao");
 
