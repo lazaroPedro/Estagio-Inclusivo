@@ -56,8 +56,14 @@
 
             </li>
             <li>
-              <a class="dropdown-item" href="${pageContext.request.contextPath}/home/candidato/full">
-                Configurações</a>
+                <c:if test="${sessionScope.usuarioLogado.tipoUsuario == TipoUsuario.CANDIDATO}">
+                    <a class="dropdown-item" href="${pageContext.request.contextPath}/home/candidato/full">
+                        Configurações</a>
+                </c:if>
+                <c:if test="${sessionScope.usuarioLogado.tipoUsuario == TipoUsuario.EMPRESA}">
+                    <a class="dropdown-item" href="${pageContext.request.contextPath}/home/empresa/full">
+                        Configurações</a>
+                </c:if>
             </li>
             <li>
               <a class="dropdown-item" href="#">

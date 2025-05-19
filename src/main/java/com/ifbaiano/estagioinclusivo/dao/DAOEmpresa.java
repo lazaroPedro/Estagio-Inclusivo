@@ -63,7 +63,6 @@ public class DAOEmpresa implements DAORepository<Empresa, Integer> {
             stmt.setString(2, entity.getRazaoSocial());
             stmt.setInt(3, entity.getId());
             stmt.executeUpdate();
-            connection.commit();
         } catch (SQLException e) {
 
             throw new RuntimeException("Erro ao atualizar empresa", e);
@@ -148,7 +147,7 @@ public class DAOEmpresa implements DAORepository<Empresa, Integer> {
                 empresa.setRazaoSocial(rs.getString("razao_social"));
                 empresa.setEndereco(e);
                 empresa.setPapel(TipoUsuario.valueOf(rs.getString("papel")));
-                empresa.setTelefone("telefone");
+                empresa.setTelefone(rs.getString("telefone"));
 
                 return Optional.of(empresa);
 

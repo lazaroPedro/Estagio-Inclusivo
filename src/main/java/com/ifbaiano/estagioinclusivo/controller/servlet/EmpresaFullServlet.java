@@ -16,6 +16,11 @@ import java.util.stream.Collectors;
 
 @WebServlet("/home/empresa/full")
 public class EmpresaFullServlet extends HttpServlet {
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        doGet(req, resp);
+    }
+
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         SessionDTO user = (SessionDTO) request.getSession().getAttribute("usuarioLogado");
 
@@ -38,7 +43,7 @@ public class EmpresaFullServlet extends HttpServlet {
             request.setAttribute("vagas", vagas);
 
 
-            request.getRequestDispatcher("/pages/perfil.jsp").forward(request, response);
+            request.getRequestDispatcher("/pages/configempresa.jsp").forward(request, response);
 
         }
     }

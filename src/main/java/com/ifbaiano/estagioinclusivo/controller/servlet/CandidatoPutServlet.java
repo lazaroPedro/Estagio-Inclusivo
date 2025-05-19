@@ -32,8 +32,11 @@ public class CandidatoPutServlet extends HttpServlet {
             Candidato candidato = new Candidato();
 
             candidato.setPapel(TipoUsuario.CANDIDATO);
-
-
+            candidato.setNome(req.getParameter("nome"));
+            candidato.setCpf(req.getParameter("cpf").replaceAll("\\D", ""));
+            candidato.setGenero(Genero.valueOf(req.getParameter("genero").toUpperCase()));
+            candidato.setTelefone(req.getParameter("telefone").replaceAll("\\D", ""));
+            candidato.setDataNascimento(LocalDate.parse(req.getParameter("nascimento")));
             dV.findById(user.getId()).ifPresent(candid -> {
                 candidato.setId(candid.getId());
                 candidato.setSalt(candid.getSalt());
@@ -41,20 +44,15 @@ public class CandidatoPutServlet extends HttpServlet {
                 candidato.setEndereco(candid.getEndereco());
                 candidato.setEmail(candid.getEmail());
 
-                Optional.ofNullable(req.getParameter("nome")).ifPresentOrElse(candidato::setNome, () -> candidato.setNome(candid.getNome()));
-                Optional.of(req.getParameter("cpf").replaceAll("\\D", "")).ifPresentOrElse(candidato::setCpf, () -> candidato.setCpf(candid.getCpf()));
-                Optional.ofNullable(req.getParameter("genero")).ifPresentOrElse(can -> candidato.setGenero(Genero.valueOf(can)), () -> candidato.setGenero(candid.getGenero()));
-                Optional.ofNullable(req.getParameter("nascimento")).ifPresentOrElse(can -> candidato.setDataNascimento(LocalDate.parse(can)), () -> candidato.setDataNascimento(candid.getDataNascimento()));
-                Optional.of(req.getParameter("telefone").replaceAll("\\D", "")).ifPresentOrElse(candidato::setTelefone, () -> candidato.setTelefone(candid.getTelefone()));
-
 
                 try {
                     Validator.validate(candidato);
+                    dV.update(candidato);
+                    req.setAttribute("sucesso", true);
                 } catch (ValidationException e) {
-                    req.setAttribute("errosValidacao", e.getErrors());
+                    req.setAttribute("erros", e.getErrors());
                 }
-                dV.update(candidato);
-                req.setAttribute("sucesso", true);
+
 
 
             });

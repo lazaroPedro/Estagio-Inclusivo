@@ -42,13 +42,21 @@ public class UsuarioPutServlet extends HttpServlet {
 
             } catch (ValidationException e) {
                 req.setAttribute("erros", e.getErrors());
+                if (user.getTipoUsuario() == TipoUsuario.CANDIDATO) {
                 req.getRequestDispatcher("/home/candidato/full").forward(req, resp);
+            } else if (user.getTipoUsuario() == TipoUsuario.EMPRESA){
+                req.getRequestDispatcher("/home/empresa/full").forward(req, resp);
+            }
                 return;
             }
             Optional<Usuario> u = dU.findById(user.getId());
             if (!SenhaUtils.verificarSenha(antigaSenha, u.get().getSalt(), u.get().getHashSenha())) {
                 req.setAttribute("erro", "Senha digitada esta incorreta");
-                req.getRequestDispatcher("/home/candidato/full").forward(req, resp);
+                if (user.getTipoUsuario() == TipoUsuario.CANDIDATO) {
+                    req.getRequestDispatcher("/home/candidato/full").forward(req, resp);
+                } else if (user.getTipoUsuario() == TipoUsuario.EMPRESA){
+                    req.getRequestDispatcher("/home/empresa/full").forward(req, resp);
+                }
                 return;
             }
             u.get().setEmail(login.getEmail());
@@ -59,8 +67,8 @@ public class UsuarioPutServlet extends HttpServlet {
 
             if (user.getTipoUsuario() == TipoUsuario.CANDIDATO) {
                 req.getRequestDispatcher("/home/candidato/full").forward(req, resp);
-            } else {
-                req.getRequestDispatcher("/pages/perfil.jsp").forward(req, resp);
+            } else if (user.getTipoUsuario() == TipoUsuario.EMPRESA){
+                req.getRequestDispatcher("/home/empresa/full").forward(req, resp);
             }
 
         }

@@ -5,6 +5,7 @@ import com.ifbaiano.estagioinclusivo.dao.DAOFactory;
 import com.ifbaiano.estagioinclusivo.dao.DAOUsuario;
 import com.ifbaiano.estagioinclusivo.model.Endereco;
 import com.ifbaiano.estagioinclusivo.model.dto.SessionDTO;
+import com.ifbaiano.estagioinclusivo.model.enums.TipoUsuario;
 import com.ifbaiano.estagioinclusivo.utils.validation.ValidationException;
 import com.ifbaiano.estagioinclusivo.utils.validation.Validator;
 import jakarta.servlet.ServletException;
@@ -40,8 +41,11 @@ public class EnderecoPutServlet extends HttpServlet {
             } catch (ValidationException e) {
                 req.setAttribute("erros", e.getErrors());
             }
-            req.getRequestDispatcher("/home/candidato/full").forward(req, resp);
-
+            if (user.getTipoUsuario() == TipoUsuario.CANDIDATO) {
+                req.getRequestDispatcher("/home/candidato/full").forward(req, resp);
+            } else if (user.getTipoUsuario() == TipoUsuario.EMPRESA){
+                req.getRequestDispatcher("/home/empresa/full").forward(req, resp);
+            }
         }
     }
 }
