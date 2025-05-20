@@ -44,7 +44,7 @@
    <div class="container-xl mt-5 pt-5">
     <div class="card mb-4">
         <div class="card-body">
-            <h1 class="card-title text-primary">Informações do Candidato: <%= candidato.getNome() %>.</h1>
+            <h1 class="card-title text-primary">Dados do candidato  <%= candidato.getNome() %>.</h1>
             
         </div>
     </div>
