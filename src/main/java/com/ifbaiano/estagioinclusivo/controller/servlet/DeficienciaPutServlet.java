@@ -16,7 +16,7 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 
-@WebServlet("/home/deficiencia/put")
+@WebServlet("/home/deficiencia/put/id")
 public class DeficienciaPutServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -30,7 +30,7 @@ public class DeficienciaPutServlet extends HttpServlet {
             deficiencia.setTipoApoio(req.getParameter("tipoApoio"));
             deficiencia.setCandidato(new Candidato());
             deficiencia.getCandidato().setId(user.getId());
-            deficiencia.setTipo(TipoDeficienciaEnum.valueOf(req.getParameter("tipoDeficiencia")));
+            deficiencia.setTipo(TipoDeficienciaEnum.valueOf(req.getParameter("tipo")));
             deficiencia.setId(Integer.parseInt(req.getParameter("id")));
             try {
                 Validator.validate(deficiencia);
@@ -40,7 +40,7 @@ public class DeficienciaPutServlet extends HttpServlet {
             } catch (ValidationException e) {
                 req.setAttribute("erros", e.getErrors());
             }
-            req.getRequestDispatcher("/pages/perfil.jsp").forward(req, resp);
+            req.getRequestDispatcher("/home/candidato/full").forward(req, resp);
 
         }
 

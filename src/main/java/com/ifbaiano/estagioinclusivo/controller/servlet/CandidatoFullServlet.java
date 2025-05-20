@@ -63,7 +63,7 @@ public class CandidatoFullServlet extends HttpServlet {
             request.setAttribute("deficiencias", lT);
 
 
-            request.getRequestDispatcher("/pages/perfil.jsp").forward(request, response);
+            request.getRequestDispatcher("/pages/configcandidato.jsp").forward(request, response);
 
         }
     }

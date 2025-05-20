@@ -17,16 +17,25 @@ import java.io.IOException;
 import java.time.LocalDate;
 
 /**/
-@WebServlet("/home/curso/delete")
+@WebServlet("/home/curso/delete/id")
 public class CursoDelServlet extends HttpServlet {
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        SessionDTO user = (SessionDTO) req.getSession().getAttribute("usuarioLogado");
+
         try(DAOFactory daoFactory = new DAOFactory()) {
+            int id = Integer.parseInt(req.getParameter("id"));
             DAOCurso dC = daoFactory.buildDAOCurso();
-            dC.delete(Integer.parseInt(req.getParameter("id")));
-            req.setAttribute("sucesso", true);
-            req.getRequestDispatcher("/pages/perfil.jsp").forward(req, resp);
+            dC.findAllByCandidato(user.getId()).forEach(candidato -> {
+                if(candidato.getId() == id) {
+                    dC.delete(id);
+                    req.setAttribute("sucesso", true);
+                }
+            });
+
+
+            req.getRequestDispatcher("/home/candidato/full").forward(req, resp);
 
         }
 
