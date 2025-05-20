@@ -31,7 +31,7 @@ public class DeficienciaPostServlet extends HttpServlet {
             deficiencia.setTipoApoio(req.getParameter("tipoApoio"));
             deficiencia.setCandidato(new Candidato());
             deficiencia.getCandidato().setId(user.getId());
-            deficiencia.setTipo(TipoDeficienciaEnum.valueOf(req.getParameter("tipo")));
+            deficiencia.setTipo(TipoDeficienciaEnum.valueOf(req.getParameter("tipoDeficiencia")));
 
             try {
                 Validator.validate(deficiencia);
@@ -41,7 +41,7 @@ public class DeficienciaPostServlet extends HttpServlet {
             } catch (ValidationException e) {
                 req.setAttribute("erros", e.getErrors());
             }
-            req.getRequestDispatcher("/home/candidato/full").forward(req, resp);
+            req.getRequestDispatcher("/pages/perfil.jsp").forward(req, resp);
 
         }
 

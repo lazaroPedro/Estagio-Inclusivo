@@ -48,8 +48,7 @@ public class CursoPostServlet extends HttpServlet {
             } catch (ValidationException e) {
                 req.setAttribute("erros", e.getErrors());
             }
-
-            req.getRequestDispatcher("/home/candidato/full").forward(req, resp);
+            req.getRequestDispatcher("/pages/perfil.jsp").forward(req, resp);
 
         }
 

@@ -25,7 +25,7 @@ public class DAOEmpresa implements DAORepository<Empresa, Integer> {
     @Override
     public Optional<Integer> insert(Empresa entity) {
 
-        String sql = "INSERT INTO empresas (id_empresa, cnpj, razao_social) VALUES (?, ?, ?)";
+        String sql = "INSERT INTO empresas (id_empresa, cnpj, razaoSocial) VALUES (?, ?, ?)";
         PreparedStatement stmt = null;
         ResultSet rs = null;
             try {
@@ -54,7 +54,7 @@ public class DAOEmpresa implements DAORepository<Empresa, Integer> {
 
     @Override
     public void update(Empresa entity) {
-        String sql = "UPDATE empresas SET cnpj = ?, razao_social = ? WHERE id_empresa = ?";
+        String sql = "UPDATE empresas SET cnpj = ?, razaoSocial = ? WHERE id_empresa = ?";
         PreparedStatement stmt = null;
         try {
             daoUsuario.update(entity);
@@ -110,10 +110,10 @@ public class DAOEmpresa implements DAORepository<Empresa, Integer> {
                 empresa.setId(rs.getInt("id_empresa"));
                 empresa.setNome(rs.getString("nome"));
                 empresa.setEmail(rs.getString("email"));
-                empresa.setHashSenha(rs.getString("hash_senha"));
+                empresa.setHashSenha(rs.getString("hashSenha"));
                 empresa.setSalt(rs.getString("salt"));
                 empresa.setCnpj(rs.getString("cnpj"));
-                empresa.setRazaoSocial(rs.getString("razao_social"));
+                empresa.setRazaoSocial(rs.getString("razaoSocial"));
                 empresa.setEndereco(e);
                 empresa.setTelefone("telefone");
                 empresa.setPapel(TipoUsuario.valueOf("papel"));

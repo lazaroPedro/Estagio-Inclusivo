@@ -17,7 +17,7 @@ import java.io.IOException;
 import java.time.LocalDate;
 
 /**/
-@WebServlet("/home/curso/put/id")
+@WebServlet("/home/curso/put")
 public class CursoPutServlet extends HttpServlet {
 
 
@@ -49,10 +49,20 @@ public class CursoPutServlet extends HttpServlet {
             } catch (ValidationException e) {
                 req.setAttribute("erros", e.getErrors());
             }
-            req.getRequestDispatcher("/home/candidato/full").forward(req, resp);
+            req.getRequestDispatcher("/pages/perfil.jsp").forward(req, resp);
 
         }
     }
 
+    @Override
+    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        try(DAOFactory daoFactory = new DAOFactory()) {
+            DAOCurso dC = daoFactory.buildDAOCurso();
+            dC.delete(Integer.parseInt(req.getParameter("id")));
+            req.setAttribute("sucesso", true);
+            req.getRequestDispatcher("/pages/perfil.jsp").forward(req, resp);
 
+        }
+
+    }
 }
