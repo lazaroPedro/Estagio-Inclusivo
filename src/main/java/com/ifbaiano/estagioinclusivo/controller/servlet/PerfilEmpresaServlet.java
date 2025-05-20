@@ -5,9 +5,11 @@ import java.util.List;
 import java.util.Optional;
 
 import com.ifbaiano.estagioinclusivo.dao.DAOEmpresa;
+import com.ifbaiano.estagioinclusivo.dao.DAOEndereco;
 import com.ifbaiano.estagioinclusivo.dao.DAOFactory;
 import com.ifbaiano.estagioinclusivo.dao.DAOVaga;
 import com.ifbaiano.estagioinclusivo.model.Empresa;
+import com.ifbaiano.estagioinclusivo.model.Endereco;
 import com.ifbaiano.estagioinclusivo.model.Vaga;
 import com.ifbaiano.estagioinclusivo.model.dto.SessionDTO;
 import com.ifbaiano.estagioinclusivo.model.enums.TipoVaga;
@@ -35,6 +37,9 @@ public class PerfilEmpresaServlet extends HttpServlet {
 			}
 
 			Empresa empresa = empresaOpt.get();
+			DAOEndereco daoEndereco = daoFactory.buildDAOEndereco();
+			Optional<Endereco> enderecoOpt = daoEndereco.findById(empresa.getEndereco().getId());
+			empresa.setEndereco(enderecoOpt.orElse(null));
 			List<Vaga> vagasPublicadas = daoVaga.findByIdEmpresa(empresa.getId());
 
 			List<Vaga> vagasAtivas = new java.util.ArrayList<>();

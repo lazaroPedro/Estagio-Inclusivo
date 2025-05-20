@@ -45,19 +45,30 @@
             <h2 >Dados da Empresa</h2>
             </div>
         <div class="card-body">
-            <p><strong>Nome:</strong> <%= empresa.getNome() %></p>
-            <p><strong>Razão social:</strong> <%= empresa.getRazaoSocial() %></p>
-             <p><strong>Cidade/Estado:</strong> <%= empresa.getEndereco().getMunicipio() %>/<%= empresa.getEndereco().getEstado() %></p>
-            <p><strong>CNPJ:</strong> <%= cnpjFormatado %></p>
-            <p><strong>Email:</strong> <%= empresa.getEmail() %></p>
-            <p><strong>Telefone:</strong> <%= telefoneFormatado %></p>
+            <p><strong>🧾 Nome:</strong> <%= empresa.getNome() %></p>
+            <p><strong>🏢 Razão social:</strong> <%= empresa.getRazaoSocial() %></p>
+            <p><strong>📄 CNPJ:</strong> <%= cnpjFormatado %></p>
+            <p><strong>📧 Email:</strong> <%= empresa.getEmail() %></p>
+            <p><strong>📞 Telefone:</strong> <%= telefoneFormatado %></p>
+         </div>
+    </div>
+     <div class="card mb-4">
+        <div class="card-body bg-secondary text-white">
+            <h2 >Endereço da Empresa</h2>
+            </div>
+        <div class="card-body">
+            <p><strong>Rua:</strong> <%= empresa.getEndereco().getRua() %></p>
+            <p><strong> Bairro:</strong> <%= empresa.getEndereco().getBairro() %></p>
+            <p><strong>Município:</strong> <%= empresa.getEndereco().getMunicipio() %></p>
+            <p><strong>Estado:</strong> <%= empresa.getEndereco().getEstado() %></p>
+            <p><strong>CEP:</strong> <%= empresa.getEndereco().getCep() %></p>
          </div>
     </div>
 
 <div class="container">
     <div class="row">
-        <!-- VAGAS ATIVAS -->
-        <div class="col-md-6">
+  <div class="col-12">
+        
             <div class="card mb-4">
                 <div class="card-header bg-secondary text-white">
                     <h2>Vagas Ativas</h2>
@@ -96,46 +107,10 @@
             </div>
         </div>
 
-        <div class="col-md-6">
-            <div class="card mb-4">
-                <div class="card-header bg-secondary text-white">
-                    <h2>Vagas Finalizadas</h2>
-                </div>
-                <div class="card-body">
-                    <%
-                        List<Vaga> vagasFinalizadas = (List<Vaga>) request.getAttribute("vagasFinalizadas");
-                        if (vagasFinalizadas == null || vagasFinalizadas.isEmpty()) {
-                    %>
-                        <div class="alert alert-secondary">Nenhuma vaga finalizada.</div>
-                    <%
-                        } else {
-                            for (Vaga vaga : vagasFinalizadas) {
-                    %>
-                        <div class="card mb-3 border-secondary">
-                            <div class="row g-0">
-                                <div class="col-4 card-body">
-                                    <p><strong>Endereço:</strong> <%= vaga.getEndereco() %></p>
-                                    <p><strong>Status:</strong> <%= vaga.getStatus() %></p>
-                                </div>
-                                <div class="col-4 card-body">
-                                    <p><strong>Descrição:</strong> <%= vaga.getDescricao() %></p>
-                                    <p><strong>Benefícios:</strong> <%= vaga.getBeneficios() %></p>
-                                </div>
-                                <div class="col-4 card-body">
-                                    <p><strong>Quantidade de Vagas:</strong> <%= vaga.getQtdVagas() %></p>
-                                    <p><strong>Localização:</strong> <%= vaga.getEndereco().getMunicipio() + " - " + vaga.getEndereco().getEstado() %></p>
-                                </div>
-                            </div>
-                        </div>
-                    <%
-                            }
-                        }
-                    %>
+       
                 </div>
             </div>
-        </div>
-    </div>
-</div>
+   
 
 
 <script src="${pageContext.request.contextPath}/webjars/bootstrap/5.3.5/js/bootstrap.bundle.min.js"></script>
