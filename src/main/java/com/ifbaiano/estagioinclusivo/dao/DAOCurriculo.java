@@ -17,17 +17,19 @@ public class DAOCurriculo implements DAORepository<Curriculo, Integer> {
 
 
     @Override
-    public Optional<Integer> insert(Curriculo curriculo) {
+    public Optional<Integer> insert(Curriculo entity) {
         String sql = "INSERT INTO curriculos (objetivo, habilidades, experiencia, fk_candidato) VALUES (?, ?, ?, ?)";
         try (PreparedStatement stmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-            stmt.setString(1, curriculo.getObjetivo());
-            stmt.setString(2, curriculo.getHabilidades());
-            stmt.setString(3, curriculo.getExperiencia());
-            stmt.setInt(4, curriculo.getCandidato().getId());
+            stmt.setString(1, entity.getObjetivo());
+            stmt.setString(2, entity.getHabilidades());
+            stmt.setString(3, entity.getExperiencia());
+            stmt.setInt(4, entity.getCandidato().getId());
             stmt.executeUpdate();
             ResultSet rs = stmt.getGeneratedKeys();
             if (rs.next()) {
-                return Optional.of(rs.getInt(1));
+                int idGerado = rs.getInt(1);
+                entity.setId(idGerado);
+                return Optional.of(idGerado);
             }
         } catch (SQLException e) {
             throw new RuntimeException("Erro ao inserir currículo.", e);
@@ -37,12 +39,12 @@ public class DAOCurriculo implements DAORepository<Curriculo, Integer> {
 
     @Override
     public void update(Curriculo entity) {
-        String sql = "UPDATE curriculos SET objetivo = ?, habilidades = ?, experiencia = ? WHERE fk_candidato = ?";
+        String sql = "UPDATE curriculos SET objetivo = ?, habilidades = ?, experiencia = ? WHERE id_curriculo = ?";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, entity.getObjetivo());
             stmt.setString(2, entity.getHabilidades());
             stmt.setString(3, entity.getExperiencia());
-            stmt.setInt(4, entity.getCandidato().getId());
+            stmt.setInt(4, entity.getId());
             stmt.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException("Erro ao atualizar currículo.", e);
@@ -133,6 +135,10 @@ public class DAOCurriculo implements DAORepository<Curriculo, Integer> {
                 curriculo.setObjetivo(rs.getString("objetivo"));
                 curriculo.setHabilidades(rs.getString("habilidades"));
                 curriculo.setExperiencia(rs.getString("experiencia"));
+
+                Candidato candidato = new Candidato();
+                candidato.setId(idCandidato);
+                curriculo.setCandidato(candidato);
                 return Optional.of(curriculo);
             }
         } catch (SQLException e) {

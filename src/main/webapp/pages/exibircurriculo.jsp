@@ -1,4 +1,4 @@
-<jsp:useBean id="candidato" scope="request" type="com.ifbaiano.estagioinclusivo.model.dto.LoginDTO"/>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="com.ifbaiano.estagioinclusivo.model.*" %>
 <%@ page import="java.util.List" %>
@@ -36,7 +36,7 @@
     <h4>Deficiências</h4>
     <ul>
         <c:forEach var="def" items="${deficiencias}">
-            <li>${def.nome} - ${def.tipo} (${def.tipoApoio})</li>
+            <li>${def.nome} - ${def.tipo} - ${def.descricao} (${def.tipoApoio})</li>
         </c:forEach>
     </ul>
 </div>

@@ -12,6 +12,17 @@ public class Curriculo {
     private Optional<Curso> cursos;
     private List<TipoDeficiencia> deficiencias;
 
+    public Curriculo() {}
+
+    public Curriculo(int id, String objetivo, String habilidades, String experiencia, Candidato candidato, Optional<Curso> cursos, List<TipoDeficiencia> deficiencias) {
+        this.id = id;
+        this.objetivo = objetivo;
+        this.habilidades = habilidades;
+        this.experiencia = experiencia;
+        this.candidato = candidato;
+        this.cursos = cursos;
+        this.deficiencias = deficiencias;
+    }
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
 
