@@ -36,18 +36,18 @@
 <%@ include file="/assets/components/header.jsp" %>
     <div class="container-xl mt-5 pt-5">
     <div class="card mb-4">
-        <div class="card-body bg-primary text-white">
-            <h1 class="card-title">Perfil da Empresa  <%= empresa.getNome() %></h1>
+        <div class="card-body bg-light text-dark border">
+            <h1 class="card-title">Dados da Empresa  <%= empresa.getNome() %></h1>
         </div>
     </div>
     <div class="card mb-4">
-        <div class="card-header bg-secondary text-white">
+        <div class="card-body bg-secondary text-white">
             <h2 >Dados da Empresa</h2>
             </div>
         <div class="card-body">
             <p><strong>Nome:</strong> <%= empresa.getNome() %></p>
             <p><strong>Razão social:</strong> <%= empresa.getRazaoSocial() %></p>
-             <p><strong>Endereço:</strong> <%= empresa.getCnpj() %></p>
+             <p><strong>Cidade/Estado:</strong> <%= empresa.getEndereco().getMunicipio() %>/<%= empresa.getEndereco().getEstado() %></p>
             <p><strong>CNPJ:</strong> <%= cnpjFormatado %></p>
             <p><strong>Email:</strong> <%= empresa.getEmail() %></p>
             <p><strong>Telefone:</strong> <%= telefoneFormatado %></p>
@@ -96,7 +96,6 @@
             </div>
         </div>
 
-        <!-- VAGAS FINALIZADAS -->
         <div class="col-md-6">
             <div class="card mb-4">
                 <div class="card-header bg-secondary text-white">
