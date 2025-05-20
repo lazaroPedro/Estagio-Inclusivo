@@ -22,12 +22,15 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
-@WebServlet("/home/vaga/insert")
+@WebServlet("/vaga/insert")
 public class CadastroVagaServlet extends HttpServlet {
 
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		
+		System.out.println(">>> Chegou no Servlet de cadastro de vaga");
+
 
 		try (Connection connection = DBConfig.criarConexao()) {
 			connection.setAutoCommit(false);
@@ -85,7 +88,8 @@ public class CadastroVagaServlet extends HttpServlet {
 			
 			
 			connection.commit();
-			response.sendRedirect("CadastroVagas.jsp?sucesso=1");
+			response.sendRedirect(request.getContextPath() + "/index.jsp");
+
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -95,6 +99,7 @@ public class CadastroVagaServlet extends HttpServlet {
 		}
 
 	}
+
 	
 	
 
@@ -103,5 +108,6 @@ public class CadastroVagaServlet extends HttpServlet {
 			throws ServletException, IOException {
 		request.getRequestDispatcher("/pages/cadastrovagas.jsp").forward(request, response);
 	}
-
 }
+
+

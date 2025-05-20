@@ -22,10 +22,9 @@
 
 
 
-				<form
-					action="${pageContext.request.contextPath}/vaga/insert"
+				<form action="${pageContext.request.contextPath}/vaga/insert"
 					method="post">
-				<form action="${pageContext.request.contextPath}/vaga/insert" method="post">
+					
 					<div class="mb-3">
 						<label for="descricao" class="form-label">Descrição</label>
 						<textarea class="form-control" name="descricao" rows="3" required>${param.descricao}</textarea>
@@ -42,8 +41,8 @@
 					</div>
 
 					<div class="form-group">
-						<label>Quantidade de Vagas</label> <input type="number"
-							name="qtd_vagas" class="form-control" min="1" required>
+						<label>Quantidade de Vagas</label> 
+						<input type="number" name="qtd_vagas" class="form-control" min="1" required>
 					</div>
 
 					<hr>
@@ -119,15 +118,10 @@
 
 					<div class="text-end">
 						<button type="submit" class="btn btn-secondary">Cadastrar</button>
-
-						</button>
 					</div>
 
 				</form>
-				</form>
-			</div>
-		</div>
-
-		</div>
+				
+	
 </body>
 </html>

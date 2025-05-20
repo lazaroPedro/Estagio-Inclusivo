@@ -2,7 +2,8 @@
 <%@ page import="com.ifbaiano.estagioinclusivo.utils.validation.ListErrors" %>
 
 <%@ page import="java.util.List" %>
-<%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
+<%@ page contentType="text/html;c
+harset=UTF-8" language="java" pageEncoding="UTF-8" %>
 <html>
 <head>
     <title>Cadastro de candidato </title>

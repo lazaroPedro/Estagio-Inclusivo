@@ -11,7 +11,7 @@ import com.ifbaiano.estagioinclusivo.model.Empresa;
 import com.ifbaiano.estagioinclusivo.model.Vaga;
 import com.ifbaiano.estagioinclusivo.model.dto.SessionDTO;
 import com.ifbaiano.estagioinclusivo.model.enums.TipoVaga;
-import java.sql.Connection; 
+import java.sql.Connection;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -19,7 +19,6 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-
 
 @WebServlet("/vaga")
 public class VagaServlet extends HttpServlet {
@@ -37,103 +36,97 @@ public class VagaServlet extends HttpServlet {
 		try (DAOFactory daoFactory = new DAOFactory()) {
 			DAOVaga vagaDao = daoFactory.buildDAOVaga();
 			DAOEmpresa empresaDao = daoFactory.buildDAOEmpresa();
-			if (idParam != null) {
-				try {
-					int id = Integer.parseInt(idParam);
-
-					int idVaga;
-
-					try {
-						idVaga = Integer.parseInt(idParam);
-					} catch (NumberFormatException e) {
-						request.setAttribute("erro", "ID da vaga inválido.");
-						request.getRequestDispatcher("/index.jsp").forward(request, response);
-						return;
-					}
-					Optional<Vaga> vagaOpt = vagaDao.findById(idVaga);
-
-					if (vagaOpt.isPresent()) {
-						Vaga vaga = vagaOpt.get();
-
-						Optional<Empresa> empresaOpt = empresaDao.findById(vaga.getEmpresa().getId());
-						empresaOpt.ifPresent(vaga::setEmpresa);
-
-						request.setAttribute("vaga", vaga);
-						request.getRequestDispatcher("/pages/vagas.jsp").forward(request, response);
-					} else {
-						request.setAttribute("erro", "Vaga não encontrada");
-						request.getRequestDispatcher("/index.jsp").forward(request, response);
-
-					}
-
-				} catch (Exception e) {
-					e.printStackTrace();
-					request.setAttribute("erro", "Erro a carregar os dados da vaga");
-					request.getRequestDispatcher("/index.jsp").forward(request, response);
-				}
-			}
-
-		}
-	}
-	@Override
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		
-		request.setCharacterEncoding("UTF-8");
-		Connection conexao = (Connection) DBConfig.criarConexao();
-		HttpSession session = request.getSession(false);
-		SessionDTO usuariologado = (session != null) ? (SessionDTO) session.getAttribute("usuarioLogado") : null;
-
-
-		try (Connection connection = DBConfig.criarConexao()) {
-			connection.setAutoCommit(false);
-
-			String descricao = request.getParameter("descricao");
-			String requisitos = request.getParameter("requisitos");
-			String beneficios = request.getParameter("beneficios");
-			String empresaNome = request.getParameter("empresa_nome");
-			
-			String qtdVagasStr = request.getParameter("qtd_vagas");
-			int qtdVagas;
-			
+			int idVaga;
 			try {
-				qtdVagas = Integer.parseInt(qtdVagasStr);
+				idVaga = Integer.parseInt(idParam);
+
 			} catch (NumberFormatException e) {
-				request.setAttribute("erro", "Quantidade de vagas inválida.");
-				request.getRequestDispatcher("cadastrovagas.jsp").forward(request, response);				return;
-			}
-
-			if (descricao == null || descricao.trim().isEmpty() 
-					|| requisitos == null || requisitos.trim().isEmpty()
-					|| beneficios == null || beneficios.trim().isEmpty() 
-					|| empresaNome == null || empresaNome.trim().isEmpty()) {
-
-				request.setAttribute("erro", "todos os campos são obrigatórios.");
-				request.getRequestDispatcher("cadastrovagas.jsp").forward(request, response);
+				request.setAttribute("erro", "ID da vaga inválido.");
+				request.getRequestDispatcher("/index.jsp").forward(request, response);
 				return;
 			}
+			Optional<Vaga> vagaOpt = vagaDao.findById(idVaga);
 
-		
-			Vaga vaga = new Vaga();
-			vaga.setDescricao(descricao);
-			vaga.setRequisitos(requisitos);
-			vaga.setBeneficios(beneficios);
-			vaga.setQtdVagas(Long.valueOf((request.getParameter("qtd_vagas"))));
-			vaga.setStatus(TipoVaga.ATIVA);
-			
-			vaga.setQtdVagas(Long.valueOf(request.getParameter("qtd_vagas")));
+			if (vagaOpt.isPresent()) {
+				Vaga vaga = vagaOpt.get();
 
-			DAOVaga vagaDAO = new DAOVaga(connection);
-			vagaDAO.insert(vaga);
+				Optional<Empresa> empresaOpt = empresaDao.findById(vaga.getEmpresa().getId());
+				if (empresaOpt.isPresent()) {
+					Empresa empresa = empresaOpt.get();
+					vaga.setEmpresa(empresa);
 
-			connection.commit();
-			response.sendRedirect("cadastrovagas.jsp?sucesso=1");
+					request.setAttribute("vaga", vaga);
+					request.setAttribute("empresaLogada", empresa);
 
+					request.getRequestDispatcher("/pages/vagas.jsp").forward(request, response);
+				} else {
+					request.setAttribute("erro", "Empresa da vaga não encontrada");
+					request.getRequestDispatcher("/index.jsp").forward(request, response);
+
+				}
+
+			} else {
+				request.setAttribute("erro", "Vaga não encontrada.");
+				request.getRequestDispatcher("/index.jsp").forward(request, response);
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			request.setAttribute("erro", "Erro ao cadastraar vaga: " + e.getMessage());
-			request.getRequestDispatcher("cadastrovagas.jsp").forward(request, response);
-
+			request.setAttribute("erro", "Erro a carregar os dados da vaga: " + e.getMessage());
+			request.getRequestDispatcher("/index.jsp").forward(request, response);
 		}
 	}
 }
+
+/*
+ * @Override protected void doPost(HttpServletRequest request,
+ * HttpServletResponse response) throws ServletException, IOException {
+ * 
+ * request.setCharacterEncoding("UTF-8"); Connection conexao = (Connection)
+ * DBConfig.criarConexao(); HttpSession session = request.getSession(false);
+ * SessionDTO usuariologado = (session != null) ? (SessionDTO)
+ * session.getAttribute("usuarioLogado") : null;
+ * 
+ * 
+ * try (Connection connection = DBConfig.criarConexao()) {
+ * connection.setAutoCommit(false);
+ * 
+ * String descricao = request.getParameter("descricao"); String requisitos =
+ * request.getParameter("requisitos"); String beneficios =
+ * request.getParameter("beneficios"); String empresaNome =
+ * request.getParameter("empresa_nome");
+ * 
+ * String qtdVagasStr = request.getParameter("qtd_vagas"); int qtdVagas;
+ * 
+ * try { qtdVagas = Integer.parseInt(qtdVagasStr); } catch
+ * (NumberFormatException e) { request.setAttribute("erro",
+ * "Quantidade de vagas inválida.");
+ * request.getRequestDispatcher("cadastrovagas.jsp").forward(request, response);
+ * return; }
+ * 
+ * if (descricao == null || descricao.trim().isEmpty() || requisitos == null ||
+ * requisitos.trim().isEmpty() || beneficios == null ||
+ * beneficios.trim().isEmpty() || empresaNome == null ||
+ * empresaNome.trim().isEmpty()) {
+ * 
+ * request.setAttribute("erro", "todos os campos são obrigatórios.");
+ * request.getRequestDispatcher("cadastrovagas.jsp").forward(request, response);
+ * return; }
+ * 
+ * 
+ * Vaga vaga = new Vaga(); vaga.setDescricao(descricao);
+ * vaga.setRequisitos(requisitos); vaga.setBeneficios(beneficios);
+ * vaga.setQtdVagas(Long.valueOf((request.getParameter("qtd_vagas"))));
+ * vaga.setStatus(TipoVaga.ATIVA);
+ * 
+ * vaga.setQtdVagas(Long.valueOf(request.getParameter("qtd_vagas")));
+ * 
+ * DAOVaga vagaDAO = new DAOVaga(connection); vagaDAO.insert(vaga);
+ * 
+ * connection.commit(); response.sendRedirect("cadastrovagas.jsp?sucesso=1");
+ * 
+ * } catch (Exception e) { e.printStackTrace(); request.setAttribute("erro",
+ * "Erro ao cadastraar vaga: " + e.getMessage());
+ * request.getRequestDispatcher("cadastrovagas.jsp").forward(request, response);
+ * 
+ * } } }
+ */
