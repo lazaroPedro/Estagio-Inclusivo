@@ -87,4 +87,14 @@ CREATE TABLE candidato_vaga (
     PRIMARY KEY(fk_candidato,fk_vaga)
 );
 
+CREATE TABLE curriculos (
+    id_curriculo INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    objetivo TEXT,
+    habilidades TEXT,
+    experiencia TEXT,
+    fk_candidato INT UNSIGNED NOT NULL,
+    FOREIGN KEY (fk_candidato) REFERENCES candidatos(id_candidato)
+);
+
+
 

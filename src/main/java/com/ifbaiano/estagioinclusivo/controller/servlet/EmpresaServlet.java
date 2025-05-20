@@ -1,9 +1,8 @@
 package com.ifbaiano.estagioinclusivo.controller.servlet;
-
 import com.ifbaiano.estagioinclusivo.dao.DAOEndereco;
 import com.ifbaiano.estagioinclusivo.dao.DAOEmpresa;
 import com.ifbaiano.estagioinclusivo.dao.DAOFactory;
-import com.ifbaiano.estagioinclusivo.dao.DAOUsuario; 
+import com.ifbaiano.estagioinclusivo.dao.DAOUsuario;
 import com.ifbaiano.estagioinclusivo.model.Empresa;
 import com.ifbaiano.estagioinclusivo.model.Endereco;
 import com.ifbaiano.estagioinclusivo.model.enums.TipoUsuario;
@@ -17,6 +16,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
+import java.sql.SQLException;
 
 @WebServlet("/empresa/insert")
 public class EmpresaServlet extends HttpServlet {
@@ -53,7 +53,7 @@ public class EmpresaServlet extends HttpServlet {
 
                 String email = request.getParameter("email");
 
-       
+
                 if (daoUsuario.findByEmail(email).isPresent()) {
                     request.setAttribute("erro", "Este e-mail já está cadastrado.");
                     request.getRequestDispatcher("/pages/cadastroempresa.jsp").forward(request, response);

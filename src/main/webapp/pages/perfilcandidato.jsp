@@ -135,10 +135,6 @@ if (telefone.length() == 11) {
 					<%
 					for (Curso curso : cursos) {
 					%>
-					<div class="card mb-3">
-						<div class="card-body">
-							<div class="row">
-								<div class="col-md-6">
 									<div
 										class="p-3 mb-3 bg-light border-start border-4 border-primary rounded shadow-sm">
 
@@ -164,8 +160,9 @@ if (telefone.length() == 11) {
 											<strong>Data de fim:</strong>
 											<%=fimFormatado%></p>
 									</div>
-								</div>
-							</div>
+
+
+
 
 							<%
 							}
@@ -173,9 +170,11 @@ if (telefone.length() == 11) {
 							<%
 							}
 							%>
-						</div>
 					</div>
 				</div>
+		</div>
+		</div>
+	</div>
 
 				<script
 					src="${pageContext.request.contextPath}/webjars/bootstrap/5.3.5/js/bootstrap.bundle.min.js"></script>

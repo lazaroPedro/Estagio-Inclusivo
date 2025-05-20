@@ -169,6 +169,29 @@ public class DAOCandidato implements DAORepository<Candidato, Integer> {
         return Optional.empty();
     }
 
+    public boolean emailJaExiste(String email) {
+        String sql = "SELECT * FROM usuarios WHERE email = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setString(1, email);
+            ResultSet rs = stmt.executeQuery();
+            return rs.next();
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao verificar e-mail.", e);
+        }
+    }
+
+    public boolean cpfJaExiste(String cpf) {
+        String sql = "SELECT * FROM candidatos WHERE cpf = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setString(1, cpf);
+            ResultSet rs = stmt.executeQuery();
+            return rs.next();
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao verificar CPF.", e);
+        }
+    }
+
+
     @Override
     public void fechar(AutoCloseable closeable) {
         try {

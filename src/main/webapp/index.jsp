@@ -8,8 +8,6 @@
     <title>Estagio Inclusivo</title>
     <meta charset="UTF-8">
     <link href="${pageContext.request.contextPath}/webjars/bootstrap/5.3.5/css/bootstrap.min.css" rel="stylesheet"></head>
-    <script src="${pageContext.request.contextPath}/webjars/bootstrap/5.3.5/js/bootstrap.bundle.min.js" ></script>
-
 <body>
     <%@ include file="/assets/components/header.jsp" %>
 
@@ -67,6 +65,7 @@
     </div>
 
 
+    <script src="${pageContext.request.contextPath}/webjars/bootstrap/5.3.5/js/bootstrap.bundle.min.js" ></script>
 
 </body>
 </html>

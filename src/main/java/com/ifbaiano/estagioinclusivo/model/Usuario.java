@@ -25,6 +25,7 @@ public class Usuario {
     private TipoUsuario papel;
     @NotBlank
     @Length(9)
+    @Pattern(regex = "^(\\+0?55\\(\\d{2}\\)\\d{5}-\\d{4}|\\d{11})$")
     private String telefone;
 
 

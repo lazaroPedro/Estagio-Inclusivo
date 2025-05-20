@@ -54,7 +54,7 @@ public class Login extends HttpServlet {
 
                     HttpSession session = req.getSession();
                     session.setAttribute("usuarioLogado", sessionDTO);
-                    resp.sendRedirect(req.getContextPath() +"/index");
+                    resp.sendRedirect(req.getContextPath() +"/home");
                     return;
                 }
             }
