@@ -20,7 +20,6 @@ public class CurriculoGetServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         SessionDTO usuarioLogado = (SessionDTO) request.getSession().getAttribute("usuarioLogado");
 
-        int usuarioId = usuarioLogado.getId();
 
         try (DAOFactory factory = new DAOFactory()) {
             DAOCandidato daoCandidato = factory.buildDAOCandidato();
@@ -28,7 +27,14 @@ public class CurriculoGetServlet extends HttpServlet {
             DAOTipoDeficiencia daoTipoDeficiencia = factory.buildDAOTipoDeficiencia();
             DAOCurriculo daoCurriculo = factory.buildDAOCurriculo();
             DAOEndereco daoEndereco = factory.buildDAOEndereco();
+            int id = Integer.parseInt(request.getParameter("id"));
+            Optional<Curriculo> curriculoOpt = daoCurriculo.findById(id);
 
+            if(curriculoOpt.isEmpty()) {
+                request.getRequestDispatcher("/i").forward(request, response);
+                return;
+            }
+            int usuarioId = curriculoOpt.get().getCandidato().getId();
             Optional<Candidato> candidatoOpt = daoCandidato.findById(usuarioId);
             if (candidatoOpt.isEmpty()) {
                 response.sendRedirect("/index");
@@ -40,13 +46,12 @@ public class CurriculoGetServlet extends HttpServlet {
 
             List<Curso> cursos = daoCurso.findAllByCandidato(usuarioId);
             List<TipoDeficiencia> deficiencias = daoTipoDeficiencia.findAllByCandidato(usuarioId);
-            Curriculo curriculoOpt = daoCurriculo.findByCandidatoId(usuarioId).orElse(new Curriculo());
 
             request.setAttribute("candidato", candidatoOpt.get());
             request.setAttribute("endereco", endereco);
             request.setAttribute("cursos", cursos);
             request.setAttribute("deficiencias", deficiencias);
-            request.setAttribute("curriculo", curriculoOpt);
+            request.setAttribute("curriculo", curriculoOpt.get());
             request.getRequestDispatcher("/pages/exibircurriculo.jsp").forward(request, response);
 
         }

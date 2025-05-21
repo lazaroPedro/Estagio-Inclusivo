@@ -19,6 +19,7 @@ public class Validator {
     mapValidator.put(Min.class, new MinValidator());
     mapValidator.put(Pattern.class, new PatternValidator());
     mapValidator.put(Length.class, new LengthValidator());
+    mapValidator.put(MaxLength.class, new MaxLengthValidator());
 
 
 }

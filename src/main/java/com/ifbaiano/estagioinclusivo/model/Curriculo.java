@@ -1,13 +1,24 @@
 package com.ifbaiano.estagioinclusivo.model;
 
+import com.ifbaiano.estagioinclusivo.utils.validation.annotations.MaxLength;
+import com.ifbaiano.estagioinclusivo.utils.validation.annotations.NotBlank;
+import com.ifbaiano.estagioinclusivo.utils.validation.annotations.NotNull;
+
 import java.util.List;
 import java.util.Optional;
 
 public class Curriculo {
     private int id;
+    @NotBlank
+    @MaxLength(1000)
     private String objetivo;
+    @NotBlank
+    @MaxLength(1000)
     private String habilidades;
+    @NotBlank
+    @MaxLength(1000)
     private String experiencia;
+    @NotNull
     private Candidato candidato;
     private Optional<Curso> cursos;
     private List<TipoDeficiencia> deficiencias;

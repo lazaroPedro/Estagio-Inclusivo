@@ -1,6 +1,7 @@
 package com.ifbaiano.estagioinclusivo.model;
 import com.ifbaiano.estagioinclusivo.utils.validation.ErroCampo;
 import com.ifbaiano.estagioinclusivo.utils.validation.ValidationException;
+import com.ifbaiano.estagioinclusivo.utils.validation.annotations.MaxLength;
 import com.ifbaiano.estagioinclusivo.utils.validation.annotations.NotBlank;
 import com.ifbaiano.estagioinclusivo.utils.validation.annotations.NotNull;
 
@@ -15,6 +16,7 @@ public class Curso {
     @NotBlank
     private String nomeCurso;
     @NotBlank
+    @MaxLength(1000)
     private String descricao;
     @NotNull
     private LocalDate dataInicio;

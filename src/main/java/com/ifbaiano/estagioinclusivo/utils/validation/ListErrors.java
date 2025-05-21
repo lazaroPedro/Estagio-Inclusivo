@@ -14,6 +14,9 @@ public class ListErrors {
         erroCampos.add(field);
 
     }
+    public String getMessage() {
+        return erroCampos.stream().map(ErroCampo::getMensagemErro).collect(Collectors.joining(" \n "));
+    }
 
     public List<ErroCampo> getErroCampos() {
         return erroCampos;

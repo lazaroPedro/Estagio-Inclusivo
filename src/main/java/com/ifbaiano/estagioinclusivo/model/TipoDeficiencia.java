@@ -3,6 +3,7 @@ package com.ifbaiano.estagioinclusivo.model;
 import com.ifbaiano.estagioinclusivo.model.enums.TipoDeficienciaEnum;
 import com.ifbaiano.estagioinclusivo.utils.validation.ErroCampo;
 import com.ifbaiano.estagioinclusivo.utils.validation.ValidationException;
+import com.ifbaiano.estagioinclusivo.utils.validation.annotations.MaxLength;
 import com.ifbaiano.estagioinclusivo.utils.validation.annotations.NotBlank;
 import com.ifbaiano.estagioinclusivo.utils.validation.annotations.NotNull;
 
@@ -14,9 +15,11 @@ public class TipoDeficiencia {
     @NotBlank
     private String nome;
     @NotBlank
+    @MaxLength(1000)
     private String descricao;
     @NotNull
     private TipoDeficienciaEnum tipo;
+    @MaxLength(1000)
     @NotBlank
     private String tipoApoio;
     @NotNull

@@ -25,6 +25,7 @@ public class VagaFullServlet extends HttpServlet {
             DAOVaga dV = daoFactory.buildDAOVaga();
             DAOCandidatoVaga dCV = daoFactory.buildDAOCandidatoVaga();
             DAOEmpresa dE = daoFactory.buildDAOEmpresa();
+            DAOCurriculo cCurr = daoFactory.buildDAOCurriculo();
             DAOCandidato dC = daoFactory.buildDAOCandidato();
             SessionDTO user = (SessionDTO) req.getSession().getAttribute("usuarioLogado");
             Optional<Vaga>  oV= dV.findByIdEmpresa(user.getId()).stream().filter(vaga -> {
@@ -36,7 +37,9 @@ public class VagaFullServlet extends HttpServlet {
             }
             Vaga vaga = oV.get();
             List<Candidato> candidatos = dCV.findByVaga(vaga.getId()).stream().map(cand ->{
-                return  dC.findById(cand.getCandidato().getId()).get();
+                Candidato candid = dC.findById(cand.getCandidato().getId()).get();
+                cCurr.findByCandidatoId(cand.getCandidato().getId()).ifPresent(candid::setCurriculo);
+                return candid;
             }).toList();
 
             req.setAttribute("candidatos", candidatos);

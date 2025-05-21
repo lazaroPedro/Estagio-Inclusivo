@@ -44,17 +44,23 @@
             </a>
             <ul class="dropdown-menu">
 
-            <li>
+
                 <c:if test="${sessionScope.usuarioLogado.tipoUsuario == TipoUsuario.CANDIDATO}">
+                <li>
                     <a class="dropdown-item" href="${pageContext.request.contextPath}/home/candidato/id">
                         Perfil</a>
+                </li>
+                     <li>
+                        <a class="dropdown-item" href="${pageContext.request.contextPath}/home/curriculo/insert">
+                            Curriculo</a>
+                    </li>
                 </c:if>
                 <c:if test="${sessionScope.usuarioLogado.tipoUsuario == TipoUsuario.EMPRESA}">
-                    <a class="dropdown-item" href="${pageContext.request.contextPath}/home/empresa/id">
-                        Perfil</a>
+                <li><a class="dropdown-item" href="${pageContext.request.contextPath}/home/empresa/id">
+                        Perfil</a> </li>
                 </c:if>
 
-            </li>
+
             <li>
                 <c:if test="${sessionScope.usuarioLogado.tipoUsuario == TipoUsuario.CANDIDATO}">
                     <a class="dropdown-item" href="${pageContext.request.contextPath}/home/candidato/full">

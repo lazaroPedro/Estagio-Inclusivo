@@ -1,6 +1,7 @@
 package com.ifbaiano.estagioinclusivo.model;
 
 import com.ifbaiano.estagioinclusivo.model.enums.TipoVaga;
+import com.ifbaiano.estagioinclusivo.utils.validation.annotations.MaxLength;
 import com.ifbaiano.estagioinclusivo.utils.validation.annotations.Min;
 import com.ifbaiano.estagioinclusivo.utils.validation.annotations.NotBlank;
 import com.ifbaiano.estagioinclusivo.utils.validation.annotations.NotNull;
@@ -14,10 +15,13 @@ public class Vaga {
 	@NotBlank
 	private String titulo;
 	@NotBlank
+	@MaxLength(1000)
 	private String descricao;
 	@NotBlank
+	@MaxLength(1000)
 	private String requisitos;
 	@NotBlank
+	@MaxLength(1000)
 	private String beneficios;
 	@Min(1)
 	private Long qtdVagas;
