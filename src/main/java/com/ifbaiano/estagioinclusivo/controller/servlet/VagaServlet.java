@@ -4,10 +4,7 @@ import java.io.IOException;
 import java.util.Optional;
 
 import com.ifbaiano.estagioinclusivo.config.DBConfig;
-import com.ifbaiano.estagioinclusivo.dao.DAOEmpresa;
-import com.ifbaiano.estagioinclusivo.dao.DAOEndereco;
-import com.ifbaiano.estagioinclusivo.dao.DAOFactory;
-import com.ifbaiano.estagioinclusivo.dao.DAOVaga;
+import com.ifbaiano.estagioinclusivo.dao.*;
 import com.ifbaiano.estagioinclusivo.model.Empresa;
 import com.ifbaiano.estagioinclusivo.model.Vaga;
 import com.ifbaiano.estagioinclusivo.model.dto.SessionDTO;
@@ -28,15 +25,19 @@ public class VagaServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		String idParam = request.getParameter("id");
-
+		SessionDTO user = (SessionDTO) request.getSession().getAttribute("usuarioLogado");
 
 
 		try (DAOFactory daoFactory = new DAOFactory()) {
 			DAOVaga vagaDao = daoFactory.buildDAOVaga();
 			DAOEndereco dE = daoFactory.buildDAOEndereco();
+			DAOCandidatoVaga dcv = daoFactory.buildDAOCandidatoVaga();
 			DAOEmpresa empresaDao = daoFactory.buildDAOEmpresa();
 			int idVaga = Integer.parseInt(idParam);
-
+			if(user != null) {
+			dcv.findById(user.getId(), idVaga).ifPresent(vaga -> {
+				request.setAttribute("candidatado", 1);
+			});}
 
 			Optional<Vaga> vagaOpt = vagaDao.findById(idVaga);
 
