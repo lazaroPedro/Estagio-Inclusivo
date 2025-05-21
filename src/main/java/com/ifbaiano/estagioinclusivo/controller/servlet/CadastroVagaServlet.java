@@ -1,26 +1,26 @@
 package com.ifbaiano.estagioinclusivo.controller.servlet;
 
 import java.io.IOException;
-import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.Optional;
 
-import com.ifbaiano.estagioinclusivo.config.DBConfig;
 import com.ifbaiano.estagioinclusivo.dao.DAOEmpresa;
 import com.ifbaiano.estagioinclusivo.dao.DAOEndereco;
-import com.ifbaiano.estagioinclusivo.dao.DAOUsuario;
+import com.ifbaiano.estagioinclusivo.dao.DAOFactory;
 import com.ifbaiano.estagioinclusivo.dao.DAOVaga;
 import com.ifbaiano.estagioinclusivo.model.Empresa;
 import com.ifbaiano.estagioinclusivo.model.Endereco;
-import com.ifbaiano.estagioinclusivo.model.Usuario;
 import com.ifbaiano.estagioinclusivo.model.Vaga;
 import com.ifbaiano.estagioinclusivo.model.dto.SessionDTO;
 import com.ifbaiano.estagioinclusivo.model.enums.TipoVaga;
+import com.ifbaiano.estagioinclusivo.utils.validation.ValidationException;
+import com.ifbaiano.estagioinclusivo.utils.validation.Validator;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
 
 @WebServlet("/vaga/insert")
 public class CadastroVagaServlet extends HttpServlet {
@@ -29,41 +29,39 @@ public class CadastroVagaServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		
-		System.out.println(">>> Chegou no Servlet de cadastro de vaga");
+		SessionDTO usuarioLogado = (SessionDTO) request.getSession().getAttribute("usuarioLogado");
+		int usuarioId = usuarioLogado.getId();
 
-
-		try (Connection connection = DBConfig.criarConexao()) {
-			connection.setAutoCommit(false);
-
+		try (DAOFactory factory = new DAOFactory()) {
+			factory.openTransaction();
+			try {
+				
+			DAOEmpresa daoEmpresa = factory.buildDAOEmpresa();
+			DAOVaga daoVaga = factory.buildDAOVaga();
+			DAOEndereco daoEndereco = factory.buildDAOEndereco();
 			
-			String descricao = request.getParameter("descricao");
-			String requisitos = request.getParameter("requisitos");
-			String beneficios = request.getParameter("beneficios");
-			long qtdVagas = Integer.parseInt(request.getParameter("qtd_vagas"));
-			SessionDTO user = (SessionDTO) request.getSession().getAttribute("usuarioLogado");
-			String rua = request.getParameter("rua");
-			String bairro = request.getParameter("bairro");			
-			String municipio = request.getParameter("municipio");
-			String estado = request.getParameter("estado");
+			Optional<Empresa> empresaOpt = daoEmpresa.findById(usuarioId);
+            if (empresaOpt.isEmpty()) {
+                response.sendRedirect("/index");
+                return;
+            }
+            
 			String cep = request.getParameter("cep");
-		
-		
+			
+			
 			
 			Endereco endereco = new Endereco();
-			endereco.setRua(rua);
-			endereco.setBairro(bairro);
-			endereco.setMunicipio(municipio);
-			endereco.setEstado(estado);
-			endereco.setCep(cep);
-		
-			
-			DAOEndereco daoEndereco = new DAOEndereco(connection);
-			Integer idEndereco = daoEndereco.insert(endereco).orElseThrow(() -> new RuntimeException("Erro ao salvar endereço"));
-			endereco.setId(idEndereco);
-			
-			DAOEmpresa daoEmpresa = new DAOEmpresa(connection);
+			endereco.setRua(request.getParameter("rua"));
+	        endereco.setBairro(request.getParameter("bairro"));
+	        endereco.setMunicipio(request.getParameter("municipio"));
+	        endereco.setEstado(request.getParameter("estado"));
+	        endereco.setCep(cep);
 
-			Empresa empresa = daoEmpresa.findById(user.getId()).orElseThrow(() -> new RuntimeException("Empresa não encontrada"));
+	        Validator.validate(endereco);
+
+	        Integer idEndereco = daoEndereco.insert(endereco).orElseThrow(()->new RuntimeException("Não foi possivel cadastrar o endereço"));
+	        endereco.setId(idEndereco);
+	        
 
 			String[] deficienciasSelecionadas = request.getParameterValues("tiposDeficiencia");
 			String deficienciasPermitidas = "";
@@ -73,33 +71,45 @@ public class CadastroVagaServlet extends HttpServlet {
 			
 			
 			Vaga vaga = new Vaga();
-			vaga.setDescricao(descricao);
-			vaga.setRequisitos(requisitos);
-			vaga.setBeneficios(beneficios);
-			vaga.setQtdVagas(qtdVagas);
+			vaga.setDescricao(request.getParameter("descricao"));
+			vaga.setRequisitos(request.getParameter("requisitos"));
+			vaga.setBeneficios(request.getParameter("beneficios"));
 			vaga.setStatus(TipoVaga.ATIVA);
-			vaga.setEmpresa(empresa);
+			vaga.setEmpresa(new Empresa());
+			vaga.getEmpresa().setId(usuarioId);
 			vaga.setEndereco(endereco);
-			
 			vaga.setQtdVagas(Long.valueOf((request.getParameter("qtd_vagas"))));
+			vaga.setTitulo(request.getParameter("titulo"));
 
-			DAOVaga vagaDAO = new DAOVaga(connection);
-			vagaDAO.insert(vaga);
+			daoVaga.insert(vaga).ifPresent(vaga :: setId);
 			
-			
-			connection.commit();
-			response.sendRedirect(request.getContextPath() + "/index.jsp");
+			factory.closeTransaction();
+			response.sendRedirect(request.getContextPath() + "/vaga?id="+vaga.getId());
 
 
-		} catch (Exception e) {
-			e.printStackTrace();
-			request.setAttribute("erro", "Erro ao cadastraar vaga: " + e.getMessage());
-			request.getRequestDispatcher("/pages/cadastrovagas.jsp").forward(request, response);
+		} catch (ValidationException ve) {
+            try {
+                factory.rollbackTransaction();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+            request.setAttribute("errosValidacao", ve.getErrors());
+            request.getRequestDispatcher("/pages/cadastrovagas.jsp").forward(request, response);
+        } catch (SQLException e) {
+            try {
+                factory.rollbackTransaction();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+            throw new ServletException("Erro ao cadastrar candidato", e);
+        	}
+        } catch (SQLException e) {
+        throw new RuntimeException(e);
+    }
+		}		
+	 
 
-		}
-
-	}
-
+	
 	
 	
 

@@ -1,8 +1,6 @@
 <%@ page language="java" contentType="text/html;charset=UTF-8"
 	pageEncoding="UTF-8"%>
-
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-
+<%@ taglib uri="jakarta.tags.core" prefix="c"%>
 
 <!DOCTYPE html>
 <html>
@@ -12,53 +10,69 @@
 <link
 	href="${pageContext.request.contextPath}/webjars/bootstrap/5.3.5/css/bootstrap.min.css"
 	rel="stylesheet">
-<script
-	src="${pageContext.request.contextPath}/webjars/bootstrap/5.3.5/js/bootstrap.bundle.min.js"></script>
 
 </head>
 
 <body class="bd-light">
-	<%@ include file="/assets/components/header.jsp"%>
 
-	<div class=" container mt-5">
+
+	<div class=" container mt-5 mb-5" style="max-width: 800px;">
 		<c:if test="${param.sucesso == '1'}">
-			<div class="alert alert-success" role="alert">Vaga cadastrada
-				com sucesso!</div>
+			<div class="alert alert-success text-center" role="alert">Vaga cadastrada com sucesso!</div>
 		</c:if>
 
-		<h2>Vagas Cadastradas</h2>
+		<div class="border rouded-3 p-3 mb-4 gb-white">
+			<h4 class="mb-0">${vaga.titulo}</h4>
+			<small class="text-muted">${vaga.empresa.razaoSocial} .
+				${vaga.endereco.municipio}, ${vaga.endereco.estado}</small>
+		</div>
 
-		<table class="table table-striped table-bordered mt-3">
-			<thead class="table-dark">
-				<tr>
-					<th>Descrição</th>
-					<th>Requisitos</th>
-					<th>Benefícios</th>
-					<th>Quantidade de Vagas</th>
-					<th>Empresa</th>
-					<th>Local</th>
-					<th>Deficiências Aceitas</th>
-				</tr>
-			<tbody>
-				<c:ForEach var="vaga" items="${listaVagas}">
-					<tr>
-						<td>${vaga.descricao}</td>
-						<td>${vaga.requisitos}</td>
-						<td>${vaga.beneficios}</td>
-						<td>${vaga.qtdVagas}</td>
-						<td>${vaga.empresa.nome}</td>
-						<td>${vaga.endereco.rua}, ${vaga.endereco.bairro},
-							${vaga.endereco.municipio} - ${vaga.endereco.estado}</td>
-						<td><c:forEach var="tipo" items="${vaga.tipoDeficiencia}">
-								<span class="badge bg-secondary me-1">${tipo}</span>
-							</c:forEach></td>
-					</tr>
-				</c:ForEach>
-			</tbody>
-
-
-		</table>
+	
+		<div class="border rounded-3 p-3 mb-3 bg-white">
+			<h6 class="text-secondary">Descrição</h6>
+			<p class="mb-0">${vaga.descricao}</p>
 	</div>
+					<div class="border rounded-3 p-3 mb-3 bg-white">
+			<h6 class="text-secondary">Requisitos</h6>
+			<p class="mb-0">${vaga.requisitos}</p>
+	</div>
+					<div class="border rounded-3 p-3 mb-3 bg-white">
+			<h6 class="text-secondary">Benefícios</h6>
+			<p class="mb-0">${vaga.beneficios}</p>
+	</div>
+
+		<div class="border rounded-3 p-3 mb-3 bg-white">
+			<h6 class="text-secondary">Informações da Empresa</h6>
+			<ul class="list-unstyled mb-0">
+				<li class="list-group-item"><Strong>Razão Social:</Strong>
+					${vaga.empresa.razaoSocial}</li>
+				<li class="list-group-item"><Strong>Nome Fantasia:</Strong>
+					${vaga.empresa.nome}</li>
+				<li class="list-group-item"><Strong>CNPJ:</Strong>
+					${vaga.empresa.cnpj}</li>
+				<li class="list-group-item"><Strong>Email:</Strong>
+					${vaga.empresa.email}</li>
+				<li class="list-group-item"><Strong>Telefone:</Strong>
+					${vaga.empresa.telefone}</li>
+			</ul>
+
+			<h6 class="text-primary">Localização</h6>
+			<p>${vaga.endereco.rua},${vaga.endereco.bairro},
+				${vaga.endereco.municipio} - ${vaga.endereco.estado}</p>
+
+			<h6 class="text-primary">Quantidade de Vagas</h6>
+			<span class="badge bg-primary-subtle text-dark fs-6">${vaga.qtdVagas}</span>
+
+		</div>
+	</div>
+	</div>
+	<c:if test="${usuarioLogado.tipoUsuario == 'CANDIDATO'}">
+		<div class="text-center">
+			<a href="${pageContext.request.contextPath}/candidatar?id=${vaga.id}"
+				class="bnt bnt-success bnt-lg px-5">Candidatar-se</a>
+		</div>
+	</c:if>
+
 
 </body>
 </html>

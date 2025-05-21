@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import com.ifbaiano.estagioinclusivo.config.DBConfig;
 import com.ifbaiano.estagioinclusivo.dao.DAOEmpresa;
+import com.ifbaiano.estagioinclusivo.dao.DAOEndereco;
 import com.ifbaiano.estagioinclusivo.dao.DAOFactory;
 import com.ifbaiano.estagioinclusivo.dao.DAOVaga;
 import com.ifbaiano.estagioinclusivo.model.Empresa;
@@ -28,28 +29,20 @@ public class VagaServlet extends HttpServlet {
 			throws ServletException, IOException {
 		String idParam = request.getParameter("id");
 
-		if (idParam == null || idParam.isEmpty()) {
-			response.sendRedirect("index.jsp");
-			return;
-		}
+
 
 		try (DAOFactory daoFactory = new DAOFactory()) {
 			DAOVaga vagaDao = daoFactory.buildDAOVaga();
+			DAOEndereco dE = daoFactory.buildDAOEndereco();
 			DAOEmpresa empresaDao = daoFactory.buildDAOEmpresa();
-			int idVaga;
-			try {
-				idVaga = Integer.parseInt(idParam);
+			int idVaga = Integer.parseInt(idParam);
 
-			} catch (NumberFormatException e) {
-				request.setAttribute("erro", "ID da vaga inválido.");
-				request.getRequestDispatcher("/index.jsp").forward(request, response);
-				return;
-			}
+
 			Optional<Vaga> vagaOpt = vagaDao.findById(idVaga);
 
 			if (vagaOpt.isPresent()) {
 				Vaga vaga = vagaOpt.get();
-
+				dE.findById(vaga.getEndereco().getId()).ifPresent(vaga :: setEndereco);
 				Optional<Empresa> empresaOpt = empresaDao.findById(vaga.getEmpresa().getId());
 				if (empresaOpt.isPresent()) {
 					Empresa empresa = empresaOpt.get();
@@ -69,64 +62,6 @@ public class VagaServlet extends HttpServlet {
 				request.setAttribute("erro", "Vaga não encontrada.");
 				request.getRequestDispatcher("/index.jsp").forward(request, response);
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			request.setAttribute("erro", "Erro a carregar os dados da vaga: " + e.getMessage());
-			request.getRequestDispatcher("/index.jsp").forward(request, response);
-		}
+}
 	}
 }
-
-/*
- * @Override protected void doPost(HttpServletRequest request,
- * HttpServletResponse response) throws ServletException, IOException {
- * 
- * request.setCharacterEncoding("UTF-8"); Connection conexao = (Connection)
- * DBConfig.criarConexao(); HttpSession session = request.getSession(false);
- * SessionDTO usuariologado = (session != null) ? (SessionDTO)
- * session.getAttribute("usuarioLogado") : null;
- * 
- * 
- * try (Connection connection = DBConfig.criarConexao()) {
- * connection.setAutoCommit(false);
- * 
- * String descricao = request.getParameter("descricao"); String requisitos =
- * request.getParameter("requisitos"); String beneficios =
- * request.getParameter("beneficios"); String empresaNome =
- * request.getParameter("empresa_nome");
- * 
- * String qtdVagasStr = request.getParameter("qtd_vagas"); int qtdVagas;
- * 
- * try { qtdVagas = Integer.parseInt(qtdVagasStr); } catch
- * (NumberFormatException e) { request.setAttribute("erro",
- * "Quantidade de vagas inválida.");
- * request.getRequestDispatcher("cadastrovagas.jsp").forward(request, response);
- * return; }
- * 
- * if (descricao == null || descricao.trim().isEmpty() || requisitos == null ||
- * requisitos.trim().isEmpty() || beneficios == null ||
- * beneficios.trim().isEmpty() || empresaNome == null ||
- * empresaNome.trim().isEmpty()) {
- * 
- * request.setAttribute("erro", "todos os campos são obrigatórios.");
- * request.getRequestDispatcher("cadastrovagas.jsp").forward(request, response);
- * return; }
- * 
- * 
- * Vaga vaga = new Vaga(); vaga.setDescricao(descricao);
- * vaga.setRequisitos(requisitos); vaga.setBeneficios(beneficios);
- * vaga.setQtdVagas(Long.valueOf((request.getParameter("qtd_vagas"))));
- * vaga.setStatus(TipoVaga.ATIVA);
- * 
- * vaga.setQtdVagas(Long.valueOf(request.getParameter("qtd_vagas")));
- * 
- * DAOVaga vagaDAO = new DAOVaga(connection); vagaDAO.insert(vaga);
- * 
- * connection.commit(); response.sendRedirect("cadastrovagas.jsp?sucesso=1");
- * 
- * } catch (Exception e) { e.printStackTrace(); request.setAttribute("erro",
- * "Erro ao cadastraar vaga: " + e.getMessage());
- * request.getRequestDispatcher("cadastrovagas.jsp").forward(request, response);
- * 
- * } } }
- */

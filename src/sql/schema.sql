@@ -68,6 +68,7 @@ CREATE TABLE vagas(
     descricao TEXT NOT NULL,
     requisitos TEXT NOT NULL,
     beneficios TEXT NOT NULL,
+    titulo VARCHAR(255) NOT NULL,
     status ENUM("ATIVA", "FINALIZADA", "EXCLUIDA") NOT NULL,
     qtd_vagas INT UNSIGNED NOT NULL,
     data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,

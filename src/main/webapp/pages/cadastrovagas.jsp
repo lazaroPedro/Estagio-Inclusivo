@@ -20,10 +20,13 @@
 			</div>
 			<div class="card-body">
 
-
-
 				<form action="${pageContext.request.contextPath}/vaga/insert"
 					method="post">
+					
+					<div class="mb-3">
+						<label for="titulo" class="form-label">Titulo da Vaga</label>
+						<input type="text" name="titulo" class="form-control" required>
+					</div>
 					
 					<div class="mb-3">
 						<label for="descricao" class="form-label">Descrição</label>
