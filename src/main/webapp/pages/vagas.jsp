@@ -57,18 +57,33 @@
 			<p class="mb-0">${vaga.endereco.rua},${vaga.endereco.bairro},
 				${vaga.endereco.municipio} - ${vaga.endereco.estado}</p>
 		</div>
-		
+
 		<div class="border rounded-3 p-3 mb-3 bg-white">
 			<h6 class="text-secondary">Quantidade de Vagas</h6>
 			<span class="fw-bold">${vaga.qtdVagas}</span>
 		</div>
 
 		<c:if test="${usuarioLogado.tipoUsuario == 'CANDIDATO'}">
-			<div class="text-center">
-				<a
-					href="${pageContext.request.contextPath}/candidatar?id=${vaga.id}"
-					class="bnt bnt-success bnt-lg px-5">Candidatar-se</a>
-			</div>
+			<c:choose>
+				<c:when test="${candidatado == 1}">
+					<div class="text-center">
+						<form method="POST" action="${pageContext.request.contextPath}/home/candidatovaga/delete?id=${vaga.id}">
+
+							<button class="btn btn-danger">Descandidatar-se</button>
+						</form>
+					</div>
+				</c:when>
+				<c:otherwise>
+					<div class="text-center">
+						<form method="POST" action="${pageContext.request.contextPath}/home/candidatovaga?id=${vaga.id}">
+
+							<button class="btn btn-success">Candidatar-se</button>
+						</form>
+					</div>
+				</c:otherwise>
+			</c:choose>
+
+
 		</c:if>
 	</div>
 </body>
