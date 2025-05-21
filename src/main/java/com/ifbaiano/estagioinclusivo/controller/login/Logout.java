@@ -13,6 +13,6 @@ public class Logout  extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.getSession().removeAttribute("usuarioLogado");
-        resp.sendRedirect(req.getContextPath() + "/home");
+        resp.sendRedirect(req.getContextPath() + "/index");
     }
 }

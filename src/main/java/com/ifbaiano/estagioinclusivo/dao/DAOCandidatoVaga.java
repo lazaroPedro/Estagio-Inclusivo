@@ -17,11 +17,10 @@ public class DAOCandidatoVaga {
     }
 
     public void insert(CandidatoVaga entity) {
-        String sql = "INSERT INTO candidato_vaga (fk_candidato, fk_vaga, data_criacao) VALUES (?, ?, ?)";
+        String sql = "INSERT INTO candidato_vaga (fk_candidato, fk_vaga) VALUES (?, ?)";
         try (PreparedStatement pp = conexao.prepareStatement(sql)){
             pp.setInt(1, entity.getCandidato().getId());
             pp.setInt(2, entity.getVaga().getId());
-            pp.setTimestamp(3, Timestamp.valueOf(entity.getData()));
             pp.execute();
         } catch (SQLException e) {
             throw new RuntimeException("Erro ao Inserir Candidato", e);

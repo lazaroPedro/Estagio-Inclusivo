@@ -2,10 +2,6 @@
 <%@ page import="com.ifbaiano.estagioinclusivo.utils.validation.ListErrors" %>
 
 <%@ page import="java.util.List" %>
-<<<<<<< HEAD
-<%@ page contentType="text/html;c
-harset=UTF-8" language="java" pageEncoding="UTF-8" %>
-=======
 <%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
 <%
     String erro2 = (String) request.getAttribute("erro");
@@ -19,17 +15,16 @@ harset=UTF-8" language="java" pageEncoding="UTF-8" %>
 %>
 
 <!DOCTYPE html>
->>>>>>> ea492846139e9269c043bd660ef28f7285976f9f
 <html>
 <head>
-    <title>Cadastro de candidato </title>
+    <title >Cadastro de candidato </title>
     <meta charset="utf-8">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/webjars/bootstrap/5.3.5/css/bootstrap.min.css">
 </head>
 <body class="container mt-5">
 <%@ include file="/assets/components/header.jsp" %>
 
-<h2 class="mb-4">Cadastro de Candidato</h2>
+<h2 class="mt-5 pt-5">Cadastro de Candidato</h2>
 <%
     ListErrors erros = (ListErrors) request.getAttribute("errosValidacao");
 

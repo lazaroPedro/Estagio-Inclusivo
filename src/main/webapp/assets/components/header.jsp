@@ -35,9 +35,9 @@
               <li class="nav-item">
               <a href="${pageContext.request.contextPath}/home/vaga/all" class="nav-link ">Vagas</a>
           </li>
-              <li class="nav-item">
+         <!--     <li class="nav-item">
                   <a href="#" class="nav-link ">Mensagens</a>
-              </li>
+              </li>-->
         <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
               Olá ${sessionScope.usuarioLogado.nome}

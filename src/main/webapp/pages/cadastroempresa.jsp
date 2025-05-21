@@ -5,14 +5,14 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
 <html>
 <head>
-    <title>Cadastro de Empresa</title>
+    <title >Cadastro de Empresa</title>
     <meta charset="utf-8">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/webjars/bootstrap/5.3.5/css/bootstrap.min.css">
 </head>
 <body class="container mt-5">
 <%@ include file="/assets/components/header.jsp" %>
 
-<h2 class="mb-4">Cadastro de Empresa</h2>
+<h2 class="mt-5 pt-5">Cadastro de Empresa</h2>
 
 <%
     String erroEmail = (String) request.getAttribute("erro");
