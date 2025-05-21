@@ -17,14 +17,14 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Cadastro de candidato </title>
+    <title >Cadastro de candidato </title>
     <meta charset="utf-8">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/webjars/bootstrap/5.3.5/css/bootstrap.min.css">
 </head>
 <body class="container mt-5">
 <%@ include file="/assets/components/header.jsp" %>
 
-<h2 class="mb-4">Cadastro de Candidato</h2>
+<h2 class="mt-5 pt-5">Cadastro de Candidato</h2>
 <%
     ListErrors erros = (ListErrors) request.getAttribute("errosValidacao");
 

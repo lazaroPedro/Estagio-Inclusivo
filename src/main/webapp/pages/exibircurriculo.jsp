@@ -10,7 +10,7 @@
 <body class="container mt-5">
 <%@ include file="/assets/components/header.jsp" %>
 
-<h2>Currículo do Candidato</h2>
+<h2 class="mt-5 pt-5">Currículo do Candidato</h2>
 
 <div class="card shadow p-4 mb-3">
     <h3>${candidato.nome}</h3>

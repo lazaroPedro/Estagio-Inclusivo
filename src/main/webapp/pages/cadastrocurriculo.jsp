@@ -71,7 +71,7 @@
 <body class="container mt-5">
 <%@ include file="/assets/components/header.jsp" %>
 
-<h2>Cadastro de Currículo</h2>
+<h2 class="mt-5 pt-5"> Cadastro de Currículo</h2>
 <form action="${pageContext.request.contextPath}/home/curriculo/insert" method="post">
     <h3>Informações Pessoais</h3>
     <div class="mb-3">
