@@ -18,9 +18,9 @@
     String erroEmail = (String) request.getAttribute("erro");
     if (erroEmail != null && !erroEmail.isEmpty()) {
 %>
-    <div class="alert alert-danger">
-        <%= erroEmail %>
-    </div>
+<div class="alert alert-danger">
+    <%= erroEmail %>
+</div>
 <%
     }
 
@@ -32,7 +32,7 @@
 <div class="alert alert-danger">
     <ul>
         <% for (ErroCampo erro : erros.getErroCampos()) { %>
-            <li><strong><%= erro.getNomeCampo() %>:</strong> <%= erro.getMensagemErro() %></li>
+        <li><strong><%= erro.getNomeCampo() %>:</strong> <%= erro.getMensagemErro() %></li>
         <% } %>
     </ul>
 </div>

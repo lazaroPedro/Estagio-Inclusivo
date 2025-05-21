@@ -2,8 +2,24 @@
 <%@ page import="com.ifbaiano.estagioinclusivo.utils.validation.ListErrors" %>
 
 <%@ page import="java.util.List" %>
+<<<<<<< HEAD
 <%@ page contentType="text/html;c
 harset=UTF-8" language="java" pageEncoding="UTF-8" %>
+=======
+<%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
+<%
+    String erro2 = (String) request.getAttribute("erro");
+    if (erro2 != null) {
+%>
+<div class="alert alert-danger">
+    <strong>Erro:</strong> <%= erro2 %>
+</div>
+<%
+    }
+%>
+
+<!DOCTYPE html>
+>>>>>>> ea492846139e9269c043bd660ef28f7285976f9f
 <html>
 <head>
     <title>Cadastro de candidato </title>
@@ -88,55 +104,6 @@ harset=UTF-8" language="java" pageEncoding="UTF-8" %>
         <label for="Data" class="form-label" id="data" name="data" >Data de Nascimento</label>
         <input type="date" name="nascimento" class="form-control" required>
     </div>
-    <h4 class="mt-4">Curso</h4>
-    <div class="mb-3">
-        <label for="NomeC" class="form-label">Nome do Curso</label>
-        <input type="text" name="curso_nome" class="form-control" id="nomeCurso">
-    </div>
-    <div class="mb-3">
-        <label for="instituicao" class="form-label">Instituição</label>
-        <input type="text" name="curso_instituicao" class="form-control" id="instituicao">
-    </div>
-    <div class="mb-3">
-        <label for="Desc" class="form-label">Descrição</label>
-        <textarea name="curso_descricao" class="form-control" id="Desc"></textarea>
-    </div>
-    <div class="mb-3">
-        <label for="DataIn" class="form-label">Data de Início</label>
-        <input type="date" name="curso_inicio" class="form-control" id="dataIn">
-    </div>
-    <div class="mb-3">
-        <label for="DataTe" class="form-label">Data de Término</label>
-        <input type="date" name="curso_fim" class="form-control" id="dataTe">
-    </div>
-
-    <h4>Deficiência</h4>
-    <div class="mb-3">
-        <label for="def_nome" class="form-label">Nome da Deficiência</label>
-        <input type="text" name="def_nome" class="form-control" id="defNome" required>
-    </div>
-    <div class="mb-3">
-        <label for="def_descricao" class="form-label">Descrição</label>
-        <textarea name="def_descricao" class="form-control" id="defDesc" required></textarea>
-    </div>
-    <div class="mb-3">
-        <label for="def_tipo" class="form-label">Tipo de Deficiência</label>
-        <select name="def_tipo" class="form-select" id="defTipo" required>
-            <option value="">Selecione</option>
-            <option value="FISICA">Física</option>
-            <option value="VISUAL">Visual</option>
-            <option value="AUDITIVA">Auditiva</option>
-            <option value="INTELECTUAL">Intelectual</option>
-            <option value="MENTAL">Mental</option>
-            <option value="SENSORIAL">Sensorial</option>
-            <option value="MULTIPLA">Múltipla</option>
-            <option value="OUTRA">Outra</option>
-        </select>
-    </div>
-    <div class="mb-3">
-        <label for="def_apoio" class="form-label">Tipo de Apoio Necessário</label>
-        <textarea name="def_apoio" class="form-control" id="defApoi" required></textarea>
-    </div>
     <div class="form-check mb-4">
         <input class="form-check-input" type="checkbox" id="termos" name="aceitaTermos" required>
         <label class="form-check-label" for="termos">
@@ -147,6 +114,6 @@ harset=UTF-8" language="java" pageEncoding="UTF-8" %>
     <button type="submit" class="btn btn-success">Cadastrar</button>
 </form>
 <script src="${pageContext.request.contextPath}/webjars/bootstrap/5.3.5/js/bootstrap.bundle.min.js"></script>
-<script src="${pageContext.request.contextPath}/js/validacoes.js"></script>
+<script src="${pageContext.request.contextPath}/js/validacoes.js" type="text/javascript"></script>
 </body>
 </html>

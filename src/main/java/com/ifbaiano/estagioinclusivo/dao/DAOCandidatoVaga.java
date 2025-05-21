@@ -45,7 +45,7 @@ public class DAOCandidatoVaga {
 
 
     public Optional<CandidatoVaga> findById(int idCandidato, int idVaga) {
-        String sql = "SELECT FROM candidato_vaga WHERE fk_candidato = ? AND fk_vaga = ?";
+        String sql = "SELECT * FROM candidato_vaga WHERE fk_candidato = ? AND fk_vaga = ?";
         ResultSet rs = null;
         try (PreparedStatement pp = conexao.prepareStatement(sql)){
             pp.setInt(1, idCandidato);
@@ -74,7 +74,7 @@ public class DAOCandidatoVaga {
 
     }
     public List<CandidatoVaga> findByVaga(int idVaga) {
-        String sql = "SELECT FROM candidato_vaga WHERE fk_vaga = ?";
+        String sql = "SELECT * FROM candidato_vaga WHERE fk_vaga = ?";
         ResultSet rs = null;
         try (PreparedStatement pp = conexao.prepareStatement(sql)){
             pp.setInt(1, idVaga);

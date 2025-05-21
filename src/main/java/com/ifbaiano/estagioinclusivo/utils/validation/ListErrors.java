@@ -29,9 +29,7 @@ public class ListErrors {
     public List<ErroCampo> findField(String field) {
         return erroCampos.stream().filter(erro -> erro.getNomeCampo().equalsIgnoreCase(field)).collect(Collectors.toList());
     }
-    public String getMessage() {
-        return erroCampos.stream().map(ErroCampo::getMensagemErro).collect(Collectors.joining(" \n "));
-    }
+
     public String findMessage(String field) {
         List<ErroCampo> erro = findField(field);
         StringBuilder message = new StringBuilder();
