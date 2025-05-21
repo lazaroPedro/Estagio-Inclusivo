@@ -2,10 +2,6 @@
 <%@ page import="com.ifbaiano.estagioinclusivo.utils.validation.ListErrors" %>
 
 <%@ page import="java.util.List" %>
-<<<<<<< HEAD
-<%@ page contentType="text/html;c
-harset=UTF-8" language="java" pageEncoding="UTF-8" %>
-=======
 <%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
 <%
     String erro2 = (String) request.getAttribute("erro");
@@ -19,7 +15,6 @@ harset=UTF-8" language="java" pageEncoding="UTF-8" %>
 %>
 
 <!DOCTYPE html>
->>>>>>> ea492846139e9269c043bd660ef28f7285976f9f
 <html>
 <head>
     <title>Cadastro de candidato </title>

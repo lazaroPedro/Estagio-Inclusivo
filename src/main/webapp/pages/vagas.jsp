@@ -1,6 +1,5 @@
 <%@ page language="java" contentType="text/html;charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%@ taglib uri="jakarta.tags.core" prefix="c"%>
 
 <!DOCTYPE html>
 <html>
@@ -14,9 +13,10 @@
 </head>
 
 <body class="bd-light">
+<%@ include file="/assets/components/header.jsp" %>
 
 
-	<div class=" container mt-5 mb-5" style="max-width: 800px;">
+	<div class=" container mt-5 pt-5 mb-5" style="max-width: 800px;">
 		<c:if test="${param.sucesso == '1'}">
 			<div class="alert alert-success text-center" role="alert">Vaga
 				cadastrada com sucesso!</div>

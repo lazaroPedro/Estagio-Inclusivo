@@ -34,9 +34,10 @@ public class VagaServlet extends HttpServlet {
 			DAOCandidatoVaga dcv = daoFactory.buildDAOCandidatoVaga();
 			DAOEmpresa empresaDao = daoFactory.buildDAOEmpresa();
 			int idVaga = Integer.parseInt(idParam);
+			if(user != null) {
 			dcv.findById(user.getId(), idVaga).ifPresent(vaga -> {
 				request.setAttribute("candidatado", 1);
-			});
+			});}
 
 			Optional<Vaga> vagaOpt = vagaDao.findById(idVaga);
 

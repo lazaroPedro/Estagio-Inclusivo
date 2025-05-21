@@ -1,4 +1,3 @@
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="com.ifbaiano.estagioinclusivo.model.*" %>
 <%@ page import="java.util.List" %>
@@ -9,6 +8,8 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/webjars/bootstrap/5.3.5/css/bootstrap.min.css">
 </head>
 <body class="container mt-5">
+<%@ include file="/assets/components/header.jsp" %>
+
 <h2>Currículo do Candidato</h2>
 
 <div class="card shadow p-4 mb-3">
@@ -40,9 +41,9 @@
         </c:forEach>
     </ul>
 </div>
-
+<!--
 <div class="text-end mt-3">
     <a href="${pageContext.request.contextPath}/curriculo/exportarPDF" class="btn btn-success">Exportar como PDF</a>
-</div>
+</div>-->
 </body>
 </html>
