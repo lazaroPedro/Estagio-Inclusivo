@@ -57,7 +57,7 @@
 			<p class="mb-0">${vaga.endereco.rua},${vaga.endereco.bairro},
 				${vaga.endereco.municipio} - ${vaga.endereco.estado}</p>
 		</div>
-		<
+		
 		<div class="border rounded-3 p-3 mb-3 bg-white">
 			<h6 class="text-secondary">Quantidade de Vagas</h6>
 			<span class="fw-bold">${vaga.qtdVagas}</span>
