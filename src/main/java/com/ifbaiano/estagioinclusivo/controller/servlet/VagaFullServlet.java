@@ -38,7 +38,7 @@ public class VagaFullServlet extends HttpServlet {
             Vaga vaga = oV.get();
             List<Candidato> candidatos = dCV.findByVaga(vaga.getId()).stream().map(cand ->{
                 Candidato candid = dC.findById(cand.getCandidato().getId()).get();
-                cCurr.findByCandidatoId(cand.getCandidato().getId()).ifPresent(candid::setCurriculo);
+//                cCurr.findByCandidatoId(cand.getCandidato().getId()).ifPresent(candid::setCurriculo);
                 return candid;
             }).toList();
 

@@ -31,6 +31,7 @@
     <ul>
         <c:forEach var="curso" items="${cursos}">
             <li>${curso.nomeCurso} - ${curso.instituicao} (${curso.dataInicio} a ${curso.dataFim})</li>
+            <li>${curso.descricao}</li>
         </c:forEach>
     </ul>
 
@@ -46,4 +47,6 @@
     <a href="${pageContext.request.contextPath}/curriculo/exportarPDF" class="btn btn-success">Exportar como PDF</a>
 </div>-->
 </body>
+<script src="${pageContext.request.contextPath}/webjars/bootstrap/5.3.5/js/bootstrap.bundle.min.js"></script>
+
 </html>

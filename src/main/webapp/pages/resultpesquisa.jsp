@@ -9,10 +9,10 @@
 <body>
     <%@ include file="/assets/components/header.jsp" %>
     <div class="container-xl mt-5 pt-5">
-        <h5 class="card-title">Vagas:</h5>
-        <c:choose>
 
+        <c:choose>
             <c:when test="${vagas != null && !vagas.isEmpty()}">
+                <h5 class="card-title">Vagas:</h5>
 
             <c:forEach var="vaga" items="${vagas}">
 
@@ -53,9 +53,10 @@
             </c:otherwise>
 
         </c:choose>
-        <h5 class="card-title">Empresas:</h5>
             <c:choose>
+
                 <c:when test="${empresas != null && !empresas.isEmpty()}">
+                    <h5 class="card-title">Empresas:</h5>
 
 
                     <c:forEach var="empresa" items="${empresas}">
@@ -87,6 +88,45 @@
                      </div>
                  </div>
              </div>
+            </c:otherwise>
+
+        </c:choose>
+
+        <c:choose>
+
+            <c:when test="${curriculos != null && !curriculos.isEmpty()}">
+                <h5 class="card-title">Curriculos:</h5>
+
+
+                <c:forEach var="curriculo" items="${curriculos}">
+                    <a class="text-decoration-none text-reset" href="${pageContext.request.contextPath}/home/curriculo/id?id=${curriculo.candidato.id}">
+                        <div class="card mb-3 ">
+                            <div class="row g-0">
+                                <div class="col-4 card-body">
+                                    <p class="card-text ">${curriculo.candidato.nome}</p>
+                                    <p class="card-text ">${curriculo.candidato.email}</p>
+
+                                </div>
+                                <div class="col-4">
+
+                                    <div class="card-body">
+                                        <h5 class="card-title"> ${curriculo.habilidades} </h5>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </a>
+                </c:forEach>
+            </c:when>
+            <c:otherwise>
+                <div class="card mb-3 ">
+                    <div class="row g-0">
+                        <div class="card-body text-bg-danger">
+                            <h5 class="card-title">Curriculo não encontrado</h5>
+                        </div>
+                    </div>
+                </div>
             </c:otherwise>
 
         </c:choose>

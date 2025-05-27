@@ -22,7 +22,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-@WebServlet("/vaga/insert")
+@WebServlet("/home/vaga/insert")
 public class CadastroVagaServlet extends HttpServlet {
 
 

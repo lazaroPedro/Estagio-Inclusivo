@@ -122,15 +122,15 @@
                 <p><strong>Instituição: ${curso.instituicao}</strong>
                 <p><strong>Descrição: ${curso.descricao}</strong>
                 <p><strong>Periodo: </strong> ${curso.dataInicio} a ${curso.dataFim}</p>
-                <button type="button" class="btn btn-danger" onclick="removerCurso(${curso.id}, this)">Remover</button>
-            </div>
+          <!--      <button type="button" class="btn btn-danger" onclick="removerCurso(${curso.id}, this)">Remover</button>
+          -->  </div>
         </c:forEach>
     </div>
-
+<!--
     <h3>Adicionar Novos Cursos</h3>
     <div id="cursos-lista"></div>
     <button type="button" class="btn btn-primary mt-2" onclick="adicionarCurso()">Adicionar Curso</button>
-
+-->
     <h3>Deficiências Cadastradas</h3>
     <div id="deficienciasExistentes">
         <c:forEach var="def" items="${deficiencias}">
@@ -139,18 +139,18 @@
                 <p><strong>Tipo Da deficiencia: ${def.tipo}</strong>
                 <p><strong>Descrição: ${def.descricao}</strong>
                 <p><strong>Tipo de Apoio: ${def.tipoApoio}</strong></p>
-                <button type="button" class="btn btn-danger" onclick="removerDeficiencia(${def.id}, this)">Remover</button>
-            </div>
+         <!--       <button type="button" class="btn btn-danger" onclick="removerDeficiencia(${def.id}, this)">Remover</button>
+      -->      </div>
         </c:forEach>
     </div>
-
+<!--
     <h3>Adicionar Novas Deficiências</h3>
     <div id="deficiencias-lista"></div>
     <button type="button" class="btn btn-primary mt-2" onclick="adicionarDeficiencia()">Adicionar Deficiência</button>
-
+-->
     <div class="mt-4 text-end">
         <button type="submit" class="btn btn-success">Salvar Currículo</button>
-        <a href="${pageContext.request.contextPath}/home/curriculo/id?id=${curriculo.id}" class="btn btn-info">Exibir Currículo</a>
+        <a href="${pageContext.request.contextPath}/home/curriculo/id?id=${candidato.id}" class="btn btn-info">Exibir Currículo</a>
     </div>
 </form>
 <script src="${pageContext.request.contextPath}/webjars/bootstrap/5.3.5/js/bootstrap.bundle.min.js"></script>

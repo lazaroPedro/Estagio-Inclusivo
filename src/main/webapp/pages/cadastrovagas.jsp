@@ -20,7 +20,7 @@
 			</div>
 			<div class="card-body">
 
-				<form action="${pageContext.request.contextPath}/vaga/insert"
+				<form action="${pageContext.request.contextPath}/home/vaga/insert"
 					method="post">
 					
 					<div class="mb-3">

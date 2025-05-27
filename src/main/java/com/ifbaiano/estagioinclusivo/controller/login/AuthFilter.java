@@ -27,14 +27,14 @@ public class AuthFilter implements Filter {
         if (session == null || session.getAttribute ("usuarioLogado") == null) {
             resp.sendRedirect(req.getContextPath() + "/pages/login.jsp");
         }else {
-      //      try {
+      try {
                 filterChain.doFilter(servletRequest, servletResponse);
 
-    /*        } catch (Exception e) {
+         } catch (Exception e) {
                 System.out.println("Erro: " + e.getMessage());
                 e.printStackTrace();
                 resp.sendRedirect(req.getContextPath() + "/index");
-            }*/
+            }
 
 
         }

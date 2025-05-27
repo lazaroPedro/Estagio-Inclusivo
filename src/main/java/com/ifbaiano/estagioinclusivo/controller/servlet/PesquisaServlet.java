@@ -1,9 +1,7 @@
 package com.ifbaiano.estagioinclusivo.controller.servlet;
 
-import com.ifbaiano.estagioinclusivo.dao.DAOCandidato;
-import com.ifbaiano.estagioinclusivo.dao.DAOEmpresa;
-import com.ifbaiano.estagioinclusivo.dao.DAOFactory;
-import com.ifbaiano.estagioinclusivo.dao.DAOVaga;
+import com.ifbaiano.estagioinclusivo.dao.*;
+import com.ifbaiano.estagioinclusivo.model.Curriculo;
 import com.ifbaiano.estagioinclusivo.model.Empresa;
 import com.ifbaiano.estagioinclusivo.model.Vaga;
 import com.ifbaiano.estagioinclusivo.model.enums.TipoVaga;
@@ -26,25 +24,45 @@ public class PesquisaServlet extends HttpServlet {
         try (DAOFactory daoFactory = new DAOFactory()){
             DAOVaga dV = daoFactory.buildDAOVaga();
             DAOEmpresa dE = daoFactory.buildDAOEmpresa();
+            DAOCurriculo dC = daoFactory.buildDAOCurriculo();
+            DAOCandidato dCa = daoFactory.buildDAOCandidato();
 
             String search = request.getParameter("pesquisa");
-            if (search == null || search.isEmpty()) {
-                response.sendRedirect(request.getContextPath() +"/");
+            String filtro = request.getParameter("filtro");
 
-            }else {
-            List<Vaga> lV = dV.findByTituloContaining(search).stream()
-                    .filter(vaga -> vaga.getStatus() == TipoVaga.ATIVA)
-                    .map(vaga -> {
-              dE.findById(vaga.getEmpresa().getId()).ifPresent(vaga::setEmpresa);
-              return vaga;
-            }).collect(Collectors.toList());
-            List<Empresa> lE = dE.findByNomeContaining(search);
-            request.setAttribute("vagas", lV);
-            request.setAttribute("empresas", lE);
+            switch (filtro){
+                case "0":
+                    List<Vaga> lV = dV.findByTituloContaining(search).stream()
+                            .filter(vaga -> vaga.getStatus() == TipoVaga.ATIVA)
+                            .map(vaga -> {
+                                dE.findById(vaga.getEmpresa().getId()).ifPresent(vaga::setEmpresa);
+                                return vaga;
+                            }).collect(Collectors.toList());
+                    request.setAttribute("vagas", lV);
+                    break;
+                case "1":
+                    List<Empresa> lE = dE.findByNomeContaining(search);
+                    request.setAttribute("empresas", lE);
+                    break;
+
+                case "2":
+                    List<Curriculo> lC = dC.findContaining(search).stream().map(curriculo -> {
+                        dCa.findById(curriculo.getCandidato().getId()).ifPresent(curriculo::setCandidato);
+                        return curriculo;
+
+                    }).toList();
+                    request.setAttribute("curriculos", lC);
+                    break;
+
+                default:
+                    response.sendRedirect(request.getContextPath() +"/");
+                    return;
+            }
+
 
             request.getRequestDispatcher("/pages/resultpesquisa.jsp").forward(request, response);
 
         }}
 
     }
-}
+

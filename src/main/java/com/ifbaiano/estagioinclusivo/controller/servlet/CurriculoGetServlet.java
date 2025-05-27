@@ -28,15 +28,9 @@ public class CurriculoGetServlet extends HttpServlet {
             DAOCurriculo daoCurriculo = factory.buildDAOCurriculo();
             DAOEndereco daoEndereco = factory.buildDAOEndereco();
             int id = Integer.parseInt(request.getParameter("id"));
-            Optional<Curriculo> curriculoOpt = daoCurriculo.findById(id);
-
-            if(curriculoOpt.isEmpty()) {
-                request.getRequestDispatcher("/i").forward(request, response);
-                return;
-            }
-            int usuarioId = curriculoOpt.get().getCandidato().getId();
-            Optional<Candidato> candidatoOpt = daoCandidato.findById(usuarioId);
-            if (candidatoOpt.isEmpty()) {
+            Optional<Curriculo> curriculoOpt = daoCurriculo.findByCandidatoId(id);
+            Optional<Candidato> candidatoOpt = daoCandidato.findById(id);
+            if (candidatoOpt.isEmpty() || curriculoOpt.isEmpty()) {
                 response.sendRedirect("/index");
                 return;
             }
@@ -44,8 +38,8 @@ public class CurriculoGetServlet extends HttpServlet {
 
             Endereco endereco = daoEndereco.findById(candidatoOpt.get().getEndereco().getId()).orElse(new Endereco());
 
-            List<Curso> cursos = daoCurso.findAllByCandidato(usuarioId);
-            List<TipoDeficiencia> deficiencias = daoTipoDeficiencia.findAllByCandidato(usuarioId);
+            List<Curso> cursos = daoCurso.findAllByCandidato(id);
+            List<TipoDeficiencia> deficiencias = daoTipoDeficiencia.findAllByCandidato(id);
 
             request.setAttribute("candidato", candidatoOpt.get());
             request.setAttribute("endereco", endereco);
