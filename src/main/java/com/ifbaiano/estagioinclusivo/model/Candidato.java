@@ -19,15 +19,8 @@ public class Candidato extends Usuario{
     private Genero genero;
     @NotNull
     private LocalDate dataNascimento;
-    private Curriculo curriculo;
 
-    public Curriculo getCurriculo() {
-        return curriculo;
-    }
 
-    public void setCurriculo(Curriculo curriculo) {
-        this.curriculo = curriculo;
-    }
 
     public Candidato () {
     }

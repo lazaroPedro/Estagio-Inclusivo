@@ -10,6 +10,14 @@
         <form action="${pageContext.request.contextPath}/search" method="post" class="d-flex justify-content-center">
         <div class="input-group ">
             <input type="text" class="form-control" name="pesquisa" placeholder="Buscar" required/>
+            <label for="filtro" class="form-label"  ></label>
+                            <select name="filtro" class="form-select-sm" id="filtro"  >
+                                <option value=""  >Selecione</option>
+                                <option value="0" >Vagas</option>
+                                <option value="1">Empresas</option>
+                                <option value="2" >Curriculos</option>
+
+                            </select>
             <button type="submit" class="btn btn-success">Q</button>
         </div>
         </form>

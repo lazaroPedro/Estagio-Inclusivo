@@ -1,4 +1,3 @@
-create database estagioinclusivo;
 use estagioinclusivo;
 CREATE TABLE enderecos(
     id_endereco INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,

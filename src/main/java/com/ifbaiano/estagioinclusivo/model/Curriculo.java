@@ -20,19 +20,17 @@ public class Curriculo {
     private String experiencia;
     @NotNull
     private Candidato candidato;
-    private Optional<Curso> cursos;
-    private List<TipoDeficiencia> deficiencias;
+
 
     public Curriculo() {}
 
-    public Curriculo(int id, String objetivo, String habilidades, String experiencia, Candidato candidato, Optional<Curso> cursos, List<TipoDeficiencia> deficiencias) {
+    public Curriculo(int id, String objetivo, String habilidades, String experiencia, Candidato candidato) {
         this.id = id;
         this.objetivo = objetivo;
         this.habilidades = habilidades;
         this.experiencia = experiencia;
         this.candidato = candidato;
-        this.cursos = cursos;
-        this.deficiencias = deficiencias;
+
     }
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
@@ -49,9 +47,5 @@ public class Curriculo {
     public Candidato getCandidato() { return candidato; }
     public void setCandidato(Candidato candidato) { this.candidato = candidato; }
 
-    public Optional<Curso> getCursos() { return cursos; }
-    public void setCursos(Optional<Curso> cursos) { this.cursos = cursos; }
 
-    public List<TipoDeficiencia> getDeficiencias() { return deficiencias; }
-    public void setDeficiencias(List<TipoDeficiencia> deficiencias) { this.deficiencias = deficiencias; }
 }

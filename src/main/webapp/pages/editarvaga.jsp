@@ -66,7 +66,7 @@
 				</div>
 
 			<div class=" col-4">
-				<a class="card-link btn btn-success" href="${pageContext.request.contextPath}/home/curriculo/id?id=${candidato.curriculo.id}">Acessar Curriculo</a>
+				<a class="card-link btn btn-success" href="${pageContext.request.contextPath}/home/curriculo/id?id=${candidato.id}">Acessar Curriculo</a>
 			</div>
 			</div>
 

@@ -146,4 +146,31 @@ public class DAOCurriculo implements DAORepository<Curriculo, Integer> {
         }
         return Optional.empty();
     }
+
+    public List<Curriculo> findContaining(String search) {
+        List<Curriculo> curriculos = new ArrayList<>();
+        String sql = "SELECT * FROM curriculos WHERE objetivo like ? OR habilidades  LIKE ? ";
+        try(PreparedStatement pp = connection.prepareStatement(sql)){
+            pp.setString(1, "%"+search+"%");
+            pp.setString(2, "%"+search+"%");
+
+            ResultSet rs = pp.executeQuery();
+            while (rs.next()) {
+                Curriculo curriculo = new Curriculo();
+                curriculo.setId(rs.getInt("id_curriculo"));
+                curriculo.setObjetivo(rs.getString("objetivo"));
+                curriculo.setHabilidades(rs.getString("habilidades"));
+                curriculo.setExperiencia(rs.getString("experiencia"));
+
+                Candidato candidato = new Candidato();
+                candidato.setId(rs.getInt("fk_candidato"));
+                curriculo.setCandidato(candidato);
+
+                curriculos.add(curriculo);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return curriculos;
+    }
 }
