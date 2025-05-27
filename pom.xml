@@ -16,9 +16,7 @@
     </properties>
 
     <dependencies>
-<<<<<<< HEAD
-      
-=======
+
      <!--   <dependency>
             <groupId>com.itextpdf</groupId>
             <artifactId>itext7-core</artifactId>
@@ -35,7 +33,6 @@
             <version>7.2.5</version>
         </dependency>
 -->
->>>>>>> 1f228933af53c9af201905a647bf969e49308d80
         <dependency>
             <groupId>com.mysql</groupId>
             <artifactId>mysql-connector-j</artifactId>
