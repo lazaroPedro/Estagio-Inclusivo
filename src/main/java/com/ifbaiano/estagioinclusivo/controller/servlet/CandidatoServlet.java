@@ -99,7 +99,7 @@ public class CandidatoServlet extends HttpServlet {
         candidato.setId(idCandidato);
 
         factory.closeTransaction();
-        response.sendRedirect("pages/login.jsp?sucesso=1");
+        response.sendRedirect(request.getContextPath() + "/pages/login.jsp");
             } catch (ValidationException ve) {
                 try {
                     factory.rollbackTransaction();
