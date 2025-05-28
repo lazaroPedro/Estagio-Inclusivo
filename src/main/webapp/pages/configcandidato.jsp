@@ -296,7 +296,7 @@
                             <label for="termino" class="form-label">Data de Término</label>
                             <input type="date" name="dataFim" class="form-control" id="termino" >
                         </div>
-                        <button type="submit" class="btn btn-success">Adcionar</button>
+                        <button type="submit" class="btn btn-success">Adicionar</button>
                     </form>
                 </div>
             </div>
@@ -424,7 +424,7 @@
                             <label for="apoio" class="form-label">Tipo de Apoio Necessário</label>
                             <textarea name="tipoApoio" class="form-control" id="apoio"></textarea>
                         </div>
-                        <button type="submit" class="btn btn-success">Adcionar</button>
+                        <button type="submit" class="btn btn-success">Adicionar</button>
                     </form>
                 </div></div>
 
