@@ -2,14 +2,12 @@ services:
   db:
     image: mysql:8
     environment:
-      MYSQL_ROOT_PASSWORD: 123456
-      MYSQL_DATABASE: estagioinclusivo
-      MYSQL_USER: lazaropedro
-      MYSQL_PASSWORD: 123456
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_DATABASE: ${DB_NAME}
     ports:
       - "3300:3306"
     volumes:
-      - ./src/sql/schema.sql:/docker-entrypoint-initdb.d/schema.sql
+      - ./src/sql:/docker-entrypoint-initdb.d/
       - mysql_data:/var/lib/mysql
 
   app:
@@ -21,9 +19,9 @@ services:
     depends_on:
       - db
     environment:
-      DB_URL: jdbc:mysql://db:3306/estagioinclusivo
-      DB_USER: lazaropedro
-      DB_PASSWORD: 123456
-
+      DB_URL: jdbc:mysql://db:3306/${DB_NAME}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_DRIVER: ${DB_DRIVER}
 volumes:
   mysql_data:
