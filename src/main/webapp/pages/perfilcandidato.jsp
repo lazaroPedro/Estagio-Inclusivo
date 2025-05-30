@@ -29,154 +29,132 @@ if (telefone.length() == 11) {
 	telefoneFormatado = telefone;
 }
 %>
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Perfil do Candidato</title>
-<link
-	href="${pageContext.request.contextPath}/webjars/bootstrap/5.3.5/css/bootstrap.min.css"
-	rel="stylesheet">
+    <meta charset="UTF-8">
+    <title>Perfil do Candidato</title>
+    <link href="${pageContext.request.contextPath}/webjars/bootstrap/5.3.5/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
 
+        .header-curvo {
+            background-color: #805DFF;
+            color: white;
+            padding: 60px 0;
+            border-bottom-left-radius: 50% 10%;
+            border-bottom-right-radius: 50% 10%;
+            text-align: center;
+        }
+
+        .breadcrumb-custom {
+            background: none;
+            color: white;
+        }
+
+        .breadcrumb-custom a {
+            color: white;
+            text-decoration: underline;
+        }
+
+        .section-title {
+            color: #805DFF;
+            font-weight: 600;
+            border-bottom: 2px solid #805DFF;
+            padding-bottom: 5px;
+            margin-bottom: 20px;
+            display: inline-block;
+        }
+
+        .card-info {
+            border-left: 4px solid #805DFF;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .col-md-6 {
+                margin-bottom: 40px;
+            }
+        }
+    </style>
 </head>
 <body>
-	<%@ include file="/assets/components/header.jsp"%>
 
-	<div class="container-xl mt-5 pt-5">
-		<div class="card mb-4">
-			<div class="card-body">
-				<h1 class="card-title text-primary">Dados do candidato</h1>
+<%@ include file="/assets/components/header.jsp"%>
 
-			</div>
-		</div>
+<div class="header-curvo">
+    <h1>Meu perfil</h1>
+</div>
 
-		<div class="card mb-4 border-0 shadow-sm bg-light">
-		<div class="card mb-4">
-			<div class="card-body">
-				<h2 class="text-primary">Dados Pessoais</h2>
-				<div class="p-3 mb-3 bg-light border-start border-4 border-primary rounded shadow-sm">
-					<p>
-						<strong>Nome:</strong>
-						<%=candidato.getNome()%></p>
-					<p>
-						<strong>Gênero:</strong>
-						<%=candidato.getGenero()%></p>
-					<p>
-						<strong>Data de Nascimento:</strong>
-						<%=dataFormatada%></p>
-					<p>
-						<strong>Cidade:</strong>
-						<%=candidato.getEndereco().getMunicipio()%></p>
-					<p>
-						<strong>Email:</strong>
-						<%=candidato.getEmail()%></p>
-					<p>
-						<strong>CPF:</strong>
-						<%=cpfFormatado%></p>
-					<p>
-						<strong>Telefone:</strong>
-						<%=telefoneFormatado%></p>
-				</div>
-			</div>
-			<div class="card mb-4">
-				<div class="card-body">
-					<h2 class="text-primary">Deficiências</h2>
+<div class="container mt-5">
+    <div class="row">
+      
+        <div class="col-md-6">
+            <h2 class="section-title">Dados Pessoais</h2>
+            <div class="card-info">
+                <p><strong>Nome:</strong> <%= candidato.getNome() %></p>
+                <p><strong>Gênero:</strong> <%= candidato.getGenero() %></p>
+                <p><strong>Data de Nascimento:</strong> <%= dataFormatada %></p>
+                <p><strong>Cidade:</strong> <%= candidato.getEndereco().getMunicipio() %></p>
+                <p><strong>Email:</strong> <%= candidato.getEmail() %></p>
+                <p><strong>CPF:</strong> <%= cpfFormatado %></p>
+                <p><strong>Telefone:</strong> <%= telefoneFormatado %></p>
+            </div>
+        </div>
 
+      
+        <div class="col-md-6">
+            <h2 class="section-title">Deficiências</h2>
+            <%
+                if (deficiencias == null || deficiencias.isEmpty()) {
+            %>
+                <div class="alert alert-secondary">Nenhuma deficiência registrada para este candidato.</div>
+            <%
+                } else {
+                    for (TipoDeficiencia def : deficiencias) {
+            %>
+                <div class="card-info">
+                    <p><strong>Deficiência:</strong> <%= def.getNome() %></p>
+                    <p><strong>Tipo:</strong> <%= def.getTipo() %></p>
+                    <p><strong>Descrição:</strong> <%= def.getDescricao() %></p>
+                    <p><strong>Tipo de Apoio:</strong> <%= def.getTipoApoio() %></p>
+                </div>
+            <%
+                    }
+                }
+            %>
 
-					<%
-					if (deficiencias == null || deficiencias.isEmpty()) {
-					%>
-					<div class="alert alert-secondary">Nenhuma deficiência
-						registrada para este candidato.</div>
-					<%
-					} else {
-					%>
-					<%
-					for (TipoDeficiencia deficiencia : deficiencias) {
-					%>
-					<div
-						class="p-3 mb-3 bg-light border-start border-4 border-primary rounded shadow-sm">
-						<p>
-							<strong>Deficiência:</strong>
-							<%=deficiencia.getNome()%></p>
-						<p>
-							<strong>Tipo:</strong>
-							<%=deficiencia.getTipo()%></p>
-						<p>
-							<strong>Descrição:</strong>
-							<%=deficiencia.getDescricao()%></p>
-						<p>
-							<strong>Tipo de Apoio:</strong>
-							<%=deficiencia.getTipoApoio()%></p>
-					</div>
-					<%
-					}
-					%>
-					<%
-					}
-					%>
-				</div>
-			</div>
+            <h2 class="section-title">Cursos Inscritos</h2>
+            <%
+                if (cursos == null || cursos.isEmpty()) {
+            %>
+                <div class="alert alert-secondary">Você ainda não se inscreveu em nenhum curso.</div>
+            <%
+                } else {
+                    DateTimeFormatter formatterCurso = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+                    for (Curso curso : cursos) {
+            %>
+                <div class="card-info">
+                    <p><strong>Instituição:</strong> <%= curso.getInstituicao() %></p>
+                    <p><strong>Curso:</strong> <%= curso.getNomeCurso() %></p>
+                    <p><strong>Descrição:</strong> <%= curso.getDescricao() %></p>
+                    <p><strong>Início:</strong> <%= curso.getDataInicio().format(formatterCurso) %></p>
+                    <p><strong>Fim:</strong> <%= curso.getDataFim().format(formatterCurso) %></p>
+                </div>
+            <%
+                    }
+                }
+            %>
+        </div>
+    </div>
+</div>
 
-			<div class="card mb-4">
-				<div class="card-body">
-					<h2 class="text-primary">Curso(s)em que você está inscrito</h2>
-
-					<%
-					if (cursos == null || cursos.isEmpty()) {
-					%>
-					<div class="alert alert-secondary">Você ainda não inscreveu
-						nenhum curso.</div>
-					<%
-					} else {
-					%>
-					<%
-					for (Curso curso : cursos) {
-					%>
-									<div
-										class="p-3 mb-3 bg-light border-start border-4 border-primary rounded shadow-sm">
-
-										<p>
-											<strong>Instituição:</strong>
-											<%=curso.getInstituicao()%></p>
-										<p>
-											<strong>Nome do curso:</strong>
-											<%=curso.getNomeCurso()%></p>
-										<p>
-											<strong>Descrição:</strong>
-											<%=curso.getDescricao()%></p>
-
-										<%
-										DateTimeFormatter formatterCurso = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-										String inicioFormatado = curso.getDataInicio().format(formatterCurso);
-										String fimFormatado = curso.getDataFim().format(formatterCurso);
-										%>
-										<p>
-											<strong>Data de início:</strong>
-											<%=inicioFormatado%></p>
-										<p>
-											<strong>Data de fim:</strong>
-											<%=fimFormatado%></p>
-									</div>
-
-
-
-
-							<%
-							}
-							%>
-							<%
-							}
-							%>
-					</div>
-				</div>
-		</div>
-		</div>
-	</div>
-
-				<script
-					src="${pageContext.request.contextPath}/webjars/bootstrap/5.3.5/js/bootstrap.bundle.min.js"></script>
+<script src="${pageContext.request.contextPath}/webjars/bootstrap/5.3.5/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
