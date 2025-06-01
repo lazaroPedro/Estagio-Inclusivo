@@ -13,7 +13,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
-@WebServlet("/home/curriculo/id")
+@WebServlet("/curriculo")
 public class CurriculoGetServlet extends HttpServlet {
 
     @Override
