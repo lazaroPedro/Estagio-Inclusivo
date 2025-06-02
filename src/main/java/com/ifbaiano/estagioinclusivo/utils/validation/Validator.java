@@ -41,11 +41,13 @@ public class Validator {
                     throw new RuntimeException(e);
                 }
                 Annotation[] annotations = f.getAnnotations();
-                if(Arrays.stream(annotations).noneMatch(a -> a.annotationType().equals(NotNull.class))) {
-                    if (value == null) {
+                if (value == null) {
+                    boolean isRequired = Arrays.stream(annotations)
+                            .anyMatch(a -> a.annotationType().equals(NotNull.class));
+                    if (isRequired) {
                         errors.add(new ErroCampo(f.getName(), "null", "O campo " + f.getName() + " não pode ser nulo"));
-                        continue;
                     }
+                        continue;
                 }
 
 

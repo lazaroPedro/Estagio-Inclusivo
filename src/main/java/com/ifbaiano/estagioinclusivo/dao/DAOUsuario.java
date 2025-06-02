@@ -25,7 +25,11 @@ public class DAOUsuario implements DAORepository<Usuario, Integer> {
             stmt.setString(2, entity.getEmail());
             stmt.setString(3, entity.getHashSenha());
             stmt.setString(4, entity.getSalt());
-            stmt.setInt(5, entity.getEndereco().getId());
+            if (entity.getEndereco() != null) {
+                stmt.setInt(5, entity.getEndereco().getId());
+            } else {
+                stmt.setNull(5, Types.INTEGER);
+            }
             stmt.setString(6, entity.getPapel().name());
             stmt.setString(7, entity.getTelefone());
             stmt.executeUpdate();

@@ -17,25 +17,6 @@
 
     <dependencies>
 
-<<<<<<< HEAD
-     <!--   <dependency>
-            <groupId>com.itextpdf</groupId>
-            <artifactId>itext7-core</artifactId>
-            <version>7.2.5</version>
-        </dependency>
-        <dependency>
-            <groupId>com.itextpdf</groupId>
-            <artifactId>layout</artifactId>
-            <version>7.2.5</version>
-        </dependency>
-        <dependency>
-            <groupId>com.itextpdf</groupId>
-            <artifactId>kernel</artifactId>
-            <version>7.2.5</version>
-        </dependency>
--->
-=======
->>>>>>> 9bc71a6cd72b2d76a719abb807dea73eb301c1c1
         <dependency>
             <groupId>com.mysql</groupId>
             <artifactId>mysql-connector-j</artifactId>

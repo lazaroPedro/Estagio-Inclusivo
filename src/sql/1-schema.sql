@@ -17,7 +17,7 @@ CREATE TABLE usuarios (
     telefone VARCHAR(16) NOT NULL,
     papel ENUM("CANDIDATO", "EMPRESA", "ADMIN") NOT NULL,
     data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    fk_endereco INT UNSIGNED NOT NULL,
+    fk_endereco INT UNSIGNED NULL,
     FOREIGN KEY (fk_endereco) REFERENCES enderecos(id_endereco)
 );
 
