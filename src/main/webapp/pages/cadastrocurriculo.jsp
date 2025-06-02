@@ -150,7 +150,7 @@
 -->
     <div class="mt-4 text-end">
         <button type="submit" class="btn btn-success">Salvar Currículo</button>
-        <a href="${pageContext.request.contextPath}/home/curriculo/id?id=${candidato.id}" class="btn btn-info">Exibir Currículo</a>
+        <a href="${pageContext.request.contextPath}/curriculo?id=${candidato.id}" class="btn btn-info">Exibir Currículo</a>
     </div>
 </form>
 <script src="${pageContext.request.contextPath}/webjars/bootstrap/5.3.5/js/bootstrap.bundle.min.js"></script>
