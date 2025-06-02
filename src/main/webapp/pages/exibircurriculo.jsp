@@ -5,7 +5,6 @@
 <html>
 <head>
     <title>Currículo do Candidato</title>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/webjars/bootstrap/5.3.5/css/bootstrap.min.css">
 </head>
 <body class="container mt-5">
 <%@ include file="/assets/components/header.jsp" %>
@@ -47,6 +46,5 @@
     <a href="${pageContext.request.contextPath}/curriculo/exportarPDF" class="btn btn-success">Exportar como PDF</a>
 </div>-->
 </body>
-<script src="${pageContext.request.contextPath}/webjars/bootstrap/5.3.5/js/bootstrap.bundle.min.js"></script>
 
 </html>

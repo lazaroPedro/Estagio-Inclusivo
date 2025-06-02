@@ -17,6 +17,10 @@
 
     <dependencies>
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 481a84e9fb2e9cc8f2e9b9f8c3dd2b0abc762477
      <!--   <dependency>
             <groupId>com.itextpdf</groupId>
             <artifactId>itext7-core</artifactId>
