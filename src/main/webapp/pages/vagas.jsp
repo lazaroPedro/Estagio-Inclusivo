@@ -26,6 +26,11 @@
 	color: var(--roxo) !important;
 }
 
+.faixa-topo {
+	border-bottom-left-radius: 50px;
+	border-bottom-right-radius: 50px;
+}
+
 .border-roxo {
 	border: 2px solid var(--roxo) !important;
 }
@@ -41,7 +46,6 @@
 }
 
 body {
-	padding-top: 70px;
 	background-color: #f8f9fa;
 }
 </style>
@@ -51,6 +55,11 @@ body {
 <body class="bd-light">
 	<%@ include file="/assets/components/header.jsp"%>
 
+	<div
+		class="bg-roxo faixa-topo d-flex align-items-center justify-content-center"
+		style="height: 150px;">
+		<h2 class="text-white">Detalhes da Vaga</h2>
+	</div>
 
 	<div class=" container my-5" style="max-width: 800px;">
 		<c:if test="${param.sucesso == '1'}">
