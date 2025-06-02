@@ -115,7 +115,7 @@ public class DAOEmpresa implements DAORepository<Empresa, Integer> {
                 empresa.setCnpj(rs.getString("cnpj"));
                 empresa.setRazaoSocial(rs.getString("razao_social"));
                 empresa.setEndereco(e);
-                empresa.setTelefone("telefone");
+                empresa.setTelefone(rs.getString("telefone"));
                 empresa.setPapel(TipoUsuario.valueOf("papel"));
 
                 empresas.add(empresa);

@@ -24,6 +24,7 @@ public class PesquisaServlet extends HttpServlet {
         try (DAOFactory daoFactory = new DAOFactory()){
             DAOVaga dV = daoFactory.buildDAOVaga();
             DAOEmpresa dE = daoFactory.buildDAOEmpresa();
+            DAOEndereco dEEndereco = daoFactory.buildDAOEndereco();
             DAOCurriculo dC = daoFactory.buildDAOCurriculo();
             DAOCandidato dCa = daoFactory.buildDAOCandidato();
 
@@ -41,7 +42,10 @@ public class PesquisaServlet extends HttpServlet {
                     request.setAttribute("vagas", lV);
                     break;
                 case "1":
-                    List<Empresa> lE = dE.findByNomeContaining(search);
+                    List<Empresa> lE = dE.findByNomeContaining(search).stream().map(empresa -> {
+                        dEEndereco.findById(empresa.getEndereco().getId()).ifPresent(empresa::setEndereco);
+                        return empresa;
+                    }).toList();
                     request.setAttribute("empresas", lE);
                     break;
 
