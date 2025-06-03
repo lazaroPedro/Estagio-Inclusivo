@@ -1,5 +1,6 @@
 package com.ifbaiano.estagioinclusivo.controller.servlet;
 
+import com.ifbaiano.estagioinclusivo.dao.DAOCandidato;
 import com.ifbaiano.estagioinclusivo.dao.DAOCurso;
 import com.ifbaiano.estagioinclusivo.dao.DAOFactory;
 import com.ifbaiano.estagioinclusivo.model.Candidato;
@@ -28,7 +29,7 @@ public class CursoPutServlet extends HttpServlet {
 
         try(DAOFactory daoFactory = new DAOFactory()) {
             DAOCurso dC = daoFactory.buildDAOCurso();
-
+            DAOCandidato dCd = daoFactory.buildDAOCandidato();
             Curso curso = new Curso();
             curso.setId(Integer.parseInt(req.getParameter("id")));
             curso.setNomeCurso(req.getParameter("nome"));
@@ -37,7 +38,13 @@ public class CursoPutServlet extends HttpServlet {
             curso.setDataInicio(LocalDate.parse(req.getParameter("dataInicio")));
             curso.setDataFim(LocalDate.parse(req.getParameter("dataFim")));
             curso.setCandidato(new Candidato());
-            curso.getCandidato().setId(user.getId());
+            dC.findAllByCandidato(user.getId()).forEach(vagas ->{
+                if(vagas.getId() == curso.getId()){
+                    curso.getCandidato().setId(user.getId());
+
+                }
+
+            });
 
 
 
