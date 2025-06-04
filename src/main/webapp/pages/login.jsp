@@ -133,9 +133,7 @@
               </div>
               <button type="submit" class="btn btn-primary">Fazer login</button>
         </div>
-      <div class="text-center mt-2">
-        <a href="${pageContext.request.contextPath}/cadastrar" class="text-link btn btn-link text-decoration-none">Sign up</a>
-      </div>
+
       </form>
   </div>
 </div>

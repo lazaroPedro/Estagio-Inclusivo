@@ -4,6 +4,7 @@ import com.ifbaiano.estagioinclusivo.dao.DAOEndereco;
 import com.ifbaiano.estagioinclusivo.dao.DAOFactory;
 import com.ifbaiano.estagioinclusivo.dao.DAOUsuario;
 import com.ifbaiano.estagioinclusivo.model.Endereco;
+import com.ifbaiano.estagioinclusivo.model.Usuario;
 import com.ifbaiano.estagioinclusivo.model.dto.SessionDTO;
 import com.ifbaiano.estagioinclusivo.model.enums.TipoUsuario;
 import com.ifbaiano.estagioinclusivo.utils.validation.ValidationException;
@@ -15,6 +16,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
+import java.util.Optional;
 
 @WebServlet("/home/endereco/put")
 public class EnderecoPutServlet extends HttpServlet {
@@ -30,9 +32,34 @@ public class EnderecoPutServlet extends HttpServlet {
             endereco.setEstado(req.getParameter("estado"));
             endereco.setMunicipio(req.getParameter("municipio"));
             endereco.setCep(req.getParameter("cep").replaceAll("\\D", ""));
-            dU.findById(user.getId()).ifPresent(usuario -> {
-                endereco.setId(usuario.getEndereco().getId());
-            });
+            Optional<Usuario> u = dU.findById(user.getId());
+                if(u.isEmpty()){
+                    req.setAttribute("erros", "Falha no cadastro");
+                    if (user.getTipoUsuario() == TipoUsuario.CANDIDATO) {
+                        req.getRequestDispatcher("/home/candidato/full").forward(req, resp);
+                    } else if (user.getTipoUsuario() == TipoUsuario.EMPRESA){
+                        req.getRequestDispatcher("/home/empresa/full").forward(req, resp);
+                    }
+
+                } else if (u.get().getEndereco() == null){
+
+                    try {
+                Validator.validate(endereco);
+
+                dE.insert(endereco);
+                req.setAttribute("sucesso", true);
+            } catch (ValidationException e) {
+                req.setAttribute("erros", e.getErrors());
+            }
+
+
+                } else {
+
+
+            endereco.setId(u.get().getEndereco().getId());
+
+
+
             try {
                 Validator.validate(endereco);
 
@@ -40,7 +67,7 @@ public class EnderecoPutServlet extends HttpServlet {
                 req.setAttribute("sucesso", true);
             } catch (ValidationException e) {
                 req.setAttribute("erros", e.getErrors());
-            }
+            }}
             if (user.getTipoUsuario() == TipoUsuario.CANDIDATO) {
                 req.getRequestDispatcher("/home/candidato/full").forward(req, resp);
             } else if (user.getTipoUsuario() == TipoUsuario.EMPRESA){

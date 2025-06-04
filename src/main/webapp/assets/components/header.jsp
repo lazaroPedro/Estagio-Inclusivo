@@ -139,7 +139,7 @@
 </li>
 
     <li class="nav-item">
-        <a href="${pageContext.request.contextPath}/index" class="nav-link active" aria-current="page">
+        <a href="${pageContext.request.contextPath}/index" class="nav-link" aria-current="page">
             <i class="fas fa-search"></i>
             <span > Buscar Vagas</span>
         </a>
@@ -156,15 +156,24 @@
                                 </span>
             </a>
         </li>
-
-
         <li class="nav-item">
-            <a href="${pageContext.request.contextPath}/cadastrar" class="nav-link">
+            <a href="${pageContext.request.contextPath}/pages/cadastrocandidato.jsp" class="nav-link">
                 <i class="fas fa-user-plus "></i>
                 <span >
-                                    Cadastrar
+                                    Cadastrar Candidato
                                 </span>
             </a>
+
+        </li>
+
+        <li class="nav-item">
+            <a href="${pageContext.request.contextPath}/pages/cadastroempresa.jsp" class="nav-link">
+                <i class="fas fa-user-plus "></i>
+                <span >
+                                    Cadastrar Empresa
+                                </span>
+            </a>
+
         </li>
     </c:when>
     <c:otherwise>

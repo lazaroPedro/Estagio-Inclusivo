@@ -69,7 +69,7 @@ if (telefone.length() == 11) {
         }
 
         .card-info {
-            border-left: 4px solid #805DFF;
+            border: 2px solid #805DFF;
             background-color: #fff;
             padding: 20px;
             border-radius: 8px;
@@ -95,7 +95,7 @@ if (telefone.length() == 11) {
 <div class="container mt-5">
     <div class="row">
       
-        <div class="col-md-6">
+        <div class="">
             <h2 class="section-title">Dados Pessoais</h2>
             <div class="card-info">
                 <p><strong>Nome:</strong> <%= candidato.getNome() %></p>
@@ -109,7 +109,7 @@ if (telefone.length() == 11) {
         </div>
 
       
-        <div class="col-md-6">
+        <div class="">
             <h2 class="section-title">Deficiências</h2>
             <%
                 if (deficiencias == null || deficiencias.isEmpty()) {

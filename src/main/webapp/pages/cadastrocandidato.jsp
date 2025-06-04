@@ -182,7 +182,7 @@
 
                         <button type="submit" class="btn btn-primary w-100">Cadastrar</button>
                         <div class="text-center mt-2">
-                            <a href="${pageContext.request.contextPath}/login" class="text-link btn btn-link text-decoration-none">Sign In</a>
+                            <a href="${pageContext.request.contextPath}/login" class="text-link btn btn-link text-decoration-none">Entrar</a>
                         </div>
                     </form>
             </div>

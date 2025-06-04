@@ -44,20 +44,19 @@ public class PerfilEmpresaServlet extends HttpServlet {
 
 			List<Vaga> vagasAtivas = new java.util.ArrayList<>();
 			List<Vaga> vagasFinalizadas = new java.util.ArrayList<>();
-			
+
 
 			if (vagasPublicadas != null) {
-			    for (Vaga vaga : vagasPublicadas) {
-			        TipoVaga status = vaga.getStatus();
-			        if (status == TipoVaga.ATIVA) {
-			            vagasAtivas.add(vaga);
-			        } else if (status == TipoVaga.FINALIZADA) {
-			            vagasFinalizadas.add(vaga);
-			        }
-			    }
+				for (Vaga vaga : vagasPublicadas) {
+					TipoVaga status = vaga.getStatus();
+					if (status == TipoVaga.ATIVA) {
+						vagasAtivas.add(vaga);
+					} else if (status == TipoVaga.FINALIZADA) {
+						vagasFinalizadas.add(vaga);
+					}
+				}
 			}
 
-			
 
 			req.setAttribute("empresa", empresa);
 			req.setAttribute("vagasPublicadas", vagasPublicadas);
@@ -67,8 +66,6 @@ public class PerfilEmpresaServlet extends HttpServlet {
 
 			req.getRequestDispatcher("/pages/perfilempresa.jsp").forward(req, resp);
 
-		} catch (Exception e) {
-			req.setAttribute("erro", "Erro ao carregar perfil da empresa.");
 		}
 	}
 }
