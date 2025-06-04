@@ -22,7 +22,7 @@ import java.util.Optional;
         "/home/curriculo/removerCurso",
         "/home/curriculo/removerDeficiencia"
 })
-public class CadastroCurriculoServlet extends HttpServlet {
+public class    CadastroCurriculoServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

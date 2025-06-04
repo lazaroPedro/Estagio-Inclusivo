@@ -18,8 +18,8 @@ public class DAOEmpresa implements DAORepository<Empresa, Integer> {
 
 
     public DAOEmpresa(Connection connection) {
+        daoUsuario = new DAOUsuario(connection);
         this.connection = connection;
-        this.daoUsuario = new DAOUsuario(connection);
     }
 
     @Override
@@ -27,28 +27,24 @@ public class DAOEmpresa implements DAORepository<Empresa, Integer> {
 
         String sql = "INSERT INTO empresas (id_empresa, cnpj, razao_social) VALUES (?, ?, ?)";
         PreparedStatement stmt = null;
-        ResultSet rs = null;
             try {
+                Optional<Integer> idGerado = daoUsuario.insert(entity);
+                if (idGerado.isEmpty()) {
+                    return Optional.empty();
+                }
+                entity.setId(idGerado.get());
 
-                daoUsuario.insert(entity).ifPresent(entity::setId);
-                stmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+                stmt = connection.prepareStatement(sql);
                 stmt.setInt(1, entity.getId());
                 stmt.setString(2, entity.getCnpj());
                 stmt.setString(3, entity.getRazaoSocial());
                 stmt.executeUpdate();
-                rs = stmt.getGeneratedKeys();
-                if (rs.next()) {
-                    return Optional.of(rs.getInt(1));
-                }
-
+                return Optional.of(entity.getId());
             } catch (SQLException e) {
-
                 throw new RuntimeException("Erro ao inserir empresa.", e);
             } finally {
-                fechar(rs);
                 fechar(stmt);
             }
-            return Optional.empty();
     }
 
 
@@ -194,6 +190,28 @@ public class DAOEmpresa implements DAORepository<Empresa, Integer> {
         }
         return empresas;
     }
+    public boolean emailJaExiste(String email) {
+        String sql = "SELECT 1 FROM usuarios WHERE email = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setString(1, email);
+            ResultSet rs = stmt.executeQuery();
+            return rs.next();
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao verificar e-mail da empresa.", e);
+        }
+    }
+
+    public boolean cnpjJaExiste(String cnpj) {
+        String sql = "SELECT 1 FROM empresas WHERE cnpj = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setString(1, cnpj);
+            ResultSet rs = stmt.executeQuery();
+            return rs.next();
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao verificar CNPJ.", e);
+        }
+    }
+
     @Override
     public void fechar(AutoCloseable closeable) {
         try {
