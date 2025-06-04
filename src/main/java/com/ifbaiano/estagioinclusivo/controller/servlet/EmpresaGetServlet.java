@@ -68,7 +68,7 @@ public class EmpresaGetServlet extends HttpServlet {
 			req.setAttribute("vagasFinalizadas", vagasFinalizadas);
 
 
-			req.getRequestDispatcher("/pages/empresa.jsp").forward(req, resp);
+			req.getRequestDispatcher("/pages/perfilempresa.jsp").forward(req, resp);
 
 		} catch (Exception e) {
 			req.setAttribute("erro", "Erro ao carregar perfil da empresa.");
