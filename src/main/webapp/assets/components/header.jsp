@@ -58,11 +58,6 @@
             z-index: 1000;
             overflow-y: auto;
         }
-
-        .sidebar-nav {
-            padding: 10px 15px;
-        }
-
         .nav-item .nav-link {
             font-weight: 500;
             color: var(--medium-grey);
@@ -75,27 +70,32 @@
             text-align: center;
             transition: background-color 0.2s ease, color 0.2s ease;
         }
-        .sidebar-nav .navbar-nav .nav-item .nav-link-header {
+        .sidebarnav {
+            padding: 10px 15px;
+        }
+
+
+        .sidebarnav .navbar-nav .nav-item .nav-link-header {
             background: var(--darker-accent);
-            color: var(--border-light);
+            color: var(--border-light) !important;
             font-weight: bold;
             font-size: 1.2rem;
 
 
         }
-        .sidebar-nav .navbar-nav .nav-item .nav-link i {
+        .sidebarnav .navbar-nav .nav-item .nav-link i {
             font-size: 1.5em;
             text-align: center;
         }
 
-        .sidebar-nav .navbar-nav .nav-item .nav-link:hover,
-        .sidebar-nav .navbar-nav .nav-item .nav-link.active {
+        .sidebarnav .navbar-nav .nav-item .nav-link:hover,
+        .sidebarnav .navbar-nav .nav-item .nav-link.active {
             background-color: var(--background-accent);
             color: var(--primary-color);
         }
 
-        .sidebar-nav .navbar-nav .nav-item .nav-link-header:hover,
-        .sidebar-nav .navbar-nav .nav-item .nav-link-header.active {
+        .sidebarnav .navbar-nav .nav-item .nav-link-header:hover,
+        .sidebarnav .navbar-nav .nav-item .nav-link-header.active {
             background: var(--darker-accent);
             color: var(--border-light);
         }
@@ -121,7 +121,7 @@
 
 <header class="main-sidebar-header d-flex flex-column" id="collapse-header" >
 
-<nav class="sidebar-nav flex-grow-1">
+<nav class="sidebarnav flex-grow-1">
 <ul class="navbar-nav flex-column">
 <li class="nav-item" onclick="collapseBar()">
     <a class="nav-link nav-link-header"  href="#">
@@ -132,11 +132,18 @@
 
 </li>
 <li class="nav-item">
-    <a href="${pageContext.request.contextPath}/index" class="nav-link active" aria-current="page">
+    <a href="${pageContext.request.contextPath}/" class="nav-link" aria-current="page">
         <i class="fas fa-home"></i>
         <span > Inicio</span>
     </a>
 </li>
+
+    <li class="nav-item">
+        <a href="${pageContext.request.contextPath}/index" class="nav-link active" aria-current="page">
+            <i class="fas fa-search"></i>
+            <span > Buscar Vagas</span>
+        </a>
+    </li>
 
 <c:choose>
     <c:when test="${sessionScope.usuarioLogado == null}">
@@ -187,7 +194,7 @@
                     Curriculo</a>
             </li>
             <li class="nav-item">
-                <a href="#" class="nav-link">
+                <a href="${pageContext.request.contextPath}/home/candidato/full" class="nav-link">
                     Configurações
                 </a>
             </li>
@@ -199,7 +206,7 @@
                     Perfil</a>
             </li>
             <li class="nav-item">
-                <a href="#" class="nav-link">
+                <a href="${pageContext.request.contextPath}/home/empresa/full" class="nav-link">
                     Configurações
                 </a>
             </li>
