@@ -90,7 +90,7 @@
         }
 
         .text-link {
-            color: var(--primary-color);
+            color: var(--primary-color) !important;
             text-decoration: underline;
         }
 
@@ -169,6 +169,9 @@
             </div>
 
             <button type="submit" class="btn btn-primary w-100">Cadastrar Empresa</button>
+            <div class="text-center mt-2">
+                <a href="${pageContext.request.contextPath}/login" class="text-link btn btn-link text-decoration-none">Sign In</a>
+            </div>
         </form>
     </div>
 </div>

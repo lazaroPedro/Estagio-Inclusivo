@@ -152,7 +152,7 @@
 
 
         <li class="nav-item">
-            <a href="${pageContext.request.contextPath}/login" class="nav-link">
+            <a href="${pageContext.request.contextPath}/cadastrar" class="nav-link">
                 <i class="fas fa-user-plus "></i>
                 <span >
                                     Cadastrar
