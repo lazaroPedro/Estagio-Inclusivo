@@ -14,7 +14,6 @@ public class Usuario {
     @NotBlank
     /*@Pattern(regex = "^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+$")*/
     private String email;
-    @NotNull
     private Endereco endereco;
 
     private String salt;

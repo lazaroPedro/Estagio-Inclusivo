@@ -41,11 +41,8 @@
 }
 
 .btn-roxo {
-	border: none;
 	background-color: var(--roxo);
 	color: white;
-	border-radius: 0.5rem;
-	padding: 0.5rem 1rem;
 }
 
 .btn-roxo:hover {
@@ -53,7 +50,9 @@
 	color: white;
 }
 
-
+body {
+	padding-top: 20px;
+}
 </style>
 <%@ include file="/assets/components/header.jsp"%>
 </head>
@@ -136,8 +135,44 @@
 						</div>
 					</div>
 
+
+					<hr>
+
+					<h5>Tipos de Deficiência Aceitas</h5>
+
+					<div class="form-check">
+						<input class="form-check-input" type="checkbox"
+							name="tiposDeficiencia" value="Auditiva"> <label
+							class="form-check-label">Auditiva</label>
+					</div>
+
+					<div class="form-check">
+						<input class="form-check-input" type="checkbox"
+							name="tiposDeficiencia" value="visual"> <label
+							class="form-check-label">Visual</label>
+					</div>
+
+					<div class="form-check">
+						<input class="form-check-input" type="checkbox"
+							name="tiposDeficiencia" value="Fisica"> <label
+							class="form-check-label">Física</label>
+					</div>
+
+					<div class="form-check">
+						<input class="form-check-input" type="checkbox"
+							name="tiposDeficiencia" value="Intelectual"> <label
+							class="form-check-label">Intelectual</label>
+					</div>
+
+					<div class="form-check">
+						<input class="form-check-input" type="checkbox"
+							name="tiposDeficiencia" value="outro"> <label
+							class="form-check-label">Outro</label>
+					</div>
+					<br>
+
 					<div class="text-end">
-						<button type="submit" class="mt-3 btn-roxo">Cadastrar</button>
+						<button type="submit" class="btn btn-roxo">Cadastrar</button>
 					</div>
 			</div>
 

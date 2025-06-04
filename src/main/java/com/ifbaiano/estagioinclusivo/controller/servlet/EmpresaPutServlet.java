@@ -33,8 +33,8 @@ public class EmpresaPutServlet extends HttpServlet {
             empresa.setPapel(TipoUsuario.EMPRESA);
             empresa.setNome(req.getParameter("nome"));
             empresa.setRazaoSocial(req.getParameter("razaoSocial"));
-            empresa.setTelefone(req.getParameter("telefone"));
-            empresa.setCnpj(req.getParameter("cnpj"));
+            empresa.setTelefone(req.getParameter("telefone").replaceAll("\\D", ""));
+            empresa.setCnpj(req.getParameter("cnpj").replaceAll("\\D", ""));
 
             dE.findById(user.getId()).ifPresent(candid -> {
                 empresa.setId(candid.getId());

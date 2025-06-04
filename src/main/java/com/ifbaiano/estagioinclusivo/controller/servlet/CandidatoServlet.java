@@ -45,10 +45,8 @@ public class CandidatoServlet extends HttpServlet {
         try (DAOFactory factory = new DAOFactory()) {
             factory.openTransaction();
             try {
-                DAOEndereco daoEndereco = factory.buildDAOEndereco();
                 DAOCandidato daoCandidato = factory.buildDAOCandidato();
 
-        String cep = request.getParameter("cep").replaceAll("[^\\d]", "");
         String telefone = request.getParameter("telefone").replaceAll("[^\\d]", "");
         String cpf = request.getParameter("cpf").replaceAll("[^\\d]", "");
         String email = request.getParameter("email");
@@ -65,20 +63,6 @@ public class CandidatoServlet extends HttpServlet {
             return;
         }
 
-
-        Endereco endereco = new Endereco();
-        endereco.setRua(request.getParameter("rua"));
-        endereco.setBairro(request.getParameter("bairro"));
-        endereco.setMunicipio(request.getParameter("municipio"));
-        endereco.setEstado(request.getParameter("estado"));
-        endereco.setCep(cep);
-
-        Validator.validate(endereco);
-
-        Integer idEndereco = daoEndereco.insert(endereco).orElseThrow(()->new RuntimeException("Não foi possivel cadastrar o endereço"));
-
-        endereco.setId(idEndereco);
-
         String salt = SenhaUtils.gerarSalt();
         String hash = SenhaUtils.gerarHashSenha(request.getParameter("password"), salt);
 
@@ -87,7 +71,7 @@ public class CandidatoServlet extends HttpServlet {
         candidato.setEmail(email);
         candidato.setHashSenha(hash);
         candidato.setSalt(salt);
-        candidato.setEndereco(endereco);
+        candidato.setEndereco(null);
         candidato.setTelefone(telefone);
         candidato.setPapel(TipoUsuario.CANDIDATO);
         candidato.setCpf(cpf);

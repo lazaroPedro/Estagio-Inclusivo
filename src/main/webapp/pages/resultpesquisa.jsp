@@ -141,11 +141,6 @@
         text-align: right;
     }
 
-    .job-salary {
-        font-size: 1.1em;
-        color: #28a745;
-        font-weight: 500;
-    }
 
     .apply-now-button {
         background-color: var(--primary-color);
@@ -253,7 +248,6 @@
                                 </div>
                             </div>
                             <div class="job-details text-md-end">
-                                <p class="job-salary mb-1">Salário: R$ ${vaga.qtdVagas}</p>
                                 <button class="apply-now-button">
                                     Ver Detalhes <i class="fas fa-arrow-right ms-2"></i>
                                 </button>
