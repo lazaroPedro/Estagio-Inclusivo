@@ -144,6 +144,14 @@
             <span > Buscar Vagas</span>
         </a>
     </li>
+    
+    <li class="nav-item">
+    <a href="${pageContext.request.contextPath}/pages/sobre.jsp" class="nav-link">
+        <i class="fas fa-info-circle"></i>
+        <span> Sobre</span>
+    </a>
+</li>
+    
 
 <c:choose>
     <c:when test="${sessionScope.usuarioLogado == null}">
