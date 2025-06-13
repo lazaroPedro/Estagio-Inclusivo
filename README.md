@@ -62,6 +62,10 @@ Execute o seguinte comando na raiz do projeto:
 ```bash
 docker-compose up --build
 ```
+ ou para versões mais recentes:
+```bash
+docker compose up --build
+```
 
 Esse comando irá:
 
