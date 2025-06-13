@@ -28,13 +28,23 @@ O projeto **"Estagio-Inclusivo"** é uma plataforma dedicada a conectar pessoas 
 - **Frontend**: HTML, CSS, JavaScript 
 - **Validação**: Sistema de validação customizado baseado em anotações.
 
+## Autores
+
+Projeto realizado como atividade avaliativa da disciplina **Linguagem de Programação Orientada a Objetos**. Desenvolvido por **Caio Alves**, **Jessica**, **Lázaro Pedro**, **Luis Felipe** e **Maria Clara**, sob orientação do professor **Woquiton Lima Fernandes**.
 ## Como Rodar o Projeto Localmente
 
 Este projeto utiliza **Docker** e **Docker Compose** para facilitar a configuração do ambiente de desenvolvimento, incluindo o banco de dados.
 
 ### Pré-requisitos
 
-Certifique-se de ter o **Docker** e o **Docker Compose** instalados em sua máquina.
+Certifique-se de ter o **Docker** e o **Docker Compose** instalados em sua máquina. Você pode verificar com:
+
+```bash
+docker --version
+docker-compose --version  # ou 'docker compose version' para versões mais novas
+```
+
+Caso não estejam instalados, siga as instruções na [documentação oficial do Docker](https://docs.docker.com/get-docker/).
 
 ### Passos para Configuração
 
@@ -65,4 +75,12 @@ Esse comando irá:
 Após os serviços serem iniciados, a aplicação estará disponível em:
 
 - [http://localhost:8080/](http://localhost:8080/)
-- [http://localhost:8080/initial](http://localhost:8080/initial) (redireciona para a landing page)
+
+## Estrutura de Pastas Relevante
+
+A estrutura do projeto segue um padrão comum para aplicações web Java, com as seguintes pastas principais:
+
+* `/docs`: Contém os diagramas do projeto.
+* `/src/main/java`: Contém todo o código-fonte Java da aplicação, incluindo modelos (models), DAOs (Data Access Objects), controladores (servlets) e utilitários.
+* `/src/main/webapp`: Contém os recursos da aplicação web, como páginas JSP, arquivos JavaScript e folhas de estilo CSS.
+* `/src/sql`: Contém os scripts SQL para a criação do esquema do banco de dados e dados de exemplo (mocks).

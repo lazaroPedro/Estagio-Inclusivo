@@ -157,7 +157,7 @@
   <%@ include file="/assets/components/header.jsp" %>
 
   <main class="main-content">
-    <section class="content-wrapper" role="region" aria-labelledby="titulo-sobre">
+    <section class="content-wrapper container-xl" role="region" aria-labelledby="titulo-sobre">
       <header class="sobre-header">
         <h1 id="titulo-sobre">Sobre Nós</h1>
       </header>
@@ -195,23 +195,23 @@
         <div class="equipe-grid">
           <div class="equipe-card">
             <h3>Lázaro Pedro</h3>
-            <p>Desenvolvedor</p>
+            <p>Desenvolvedor FullStack</p>
           </div>
           <div class="equipe-card">
             <h3>Jéssica Tainá</h3>
-            <p>Desenvolvedora</p>
+            <p>Desenvolvedora FullStack</p>
           </div>
           <div class="equipe-card">
             <h3>Caio Alves</h3>
-            <p>Desenvolvedor</p>
+            <p>Desenvolvedor FullStack</p>
           </div>
            <div class="equipe-card">
             <h3>Maria Clara</h3>
-            <p>Desenvolvedora</p>
+            <p>Desenvolvedora FullStack</p>
           </div>
           <div class="equipe-card">
             <h3>Luis Felipe</h3>
-            <p>Desenvolvedor</p>
+            <p>Desenvolvedor FullStack</p>
           </div>
           <div class="equipe-card">
             <h3>Woquiton Fernandes</h3>
